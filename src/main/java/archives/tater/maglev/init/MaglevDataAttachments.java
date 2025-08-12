@@ -14,6 +14,11 @@ public class MaglevDataAttachments {
             .syncWith(PacketCodecs.INTEGER, AttachmentSyncPredicate.all())
     );
 
+    public static AttachmentType<Double> HOVER_SPEED = AttachmentRegistry.create(Maglev.id("hover_speed"), builder -> builder
+            .persistent(Codec.DOUBLE)
+            .syncWith(PacketCodecs.DOUBLE, AttachmentSyncPredicate.all())
+    );
+
     public static void init() {
 
     }

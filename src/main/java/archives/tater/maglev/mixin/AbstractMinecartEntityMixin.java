@@ -1,5 +1,6 @@
 package archives.tater.maglev.mixin;
 
+import archives.tater.maglev.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -12,6 +13,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
@@ -29,6 +31,14 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         super(entityType, world);
     }
 
+    @Unique
+    private boolean checkRail(int x, int y, int z) {
+        var state = getWorld().getBlockState(new BlockPos(x, y, z));
+        if (!state.isIn(MaglevBlocks.MAGLEV_RAILS)) return false;
+        OxidizablePoweredRailBlock.updateSpeed((AbstractMinecartEntity) (Object) this, state);
+        return true;
+    }
+
     @ModifyVariable(
             method = "getRailOrMinecartPos",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;getWorld()Lnet/minecraft/world/World;", ordinal = 0),
@@ -38,15 +48,16 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         var world = getWorld();
         if (hasAttached(HOVER_HEIGHT)) {
             var movedY = y - getAttachedOrElse(HOVER_HEIGHT, 0);
-            if (world.getBlockState(new BlockPos(x, movedY, z)).isIn(MaglevBlocks.MAGLEV_RAILS) ||
-            world.getBlockState(new BlockPos(x, movedY - 1, z)).isIn(MaglevBlocks.MAGLEV_RAILS))
+            if (checkRail(x, movedY, z) || checkRail(x, movedY - 1, z))
                 return movedY;
         }
 
         var blockPos = getBlockPos().mutableCopy();
         for (int i = 0; i <= 15; i++) { // TODO unhardcode? or at least make constant
-            if (world.getBlockState(blockPos).isIn(MaglevBlocks.MAGLEV_RAILS)) {
+            var state = world.getBlockState(blockPos);
+            if (state.isIn(MaglevBlocks.MAGLEV_RAILS)) {
                 if (i <= 1) return y;
+                OxidizablePoweredRailBlock.updateSpeed((AbstractMinecartEntity) (Object) this, state);
                 setAttached(HOVER_HEIGHT, i);
                 return blockPos.getY();
             }
