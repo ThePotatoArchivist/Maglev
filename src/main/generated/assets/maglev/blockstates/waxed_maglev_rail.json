@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "maglev:block/maglev_rail"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "archives.tater.maglev.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"AbstractMinecartEntityMixin",
+		"DefaultMinecartControllerMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

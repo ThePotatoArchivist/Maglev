@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "maglev:item/exposed_maglev_rail"
+  }
+}

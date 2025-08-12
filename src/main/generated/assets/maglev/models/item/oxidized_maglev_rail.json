@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "maglev:block/oxidized_maglev_rail"
+  }
+}

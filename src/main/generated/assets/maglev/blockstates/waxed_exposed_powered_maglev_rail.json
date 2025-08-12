@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "maglev:block/exposed_powered_maglev_rail"
+    }
+  }
+}

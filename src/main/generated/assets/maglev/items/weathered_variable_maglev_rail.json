@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "maglev:item/weathered_variable_maglev_rail"
+  }
+}

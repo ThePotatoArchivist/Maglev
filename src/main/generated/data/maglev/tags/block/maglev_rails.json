@@ -1,0 +1,28 @@
+{
+  "values": [
+    "maglev:maglev_rail",
+    "maglev:exposed_maglev_rail",
+    "maglev:weathered_maglev_rail",
+    "maglev:oxidized_maglev_rail",
+    "maglev:waxed_maglev_rail",
+    "maglev:waxed_exposed_maglev_rail",
+    "maglev:waxed_weathered_maglev_rail",
+    "maglev:waxed_oxidized_maglev_rail",
+    "maglev:variable_maglev_rail",
+    "maglev:exposed_variable_maglev_rail",
+    "maglev:weathered_variable_maglev_rail",
+    "maglev:oxidized_variable_maglev_rail",
+    "maglev:waxed_variable_maglev_rail",
+    "maglev:waxed_exposed_variable_maglev_rail",
+    "maglev:waxed_weathered_variable_maglev_rail",
+    "maglev:waxed_oxidized_variable_maglev_rail",
+    "maglev:powered_maglev_rail",
+    "maglev:exposed_powered_maglev_rail",
+    "maglev:weathered_powered_maglev_rail",
+    "maglev:oxidized_powered_maglev_rail",
+    "maglev:waxed_powered_maglev_rail",
+    "maglev:waxed_exposed_powered_maglev_rail",
+    "maglev:waxed_weathered_powered_maglev_rail",
+    "maglev:waxed_oxidized_powered_maglev_rail"
+  ]
+}

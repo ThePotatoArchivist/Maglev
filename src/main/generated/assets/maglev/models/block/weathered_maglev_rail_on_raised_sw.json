@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_rail_raised_sw",
+  "textures": {
+    "rail": "maglev:block/weathered_maglev_rail_on"
+  }
+}

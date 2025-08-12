@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "maglev:block/oxidized_variable_maglev_rail"
+    }
+  }
+}
