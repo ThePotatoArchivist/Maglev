@@ -1,14 +1,8 @@
 package archives.tater.maglev.init;
 
-import archives.tater.maglev.Maglev;
-import archives.tater.maglev.OxidizablePoweredRailBlock;
-import archives.tater.maglev.OxidizableVariableRailBlock;
-import archives.tater.maglev.VariableRailBlock;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import archives.tater.maglev.*;
+import net.minecraft.block.*;
 import net.minecraft.block.Oxidizable.OxidationLevel;
-import net.minecraft.block.PoweredRailBlock;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -77,7 +71,7 @@ public class MaglevBlocks {
         );
     }
 
-    public static final OxidizableBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", PoweredRailBlock::new, OxidizablePoweredRailBlock::new);
+    public static final OxidizableBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", RailBlock::new, OxidizableRailBlock::new);
     public static final OxidizableBlockSet VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", VariableRailBlock::new, OxidizableVariableRailBlock::new);
     public static final OxidizableBlockSet POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", PoweredRailBlock::new, OxidizablePoweredRailBlock::new);
 

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/rail_curved",
+  "textures": {
+    "rail": "maglev:block/maglev_rail_corner"
+  }
+}
