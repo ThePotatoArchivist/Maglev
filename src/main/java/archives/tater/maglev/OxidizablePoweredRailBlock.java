@@ -35,10 +35,10 @@ public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Oxid
 
     public static double getSpeed(OxidationLevel level) {
         return switch (level) {
-            case UNAFFECTED -> 1.15;
-            case EXPOSED -> 0.9;
-            case WEATHERED -> 0.65;
-            case OXIDIZED -> 0.4;
+            case UNAFFECTED -> 1.2;
+            case EXPOSED -> 0.8;
+            case WEATHERED -> 0.4;
+            case OXIDIZED -> 0.1;
         };
     }
 
