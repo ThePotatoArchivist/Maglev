@@ -2,9 +2,7 @@ package archives.tater.maglev.mixin;
 
 import archives.tater.maglev.init.MaglevBlocks;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Cancellable;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
@@ -15,7 +13,7 @@ import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
@@ -31,40 +29,32 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         super(entityType, world);
     }
 
-    @WrapOperation(
+    @ModifyVariable(
             method = "getRailOrMinecartPos",
-            at = @At(value = "NEW", target = "(III)Lnet/minecraft/util/math/BlockPos;")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;getWorld()Lnet/minecraft/world/World;", ordinal = 0),
+            ordinal = 1
     )
-    private BlockPos addHoverHeight(int x, int y, int z, Operation<BlockPos> original) {
-        if (!hasAttached(HOVER_HEIGHT)) return original.call(x, y, z);
-        var hoverHeight = getAttachedOrElse(HOVER_HEIGHT, 0);
-        var altered = new BlockPos(x, y - hoverHeight + 1, z);
-        if (getWorld().getBlockState(altered).isIn(MaglevBlocks.MAGLEV_RAILS))
-            return altered;
-        removeAttached(HOVER_HEIGHT);
-        return original.call(x, y, z);
-    }
-
-    @ModifyExpressionValue(
-            method = "getRailOrMinecartPos",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
-    )
-    private boolean setHoverHeight(boolean original, @Cancellable CallbackInfoReturnable<BlockPos> cir) {
-        if (original || hasAttached(HOVER_HEIGHT)) return true;
-        // essentially adding an else clause
+    private int addHoverHeight(int y, @Local(ordinal = 0) int x, @Local(ordinal = 2) int z) {
         var world = getWorld();
-        var blockPos = getBlockPos().mutableCopy();
-
-        for (int i = 1; i <= 15; i++) {
-            blockPos.move(Direction.DOWN);
-            if (world.getBlockState(blockPos).isIn(MaglevBlocks.MAGLEV_RAILS)) {
-                setAttached(HOVER_HEIGHT, i);
-                cir.setReturnValue(blockPos.toImmutable());
-                return false;
-            }
+        if (hasAttached(HOVER_HEIGHT)) {
+            var movedY = y - getAttachedOrElse(HOVER_HEIGHT, 0);
+            if (world.getBlockState(new BlockPos(x, movedY, z)).isIn(MaglevBlocks.MAGLEV_RAILS) ||
+            world.getBlockState(new BlockPos(x, movedY - 1, z)).isIn(MaglevBlocks.MAGLEV_RAILS))
+                return movedY;
         }
 
-        return false;
+        var blockPos = getBlockPos().mutableCopy();
+        for (int i = 0; i <= 15; i++) { // TODO unhardcode? or at least make constant
+            if (world.getBlockState(blockPos).isIn(MaglevBlocks.MAGLEV_RAILS)) {
+                if (i <= 1) return y;
+                setAttached(HOVER_HEIGHT, i);
+                return blockPos.getY();
+            }
+            blockPos.move(Direction.DOWN);
+        }
+
+        removeAttached(HOVER_HEIGHT);
+        return y;
     }
 
     @ModifyExpressionValue(
