@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
-import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_SPEED;
+import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 
 @Debug(export = true)
 @SuppressWarnings("UnstableApiUsage")
@@ -72,7 +72,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/MinecartController;getSpeedRetention()D")
     )
     private double frictionless(double original) {
-        return hasAttached(HOVER_SPEED) ? 1 : original;
+        return hasAttached(SPEED_MULTIPLIER) ? 1 : original;
     }
 
     @Inject(
@@ -80,17 +80,6 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             at = @At("HEAD")
     )
     private void removeHoverSpeed(ServerWorld world, CallbackInfo ci) {
-        removeAttached(HOVER_SPEED);
+        removeAttached(SPEED_MULTIPLIER);
     }
-
-//    @Inject(
-//            method = "applyGravity",
-//            at = @At("HEAD")
-//    )
-//    private void hover(CallbackInfo ci) {
-//        if (hasAttached(MaglevDataAttachments.HOVER_HEIGHT) && getRailOrMinecartPos().getY() > getY()) {
-//            var velocity = getVelocity();
-//            setVelocity(velocity.x, Math.clamp(0.1 - velocity.y, 0, 0.1), velocity.z);
-//        }
-//    }
 }

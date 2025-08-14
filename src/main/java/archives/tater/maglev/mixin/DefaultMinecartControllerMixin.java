@@ -4,6 +4,7 @@ import archives.tater.maglev.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.block.Block;
@@ -17,9 +18,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
-import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_SPEED;
-import static java.lang.Math.abs;
-import static java.lang.Math.copySign;
 
 @SuppressWarnings("UnstableApiUsage")
 @Mixin(DefaultMinecartController.class)
@@ -68,16 +66,21 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
     }
 
     @ModifyExpressionValue(
-            method = {
-                    "limitSpeed",
-                    "getMaxSpeed"
-            },
-            at = {
-                    @At(value = "CONSTANT", args = "doubleValue=-0.4"),
-                    @At(value = "CONSTANT", args = "doubleValue=0.4")
-            }
+            method = "limitSpeed",
+            at = @At(value = "CONSTANT", args = {
+                    "doubleValue=-0.4",
+                    "doubleValue=0.4"
+            })
     )
-    private double increaseMaxSpeed(double original) {
-        return minecart.hasAttached(HOVER_SPEED) ? copySign(minecart.getAttachedOrElse(MaglevDataAttachments.HOVER_SPEED, abs(original)), original) : original;
+    private double changeMaxSpeed(double original) {
+        return minecart.getAttachedOrElse(MaglevDataAttachments.SPEED_MULTIPLIER, 1.0) * original;
+    }
+
+    @ModifyReturnValue(
+            method = "getMaxSpeed",
+            at = @At("RETURN")
+    )
+    private double changeMaxSpeed2(double original) {
+        return minecart.getAttachedOrElse(MaglevDataAttachments.SPEED_MULTIPLIER, 1.0) * original;
     }
 }

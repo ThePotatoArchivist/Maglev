@@ -8,7 +8,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 
-import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_SPEED;
+import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 
 public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Oxidizable, HasOxidationLevel {
     private final OxidationLevel oxidationLevel;
@@ -33,20 +33,20 @@ public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Oxid
         return oxidationLevel;
     }
 
-    public static double getSpeed(OxidationLevel level) {
+    public static double getSpeedMultiplier(OxidationLevel level) {
         return switch (level) {
-            case UNAFFECTED -> 1.2;
-            case EXPOSED -> 0.8;
-            case WEATHERED -> 0.4;
-            case OXIDIZED -> 0.1;
+            case UNAFFECTED -> 3;
+            case EXPOSED -> 2;
+            case WEATHERED -> 1;
+            case OXIDIZED -> 0.5;
         };
     }
 
     @SuppressWarnings("UnstableApiUsage")
     public static void updateSpeed(AbstractMinecartEntity minecart, BlockState state) {
         if (state.getBlock() instanceof HasOxidationLevel oxidizable)
-            minecart.setAttached(HOVER_SPEED, OxidizablePoweredRailBlock.getSpeed(oxidizable.getDegradationLevel()));
+            minecart.setAttached(SPEED_MULTIPLIER, OxidizablePoweredRailBlock.getSpeedMultiplier(oxidizable.getDegradationLevel()));
         else
-            minecart.removeAttached(HOVER_SPEED);
+            minecart.removeAttached(SPEED_MULTIPLIER);
     }
 }
