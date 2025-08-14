@@ -6,7 +6,6 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Oxidizable.OxidationLevel;
-import net.minecraft.block.RailBlock;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
@@ -123,7 +122,7 @@ public class MaglevBlocks {
         ).register();
     }
 
-    public static final OxidizableBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", RailBlock::new, OxidizableRailBlock::new);
+    public static final OxidizableBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, OxidizableRailBlock::new);
     public static final OxidizableBlockSet VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", VariableRailBlock::new, OxidizableVariableRailBlock::new);
     public static final OxidizableBlockSet POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, OxidizablePoweredRailBlock::new);
 
