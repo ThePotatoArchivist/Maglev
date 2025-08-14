@@ -46,5 +46,7 @@ public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Oxid
     public static void updateSpeed(AbstractMinecartEntity minecart, BlockState state) {
         if (state.getBlock() instanceof HasOxidationLevel oxidizable)
             minecart.setAttached(HOVER_SPEED, OxidizablePoweredRailBlock.getSpeed(oxidizable.getDegradationLevel()));
+        else
+            minecart.removeAttached(HOVER_SPEED);
     }
 }

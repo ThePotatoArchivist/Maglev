@@ -6,7 +6,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 
-public class OxidizableVariableRailBlock extends VariableRailBlock implements Oxidizable {
+public class OxidizableVariableRailBlock extends VariableRailBlock implements Oxidizable, HasOxidationLevel {
     private final OxidationLevel oxidationLevel;
 
     public OxidizableVariableRailBlock(OxidationLevel oxidationLevel, Settings settings) {

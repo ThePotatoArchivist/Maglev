@@ -1,5 +1,6 @@
 package archives.tater.maglev.mixin;
 
+import archives.tater.maglev.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
+import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_SPEED;
 import static java.lang.Math.abs;
 import static java.lang.Math.copySign;
 
@@ -28,21 +30,14 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
     }
 
     @ModifyArg(
-            method = "snapPositionToRail",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;<init>(III)V", ordinal = 1),
+            method = {
+                    "snapPositionToRail",
+                    "simulateMovement"
+            },
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;<init>(III)V"),
             index = 1
     )
     private int snapToHover(int y) {
-        if (!minecart.hasAttached(HOVER_HEIGHT)) return y;
-        return y - minecart.getAttachedOrElse(HOVER_HEIGHT, 0);
-    }
-
-    @ModifyArg(
-            method = "simulateMovement",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;<init>(III)V", ordinal = 1),
-            index = 1
-    )
-    private int moveHover(int y) {
         if (!minecart.hasAttached(HOVER_HEIGHT)) return y;
         return y - minecart.getAttachedOrElse(HOVER_HEIGHT, 0);
     }
@@ -64,6 +59,15 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
     }
 
     @ModifyExpressionValue(
+            method = "moveOnRail",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;")
+    )
+    private BlockState updateSpeed(BlockState original) {
+        OxidizablePoweredRailBlock.updateSpeed(minecart, original);
+        return original;
+    }
+
+    @ModifyExpressionValue(
             method = {
                     "limitSpeed",
                     "getMaxSpeed"
@@ -74,6 +78,6 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
             }
     )
     private double increaseMaxSpeed(double original) {
-        return minecart.hasAttached(HOVER_HEIGHT) ? copySign(minecart.getAttachedOrElse(MaglevDataAttachments.HOVER_SPEED, abs(original)), original) : original;
+        return minecart.hasAttached(HOVER_SPEED) ? copySign(minecart.getAttachedOrElse(MaglevDataAttachments.HOVER_SPEED, abs(original)), original) : original;
     }
 }

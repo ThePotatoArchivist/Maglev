@@ -1,12 +1,12 @@
 package archives.tater.maglev.mixin;
 
-import archives.tater.maglev.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -15,16 +15,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
+import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_SPEED;
 
 @Debug(export = true)
 @SuppressWarnings("UnstableApiUsage")
 @Mixin(AbstractMinecartEntity.class)
 public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
-    @Shadow public abstract BlockPos getRailOrMinecartPos();
-
     @Shadow protected abstract float getVelocityMultiplier();
 
     public AbstractMinecartEntityMixin(EntityType<?> entityType, World world) {
@@ -35,7 +36,6 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     private boolean checkRail(int x, int y, int z) {
         var state = getWorld().getBlockState(new BlockPos(x, y, z));
         if (!state.isIn(MaglevBlocks.MAGLEV_RAILS)) return false;
-        OxidizablePoweredRailBlock.updateSpeed((AbstractMinecartEntity) (Object) this, state);
         return true;
     }
 
@@ -57,7 +57,6 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             var state = world.getBlockState(blockPos);
             if (state.isIn(MaglevBlocks.MAGLEV_RAILS)) {
                 if (i <= 1) return y;
-                OxidizablePoweredRailBlock.updateSpeed((AbstractMinecartEntity) (Object) this, state);
                 setAttached(HOVER_HEIGHT, i);
                 return blockPos.getY();
             }
@@ -73,7 +72,15 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/MinecartController;getSpeedRetention()D")
     )
     private double frictionless(double original) {
-        return hasAttached(HOVER_HEIGHT) ? 1 : original;
+        return hasAttached(HOVER_SPEED) ? 1 : original;
+    }
+
+    @Inject(
+            method = "moveOffRail",
+            at = @At("HEAD")
+    )
+    private void removeHoverSpeed(ServerWorld world, CallbackInfo ci) {
+        removeAttached(HOVER_SPEED);
     }
 
 //    @Inject(
