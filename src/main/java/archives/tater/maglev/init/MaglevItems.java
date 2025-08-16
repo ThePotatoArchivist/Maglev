@@ -2,6 +2,7 @@ package archives.tater.maglev.init;
 
 import archives.tater.maglev.Maglev;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
@@ -12,7 +13,11 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Use {@link Block#asItem()} to get the items from the {@link archives.tater.maglev.init.MaglevBlocks.OxidizableBlockSet}s
+ */
 public class MaglevItems {
+
     private static final List<Item> itemGroupItems = new ArrayList<>();
 
     public static final ItemGroup MAGLEV_RAILS = Registry.register(

@@ -1,6 +1,6 @@
 package archives.tater.maglev.init;
 
-import archives.tater.maglev.*;
+import archives.tater.maglev.Maglev;
 import archives.tater.maglev.block.*;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.block.AbstractBlock;
@@ -32,7 +32,7 @@ public class MaglevBlocks {
             Block waxedWeathered,
             Block waxedOxidized
     ) implements Iterable<Block> {
-        private OxidizableBlockSet register() {
+        public OxidizableBlockSet {
             OxidizableBlocksRegistry.registerOxidizableBlockPair(base, exposed);
             OxidizableBlocksRegistry.registerOxidizableBlockPair(exposed, weathered);
             OxidizableBlocksRegistry.registerOxidizableBlockPair(weathered, oxidized);
@@ -40,7 +40,6 @@ public class MaglevBlocks {
             OxidizableBlocksRegistry.registerWaxableBlockPair(exposed, waxedExposed);
             OxidizableBlocksRegistry.registerWaxableBlockPair(weathered, waxedWeathered);
             OxidizableBlocksRegistry.registerWaxableBlockPair(oxidized, waxedOxidized);
-            return this;
         }
 
         public Stream<Block> stream() {
@@ -99,7 +98,7 @@ public class MaglevBlocks {
                 registerWaxedRail(name, OxidationLevel.EXPOSED, waxedConstructor),
                 registerWaxedRail(name, OxidationLevel.WEATHERED, waxedConstructor),
                 registerWaxedRail(name, OxidationLevel.OXIDIZED, waxedConstructor)
-        ).register();
+        );
     }
 
     public static final OxidizableBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, OxidizableRailBlock::new);
