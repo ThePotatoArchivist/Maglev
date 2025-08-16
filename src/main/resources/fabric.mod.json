@@ -3,15 +3,15 @@
 	"id": "maglev",
 	"version": "${version}",
 	"name": "Maglev",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A new era of minecart technology",
 	"authors": [
-		"Me!"
+		"ThePotatoArchivist"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/project/maglev-minecarts",
+		"sources": "https://github.com/ThePotatoArchivist/Maglev"
 	},
-	"license": "CC0-1.0",
+	"license": "LGPL-3.0-or-later",
 	"icon": "assets/maglev/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -34,7 +34,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
-		"minecraft": "~1.21.8",
+		"minecraft": "~1.21.6",
 		"java": ">=21",
 		"fabric-api": "*"
 	},
