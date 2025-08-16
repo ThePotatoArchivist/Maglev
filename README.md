@@ -8,16 +8,22 @@ This mod was based on [this r/minecraftsuggestions reddit post](https://www.redd
 
 ## Additions
 
-### Maglev Rails
+### Maglev Rail
 
 - Allows a minecart to hover up to 15 blocks above the rail
     - The minecart can be made to hover by dropping it from the end of normal rails
 - Comes in all waxed and oxidized copper variants
 
-### Powered Maglev Rails
+### Powered Maglev Rail
 
 - Allows minecarts to hover just like maglev rails
 - Accelerates the minecart just like powered rails
+- Comes in all waxed and oxidized copper variants
+
+### Variable Maglev Rail
+
+- Allows minecarts to hover just like maglev rails
+- Changes the hover height of a minecart to its redstone power level (0-15)
 - Comes in all waxed and oxidized copper variants
 
 ## Mechanics
@@ -32,3 +38,7 @@ This mod was based on [this r/minecraftsuggestions reddit post](https://www.redd
   | Oxidized | 1 blocks/tick |
 - Minecarts remember which track they're on so rails can cross underneath and they stay on the right track
 - You may place blocks between the rail and minecart to have invisible rails
+
+## Notes
+
+- Does not work with experimental minecart mechanics yet, this will be added in the future
