@@ -1,11 +1,13 @@
 {
-	"required": true,
-	"package": "archives.tater.maglev.mixin.client",
-	"compatibilityLevel": "JAVA_21",
-	"client": [
-		"BlockStateModelGeneratorMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "archives.tater.maglev.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "BlockStateModelGeneratorMixin",
+    "MinecartInsideSoundInstanceMixin",
+    "MovingMinecartSoundInstanceMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
