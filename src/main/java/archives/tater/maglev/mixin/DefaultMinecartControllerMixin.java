@@ -14,7 +14,6 @@ import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.DefaultMinecartController;
 import net.minecraft.entity.vehicle.MinecartController;
 import net.minecraft.util.math.BlockPos;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -23,7 +22,6 @@ import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
 @SuppressWarnings("UnstableApiUsage")
 @Mixin(DefaultMinecartController.class)
-@Debug(export = true)
 public abstract class DefaultMinecartControllerMixin extends MinecartController {
     protected DefaultMinecartControllerMixin(AbstractMinecartEntity minecart) {
         super(minecart);
