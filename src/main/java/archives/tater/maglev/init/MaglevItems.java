@@ -20,11 +20,12 @@ public class MaglevItems {
 
     private static final List<Item> itemGroupItems = new ArrayList<>();
 
-    public static final ItemGroup MAGLEV_RAILS = Registry.register(
+    public static final String ITEM_GROUP_NAME = "itemGroup.maglev.maglev";
+    public static final ItemGroup ITEM_GROUP = Registry.register(
             Registries.ITEM_GROUP,
             Maglev.id("maglev_rails"),
             FabricItemGroup.builder()
-                    .displayName(Text.translatable("itemGroup.maglev.maglev_rails"))
+                    .displayName(Text.translatable(ITEM_GROUP_NAME))
                     .icon(() -> MaglevBlocks.MAGLEV_RAIL.base().asItem().getDefaultStack())
                     .entries((displayContext, entries) -> {
                         entries.addAll(itemGroupItems.stream().map(Item::getDefaultStack).toList());
