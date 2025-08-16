@@ -34,7 +34,7 @@ public class MaglevItems {
 
     public static void init() {
         registerOxidizableItems(MaglevBlocks.MAGLEV_RAIL);
-        registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
+//        registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
         registerOxidizableItems(MaglevBlocks.POWERED_MAGLEV_RAIL);
     }
 }
