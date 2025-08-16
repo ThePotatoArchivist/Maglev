@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/template_rail_raised_ne",
+  "parent": "maglev:block/template_maglev_rail_on_raised_ne",
   "textures": {
     "rail": "maglev:block/oxidized_powered_maglev_rail_on"
   }

@@ -1,0 +1,6 @@
+{
+  "parent": "maglev:block/template_rail_raised_sw_emissive",
+  "textures": {
+    "rail_emissive": "maglev:block/variable_maglev_rail_on_glow"
+  }
+}

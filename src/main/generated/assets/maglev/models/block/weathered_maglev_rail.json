@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/rail_flat",
+  "parent": "maglev:block/maglev_rail_flat",
   "textures": {
     "rail": "maglev:block/weathered_maglev_rail"
   }
