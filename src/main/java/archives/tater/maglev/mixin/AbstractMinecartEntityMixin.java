@@ -12,22 +12,18 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
-import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
+import static archives.tater.maglev.init.MaglevDataAttachments.*;
 
 @Debug(export = true)
 @SuppressWarnings("UnstableApiUsage")
 @Mixin(AbstractMinecartEntity.class)
 public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
-    @Shadow protected abstract float getVelocityMultiplier();
-
     public AbstractMinecartEntityMixin(EntityType<?> entityType, World world) {
         super(entityType, world);
     }

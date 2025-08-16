@@ -27,17 +27,14 @@ public class MaglevItems {
                     .build()
     );
 
-    private static void registerOxidizableItems(MaglevBlocks.OxidizableBlockSet blockSet, boolean creativeInventory) {
-        for (var block : blockSet) {
-            var item = Items.register(block);
-            if (creativeInventory)
-                itemGroupItems.add(item);
-        }
+    private static void registerOxidizableItems(MaglevBlocks.OxidizableBlockSet blockSet) {
+        for (var block : blockSet)
+            itemGroupItems.add(Items.register(block));
     }
 
     public static void init() {
-        registerOxidizableItems(MaglevBlocks.MAGLEV_RAIL, true);
-        registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL, false);
-        registerOxidizableItems(MaglevBlocks.POWERED_MAGLEV_RAIL, true);
+        registerOxidizableItems(MaglevBlocks.MAGLEV_RAIL);
+        registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
+        registerOxidizableItems(MaglevBlocks.POWERED_MAGLEV_RAIL);
     }
 }

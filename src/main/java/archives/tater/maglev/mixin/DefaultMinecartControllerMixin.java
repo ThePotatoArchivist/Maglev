@@ -7,11 +7,13 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.DefaultMinecartController;
 import net.minecraft.entity.vehicle.MinecartController;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -62,6 +64,18 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
     )
     private BlockState updateSpeed(BlockState original) {
         OxidizablePoweredRailBlock.updateSpeed(minecart, original);
+        return original;
+    }
+
+    @ModifyExpressionValue(
+            method = "moveOnRail",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;")
+    )
+    private BlockState updateOnVariableRail(BlockState original, @Local BlockPos pos) {
+        if (!MaglevBlocks.VARIABLE_MAGLEV_RAIL.contains(original.getBlock())) return original;
+
+        minecart.setAttached(HOVER_HEIGHT, minecart.getWorld().getReceivedRedstonePower(pos));
+
         return original;
     }
 
