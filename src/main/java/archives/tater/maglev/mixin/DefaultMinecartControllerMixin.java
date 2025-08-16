@@ -1,6 +1,6 @@
 package archives.tater.maglev.mixin;
 
-import archives.tater.maglev.OxidizablePoweredRailBlock;
+import archives.tater.maglev.block.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;

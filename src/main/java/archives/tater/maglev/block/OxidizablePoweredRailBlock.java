@@ -1,5 +1,6 @@
-package archives.tater.maglev;
+package archives.tater.maglev.block;
 
+import archives.tater.maglev.HasOxidationLevel;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Oxidizable;
 import net.minecraft.block.PoweredRailBlock;
@@ -10,7 +11,7 @@ import net.minecraft.util.math.random.Random;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 
-public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Oxidizable, HasOxidationLevel {
+public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Oxidizable, HasOxidationLevel, VariantPoweredRail {
     private final OxidationLevel oxidationLevel;
 
     public OxidizablePoweredRailBlock(OxidationLevel oxidationLevel, Settings settings) {

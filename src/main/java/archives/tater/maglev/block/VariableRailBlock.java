@@ -1,4 +1,4 @@
-package archives.tater.maglev;
+package archives.tater.maglev.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PoweredRailBlock;

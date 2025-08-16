@@ -1,12 +1,12 @@
-package archives.tater.maglev;
+package archives.tater.maglev.block;
 
+import archives.tater.maglev.HasOxidationLevel;
 import net.minecraft.block.Oxidizable;
-import net.minecraft.block.PoweredRailBlock;
 
-public class WaxedPoweredRailBlock extends PoweredRailBlock implements HasOxidationLevel {
+public class WaxedVariableRailBlock extends VariableRailBlock implements HasOxidationLevel {
     private final Oxidizable.OxidationLevel oxidationLevel;
 
-    public WaxedPoweredRailBlock(Oxidizable.OxidationLevel oxidationLevel, Settings settings) {
+    public WaxedVariableRailBlock(Oxidizable.OxidationLevel oxidationLevel, Settings settings) {
         super(settings);
         this.oxidationLevel = oxidationLevel;
     }

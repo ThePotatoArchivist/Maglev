@@ -1,5 +1,6 @@
-package archives.tater.maglev;
+package archives.tater.maglev.block;
 
+import archives.tater.maglev.HasOxidationLevel;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Oxidizable;
 import net.minecraft.block.RailBlock;

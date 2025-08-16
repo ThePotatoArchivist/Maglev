@@ -1,6 +1,7 @@
 package archives.tater.maglev.init;
 
 import archives.tater.maglev.*;
+import archives.tater.maglev.block.*;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
