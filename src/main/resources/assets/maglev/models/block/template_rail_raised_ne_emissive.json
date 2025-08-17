@@ -25,7 +25,7 @@
                 "angle": 45,
                 "rescale": true
             },
-            "light_emission": 7,
+            "light_emission": 10,
             "faces": {
                 "down":  { "uv": [ 0, 16, 16,  0 ], "texture": "#rail_emissive" },
                 "up":    { "uv": [ 0,  0, 16, 16 ], "texture": "#rail_emissive" }
