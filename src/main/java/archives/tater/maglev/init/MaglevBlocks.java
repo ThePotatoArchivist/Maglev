@@ -66,6 +66,19 @@ public class MaglevBlocks {
                     block == waxedOxidized
             );
         }
+
+        public static Stream<Function<OxidizableBlockSet, Block>> fields() {
+            return Stream.of(
+                    OxidizableBlockSet::base,
+                    OxidizableBlockSet::exposed,
+                    OxidizableBlockSet::weathered,
+                    OxidizableBlockSet::oxidized,
+                    OxidizableBlockSet::waxedBase,
+                    OxidizableBlockSet::waxedExposed,
+                    OxidizableBlockSet::waxedWeathered,
+                    OxidizableBlockSet::waxedOxidized
+            );
+        }
     }
 
     private static String getOxidizedName(String name, OxidationLevel oxidationLevel) {
@@ -102,8 +115,8 @@ public class MaglevBlocks {
     }
 
     public static final OxidizableBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, OxidizableRailBlock::new);
-    public static final OxidizableBlockSet VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, OxidizableVariableRailBlock::new);
     public static final OxidizableBlockSet POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, OxidizablePoweredRailBlock::new);
+    public static final OxidizableBlockSet VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, OxidizableVariableRailBlock::new);
 
     public static final TagKey<Block> MAGLEV_RAILS = TagKey.of(RegistryKeys.BLOCK, Maglev.id("maglev_rails"));
 

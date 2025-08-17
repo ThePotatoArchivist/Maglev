@@ -10,7 +10,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +17,11 @@ import java.util.List;
  */
 public class MaglevItems {
 
-    private static final List<Item> itemGroupItems = new ArrayList<>();
+    private static final List<MaglevBlocks.OxidizableBlockSet> blockSets = List.of(
+            MaglevBlocks.MAGLEV_RAIL,
+            MaglevBlocks.POWERED_MAGLEV_RAIL,
+            MaglevBlocks.VARIABLE_MAGLEV_RAIL
+    );
 
     public static final String ITEM_GROUP_NAME = "itemGroup.maglev.maglev";
     public static final ItemGroup ITEM_GROUP = Registry.register(
@@ -28,19 +31,22 @@ public class MaglevItems {
                     .displayName(Text.translatable(ITEM_GROUP_NAME))
                     .icon(() -> MaglevBlocks.MAGLEV_RAIL.base().asItem().getDefaultStack())
                     .entries((displayContext, entries) -> {
-                        entries.addAll(itemGroupItems.stream().map(Item::getDefaultStack).toList());
+                        entries.addAll(MaglevBlocks.OxidizableBlockSet.fields()
+                                .flatMap(field -> blockSets.stream().map(field))
+                                .map(Block::asItem)
+                                .map(Item::getDefaultStack).toList());
                     })
                     .build()
     );
 
     private static void registerOxidizableItems(MaglevBlocks.OxidizableBlockSet blockSet) {
         for (var block : blockSet)
-            itemGroupItems.add(Items.register(block));
+            Items.register(block);
     }
 
     public static void init() {
         registerOxidizableItems(MaglevBlocks.MAGLEV_RAIL);
-        registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
         registerOxidizableItems(MaglevBlocks.POWERED_MAGLEV_RAIL);
+        registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
     }
 }
