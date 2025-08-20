@@ -30,7 +30,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     @Unique
     private boolean checkRail(int x, int y, int z) {
         var state = getWorld().getBlockState(new BlockPos(x, y, z));
-        if (!state.isIn(MaglevBlocks.MAGLEV_RAILS)) return false;
+        if (!state.isIn(MaglevBlocks.HOVERABLE_RAILS)) return false;
         return true;
     }
 
@@ -50,7 +50,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         var blockPos = getBlockPos().mutableCopy();
         for (int i = 0; i <= 15; i++) { // TODO unhardcode? or at least make constant
             var state = world.getBlockState(blockPos);
-            if (state.isIn(MaglevBlocks.MAGLEV_RAILS)) {
+            if (state.isIn(MaglevBlocks.HOVERABLE_RAILS)) {
                 if (i <= 1) return y;
                 setAttached(HOVER_HEIGHT, i);
                 return blockPos.getY();

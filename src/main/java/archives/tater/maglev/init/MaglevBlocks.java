@@ -22,6 +22,10 @@ public class MaglevBlocks {
         return Blocks.register(RegistryKey.of(RegistryKeys.BLOCK, Maglev.id(path)), constructor, settings);
     }
 
+    private static TagKey<Block> tagOf(String path) {
+        return TagKey.of(RegistryKeys.BLOCK, Maglev.id(path));
+    }
+
     public record OxidizableBlockSet(
             Block base,
             Block exposed,
@@ -118,7 +122,10 @@ public class MaglevBlocks {
     public static final OxidizableBlockSet POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, OxidizablePoweredRailBlock::new);
     public static final OxidizableBlockSet VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, OxidizableVariableRailBlock::new);
 
-    public static final TagKey<Block> MAGLEV_RAILS = TagKey.of(RegistryKeys.BLOCK, Maglev.id("maglev_rails"));
+    public static final TagKey<Block> MAGLEV_RAILS = tagOf("maglev_rails");
+    public static final TagKey<Block> POWERED_MAGLEV_RAILS = tagOf("powered_maglev_rails");
+    public static final TagKey<Block> VARIABLE_MAGLEV_RAILS = tagOf("variable_maglev_rails");
+    public static final TagKey<Block> HOVERABLE_RAILS = tagOf("hoverable_rails");
 
     public static void init() {
 

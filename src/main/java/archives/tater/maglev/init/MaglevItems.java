@@ -8,6 +8,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -16,6 +18,10 @@ import java.util.List;
  * Use {@link Block#asItem()} to get the items from the {@link archives.tater.maglev.init.MaglevBlocks.OxidizableBlockSet}s
  */
 public class MaglevItems {
+
+    private static TagKey<Item> tagOf(String path) {
+        return TagKey.of(RegistryKeys.ITEM, Maglev.id(path));
+    }
 
     private static final List<MaglevBlocks.OxidizableBlockSet> blockSets = List.of(
             MaglevBlocks.MAGLEV_RAIL,
@@ -38,6 +44,11 @@ public class MaglevItems {
                     })
                     .build()
     );
+
+    public static final TagKey<Item> MAGLEV_RAILS = tagOf("maglev_rails");
+    public static final TagKey<Item> POWERED_MAGLEV_RAILS = tagOf("powered_maglev_rails");
+    public static final TagKey<Item> VARIABLE_MAGLEV_RAILS = tagOf("variable_maglev_rails");
+    public static final TagKey<Item> HOVERABLE_RAILS = tagOf("hoverable_rails");
 
     private static void registerOxidizableItems(MaglevBlocks.OxidizableBlockSet blockSet) {
         for (var block : blockSet)
