@@ -19,6 +19,10 @@ public class MaglevDataAttachments {
             .syncWith(PacketCodecs.DOUBLE, AttachmentSyncPredicate.all())
     );
 
+    public static AttachmentType<Integer> MAX_EMPTY_TIME = AttachmentRegistry.createPersistent(Maglev.id("max_empty_time"), Codec.INT);
+
+    public static AttachmentType<Integer> EMPTY_TIME = AttachmentRegistry.createPersistent(Maglev.id("empty_time"), Codec.INT);
+
     public static void init() {
 
     }
