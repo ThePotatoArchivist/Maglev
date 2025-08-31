@@ -1,6 +1,7 @@
 package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
+import archives.tater.maglev.init.MaglevGamerules;
 import archives.tater.maglev.init.MaglevItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -31,6 +32,8 @@ public class LangGenerator extends FabricLanguageProvider {
         addDescription(translationBuilder, MaglevBlocks.MAGLEV_RAIL, "allows minecarts to hover up to 15 blocks above it");
         addDescription(translationBuilder, MaglevBlocks.POWERED_MAGLEV_RAIL, "accelerates minecarts hovering above it");
         addDescription(translationBuilder, MaglevBlocks.VARIABLE_MAGLEV_RAIL, "sets minecarts' hover speed to its redstone power level");
+        translationBuilder.add(MaglevGamerules.CATEGORY_TRANSLATION, "Maglev");
+        translationBuilder.add(MaglevGamerules.MINECART_COLLISION.getTranslationKey(), "Minecart Collision");
     }
 
     private static void addDescription(TranslationBuilder translationBuilder, TagKey<?> tagKey, String description) {

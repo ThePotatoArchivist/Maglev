@@ -23,6 +23,8 @@
   "block.maglev.weathered_maglev_rail": "Weathered Maglev Rail",
   "block.maglev.weathered_powered_maglev_rail": "Weathered Powered Maglev Rail",
   "block.maglev.weathered_variable_maglev_rail": "Weathered Variable Maglev Rail",
+  "gamerule.category.maglev": "Maglev",
+  "gamerule.maglev.minecart_collision": "Minecart Collision",
   "itemGroup.maglev.maglev": "Maglev",
   "lore.maglev.exposed_maglev_rail": "A rail block that allows minecarts to hover up to 15 blocks above it. Friction is removed and minecart travel at a high max speed.",
   "lore.maglev.exposed_powered_maglev_rail": "A rail block that accelerates minecarts hovering above it. Friction is removed and minecart travel at a high max speed.",

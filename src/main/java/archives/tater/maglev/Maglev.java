@@ -2,6 +2,7 @@ package archives.tater.maglev;
 
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
+import archives.tater.maglev.init.MaglevGamerules;
 import archives.tater.maglev.init.MaglevItems;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
@@ -29,5 +30,6 @@ public class Maglev implements ModInitializer {
 		MaglevBlocks.init();
 		MaglevItems.init();
 		MaglevDataAttachments.init();
+		MaglevGamerules.init();
 	}
 }

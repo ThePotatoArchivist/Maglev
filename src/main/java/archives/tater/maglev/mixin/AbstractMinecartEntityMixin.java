@@ -1,6 +1,7 @@
 package archives.tater.maglev.mixin;
 
 import archives.tater.maglev.init.MaglevBlocks;
+import archives.tater.maglev.init.MaglevGamerules;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
@@ -11,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,6 +25,8 @@ import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 @SuppressWarnings("UnstableApiUsage")
 @Mixin(AbstractMinecartEntity.class)
 public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
+    @Shadow public abstract void setOnRail(boolean onRail);
+
     public AbstractMinecartEntityMixin(EntityType<?> entityType, World world) {
         super(entityType, world);
     }
@@ -76,5 +80,15 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     )
     private void removeHoverSpeed(ServerWorld world, CallbackInfo ci) {
         removeAttached(SPEED_MULTIPLIER);
+    }
+
+    @ModifyExpressionValue(
+            method = "pushAwayFrom",
+            at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;noClip:Z")
+    )
+    private boolean checkCollisionGamerule(boolean original) {
+        if (original) return true;
+        if (!(getWorld() instanceof ServerWorld serverWorld)) return false;
+        return !serverWorld.getGameRules().getBoolean(MaglevGamerules.MINECART_COLLISION);
     }
 }
