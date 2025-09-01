@@ -3,6 +3,7 @@ package archives.tater.maglev.mixin;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevGamerules;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
@@ -79,11 +80,21 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         removeAttached(SPEED_MULTIPLIER);
     }
 
+    @ModifyReturnValue(
+            method = "collidesWith",
+            at = @At("RETURN")
+    )
+    private boolean checkCollisionGamerule(boolean original) {
+        if (!original) return false;
+        if (!(getWorld() instanceof ServerWorld serverWorld)) return true;
+        return serverWorld.getGameRules().getBoolean(MaglevGamerules.MINECART_COLLISION);
+    }
+
     @ModifyExpressionValue(
             method = "pushAwayFrom",
             at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;noClip:Z")
     )
-    private boolean checkCollisionGamerule(boolean original) {
+    private boolean checkCollisionGamerule2(boolean original) {
         if (original) return true;
         if (!(getWorld() instanceof ServerWorld serverWorld)) return false;
         return !serverWorld.getGameRules().getBoolean(MaglevGamerules.MINECART_COLLISION);
