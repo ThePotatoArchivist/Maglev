@@ -14,5 +14,6 @@ public class MaglevDataGenerator implements DataGeneratorEntrypoint {
 				pack.addProvider(BlockTagGenerator::new)
 		));
 		pack.addProvider(BlockLootTableGenerator::new);
+		pack.addProvider(MaglevRecipeGenerator.Provider::new);
 	}
 }

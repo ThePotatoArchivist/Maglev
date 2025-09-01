@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "waxed_weathered_variable_maglev_rail",
+  "ingredients": [
+    "maglev:weathered_variable_maglev_rail",
+    "minecraft:honeycomb"
+  ],
+  "result": {
+    "count": 1,
+    "id": "maglev:waxed_weathered_variable_maglev_rail"
+  }
+}
