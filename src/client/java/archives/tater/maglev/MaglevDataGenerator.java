@@ -1,9 +1,6 @@
 package archives.tater.maglev;
 
-import archives.tater.maglev.datagen.BlockTagGenerator;
-import archives.tater.maglev.datagen.ItemTagGenerator;
-import archives.tater.maglev.datagen.LangGenerator;
-import archives.tater.maglev.datagen.ModelGenerator;
+import archives.tater.maglev.datagen.*;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
@@ -13,7 +10,9 @@ public class MaglevDataGenerator implements DataGeneratorEntrypoint {
 		var pack = fabricDataGenerator.createPack();
 		pack.addProvider(ModelGenerator::new);
 		pack.addProvider(LangGenerator::new);
-		var blockTagGenerator = pack.addProvider(BlockTagGenerator::new);
-		pack.addProvider((output, registries) -> new ItemTagGenerator(output, registries, blockTagGenerator));
+        pack.addProvider(ItemTagGenerator.factory(
+				pack.addProvider(BlockTagGenerator::new)
+		));
+		pack.addProvider(BlockLootTableGenerator::new);
 	}
 }

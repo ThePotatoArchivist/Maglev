@@ -2,6 +2,7 @@ package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevItems;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.registry.RegistryWrapper;
@@ -13,6 +14,10 @@ public class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 
     public ItemTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture, @Nullable BlockTagProvider blockTagProvider) {
         super(output, registriesFuture, blockTagProvider);
+    }
+
+    public static FabricDataGenerator.Pack.RegistryDependentFactory<ItemTagGenerator> factory(BlockTagProvider blockTagProvider) {
+        return (output, registriesFuture) -> new ItemTagGenerator(output, registriesFuture, blockTagProvider);
     }
 
     @Override
