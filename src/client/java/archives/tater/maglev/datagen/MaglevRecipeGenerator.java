@@ -1,8 +1,10 @@
 package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
+import archives.tater.maglev.init.MaglevItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.data.recipe.RecipeGenerator;
 import net.minecraft.item.Item;
@@ -38,6 +40,36 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
         offerWaxingRecipes(MaglevBlocks.MAGLEV_RAIL);
         offerWaxingRecipes(MaglevBlocks.POWERED_MAGLEV_RAIL);
         offerWaxingRecipes(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
+
+        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.MAGLEV_RAIL.base(), 3)
+                .pattern("# #")
+                .pattern("#%#")
+                .pattern("# #")
+                .input('#', ConventionalItemTags.COPPER_INGOTS)
+                .input('%', Items.ECHO_SHARD) // TODO
+                .criterion(hasItem(Items.COPPER_INGOT), conditionsFromTag(ConventionalItemTags.COPPER_INGOTS))
+                .offerTo(exporter);
+
+        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.POWERED_MAGLEV_RAIL.base(), 2)
+                .pattern("#&#")
+                .pattern("#%#")
+                .pattern("#*#")
+                .input('#', ConventionalItemTags.COPPER_INGOTS)
+                .input('%', Items.ECHO_SHARD) // TODO
+                .input('&', ConventionalItemTags.GOLD_INGOTS)
+                .input('*', ConventionalItemTags.REDSTONE_DUSTS)
+                .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.base()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
+                .offerTo(exporter);
+
+        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.VARIABLE_MAGLEV_RAIL.base(), 1)
+                .pattern("# #")
+                .pattern("#%#")
+                .pattern("#*#")
+                .input('#', ConventionalItemTags.COPPER_INGOTS)
+                .input('%', Items.ECHO_SHARD) // TODO
+                .input('*', ConventionalItemTags.QUARTZ_GEMS)
+                .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.base()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
+                .offerTo(exporter);
     }
 
     public static class Provider extends FabricRecipeProvider {

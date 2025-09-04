@@ -37,9 +37,9 @@ This mod was based on [this r/minecraftsuggestions reddit post](https://www.redd
   | Weathered | 4 blocks/tick |
   | Oxidized | 1 blocks/tick |
 - Minecarts remember which track they're on so rails can cross underneath and they stay on the right track
-- You may place blocks between the rail and minecart to have invisible rails
+- You may place blocks between the rail and minecart to have hidden rails
 - If a minecart hits a corner (including a change between flat and incline) while moving too quickly, it may derail. To prevent this, the minecart must be slowed to at most weathered speed. This was unintentional but is currently considered a feature.
-- All maglev rails can be manually oxidized by right clicking with a wet sponge
+- All maglev rails can be manually oxidized by right-clicking with a wet sponge
 
 ## Notes
 

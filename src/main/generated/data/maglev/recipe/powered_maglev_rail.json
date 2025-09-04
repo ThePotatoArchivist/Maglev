@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "#c:ingots/copper",
+    "%": "minecraft:echo_shard",
+    "&": "#c:ingots/gold",
+    "*": "#c:dusts/redstone"
+  },
+  "pattern": [
+    "#&#",
+    "#%#",
+    "#*#"
+  ],
+  "result": {
+    "count": 2,
+    "id": "maglev:powered_maglev_rail"
+  }
+}
