@@ -24,5 +24,7 @@ public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 .forceAddTag(MaglevBlocks.VARIABLE_MAGLEV_RAILS);
         valueLookupBuilder(BlockTags.RAILS)
                 .forceAddTag(MaglevBlocks.HOVERABLE_RAILS);
+        valueLookupBuilder(MaglevBlocks.MANUALLY_OXIDIZABLE)
+                .forceAddTag(MaglevBlocks.HOVERABLE_RAILS);
     }
 }

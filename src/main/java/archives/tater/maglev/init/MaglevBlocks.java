@@ -2,20 +2,27 @@ package archives.tater.maglev.init;
 
 import archives.tater.maglev.Maglev;
 import archives.tater.maglev.block.*;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Oxidizable.OxidationLevel;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static net.minecraft.block.Oxidizable.getIncreasedOxidationBlock;
 
 public class MaglevBlocks {
     private static Block register(String path, Function<AbstractBlock.Settings, Block> constructor, AbstractBlock.Settings settings) {
@@ -126,8 +133,26 @@ public class MaglevBlocks {
     public static final TagKey<Block> POWERED_MAGLEV_RAILS = tagOf("powered_maglev_rails");
     public static final TagKey<Block> VARIABLE_MAGLEV_RAILS = tagOf("variable_maglev_rails");
     public static final TagKey<Block> HOVERABLE_RAILS = tagOf("hoverable_rails");
+    public static final TagKey<Block> MANUALLY_OXIDIZABLE = tagOf("manually_oxidizable");
 
     public static void init() {
+        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+            if (!player.getStackInHand(hand).isIn(MaglevItems.OXIDIZERS)) return ActionResult.PASS;
+            var pos = hitResult.getBlockPos();
+            var state = world.getBlockState(pos);
+            if (!state.isIn(MaglevBlocks.MANUALLY_OXIDIZABLE)) return ActionResult.PASS;
 
+            var oxidizedBlock = getIncreasedOxidationBlock(state.getBlock()).orElse(null);
+            if (oxidizedBlock == null) return ActionResult.FAIL;
+
+            world.setBlockState(pos, oxidizedBlock.getStateWithProperties(state));
+            world.playSound(player, pos, SoundEvents.ITEM_BOTTLE_EMPTY, player.getSoundCategory());
+            if (world instanceof ServerWorld serverWorld) {
+                var particlePos = pos.toBottomCenterPos();
+                serverWorld.spawnParticles(ParticleTypes.SPLASH, particlePos.x, particlePos.y, particlePos.z, 8, 0.25, 0, 0.25, 0);
+            }
+
+            return ActionResult.SUCCESS;
+        });
     }
 }

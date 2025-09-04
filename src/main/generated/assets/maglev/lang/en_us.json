@@ -50,6 +50,7 @@
   "lore.maglev.weathered_variable_maglev_rail": "A rail block that sets minecarts' hover speed to its redstone power level. Friction is removed and minecart travel at a normal max speed.",
   "tag.item.maglev.hoverable_rails": "Hoverable Rails",
   "tag.item.maglev.maglev_rails": "Maglev Rails",
+  "tag.item.maglev.oxidizers": "Oxidizers",
   "tag.item.maglev.powered_maglev_rails": "Powered Maglev Rails",
   "tag.item.maglev.variable_maglev_rails": "Variable Maglev Rails"
 }

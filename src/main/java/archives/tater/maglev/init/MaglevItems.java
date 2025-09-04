@@ -49,6 +49,7 @@ public class MaglevItems {
     public static final TagKey<Item> POWERED_MAGLEV_RAILS = tagOf("powered_maglev_rails");
     public static final TagKey<Item> VARIABLE_MAGLEV_RAILS = tagOf("variable_maglev_rails");
     public static final TagKey<Item> HOVERABLE_RAILS = tagOf("hoverable_rails");
+    public static final TagKey<Item> OXIDIZERS = tagOf("oxidizers");
 
     private static void registerOxidizableItems(MaglevBlocks.OxidizableBlockSet blockSet) {
         for (var block : blockSet)

@@ -28,6 +28,7 @@ public class LangGenerator extends FabricLanguageProvider {
         translationBuilder.add(MaglevItems.POWERED_MAGLEV_RAILS, "Powered Maglev Rails");
         translationBuilder.add(MaglevItems.VARIABLE_MAGLEV_RAILS, "Variable Maglev Rails");
         translationBuilder.add(MaglevItems.HOVERABLE_RAILS, "Hoverable Rails");
+        translationBuilder.add(MaglevItems.OXIDIZERS, "Oxidizers");
         addDescription(translationBuilder, MaglevBlocks.MAGLEV_RAIL, "allows minecarts to hover up to 15 blocks above it");
         addDescription(translationBuilder, MaglevBlocks.POWERED_MAGLEV_RAIL, "accelerates minecarts hovering above it");
         addDescription(translationBuilder, MaglevBlocks.VARIABLE_MAGLEV_RAIL, "sets minecarts' hover speed to its redstone power level");
