@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "#": "#c:ingots/copper",
-    "%": "minecraft:echo_shard"
+    "%": "#c:ingots/iron"
   },
   "pattern": [
     "# #",
@@ -11,7 +11,7 @@
     "# #"
   ],
   "result": {
-    "count": 3,
+    "count": 6,
     "id": "maglev:maglev_rail"
   }
 }

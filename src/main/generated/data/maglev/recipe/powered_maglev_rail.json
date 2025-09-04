@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "#": "#c:ingots/copper",
-    "%": "minecraft:echo_shard",
+    "%": "#c:ingots/iron",
     "&": "#c:ingots/gold",
     "*": "#c:dusts/redstone"
   },

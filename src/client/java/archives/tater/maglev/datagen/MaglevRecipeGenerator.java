@@ -41,12 +41,12 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
         offerWaxingRecipes(MaglevBlocks.POWERED_MAGLEV_RAIL);
         offerWaxingRecipes(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
 
-        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.MAGLEV_RAIL.base(), 3)
+        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.MAGLEV_RAIL.base(), 6)
                 .pattern("# #")
                 .pattern("#%#")
                 .pattern("# #")
                 .input('#', ConventionalItemTags.COPPER_INGOTS)
-                .input('%', Items.ECHO_SHARD) // TODO
+                .input('%', ConventionalItemTags.IRON_INGOTS)
                 .criterion(hasItem(Items.COPPER_INGOT), conditionsFromTag(ConventionalItemTags.COPPER_INGOTS))
                 .offerTo(exporter);
 
@@ -55,19 +55,20 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
                 .pattern("#%#")
                 .pattern("#*#")
                 .input('#', ConventionalItemTags.COPPER_INGOTS)
-                .input('%', Items.ECHO_SHARD) // TODO
+                .input('%', ConventionalItemTags.IRON_INGOTS)
                 .input('&', ConventionalItemTags.GOLD_INGOTS)
                 .input('*', ConventionalItemTags.REDSTONE_DUSTS)
                 .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.base()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
                 .offerTo(exporter);
 
         createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.VARIABLE_MAGLEV_RAIL.base(), 1)
-                .pattern("# #")
+                .pattern("#&#")
                 .pattern("#%#")
                 .pattern("#*#")
                 .input('#', ConventionalItemTags.COPPER_INGOTS)
-                .input('%', Items.ECHO_SHARD) // TODO
-                .input('*', ConventionalItemTags.QUARTZ_GEMS)
+                .input('%', ConventionalItemTags.IRON_INGOTS)
+                .input('&', ConventionalItemTags.QUARTZ_GEMS)
+                .input('*', ConventionalItemTags.REDSTONE_DUSTS)
                 .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.base()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
                 .offerTo(exporter);
     }

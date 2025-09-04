@@ -3,11 +3,12 @@
   "category": "misc",
   "key": {
     "#": "#c:ingots/copper",
-    "%": "minecraft:echo_shard",
-    "*": "#c:gems/quartz"
+    "%": "#c:ingots/iron",
+    "&": "#c:gems/quartz",
+    "*": "#c:dusts/redstone"
   },
   "pattern": [
-    "# #",
+    "#&#",
     "#%#",
     "#*#"
   ],
