@@ -40,10 +40,10 @@ This mod was based on [this r/minecraftsuggestions reddit post](https://www.redd
 - Minecarts have different max speeds on different oxidized rails:
   | Oxidation | Max Speed |
   | --- | --- |
-  | Unoxidized | 12 blocks/tick |
-  | Exposed | 8 blocks/tick |
-  | Weathered | 4 blocks/tick |
-  | Oxidized | 1 blocks/tick |
+  | Unoxidized | 1.2 blocks/tick |
+  | Exposed | 0.8 blocks/tick |
+  | Weathered | 0.4 blocks/tick |
+  | Oxidized | 0.1 blocks/tick |
 - Minecarts remember which track they're on so rails can cross underneath and they stay on the right track
 - You may place blocks between the rail and minecart to have hidden rails
 - If a minecart hits a corner (or changes between flat and incline) while moving too quickly, it may derail. To prevent this, the minecart must be slowed to at most weathered speed. This was unintentional but is currently considered a feature.
