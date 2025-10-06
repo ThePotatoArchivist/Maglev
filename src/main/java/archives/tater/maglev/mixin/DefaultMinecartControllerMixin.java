@@ -3,20 +3,22 @@ package archives.tater.maglev.mixin;
 import archives.tater.maglev.block.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
+
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.DefaultMinecartController;
 import net.minecraft.entity.vehicle.MinecartController;
 import net.minecraft.util.math.BlockPos;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
@@ -72,7 +74,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
     private BlockState updateOnVariableRail(BlockState original, @Local BlockPos pos) {
         if (!MaglevBlocks.VARIABLE_MAGLEV_RAIL.contains(original.getBlock())) return original;
 
-        minecart.setAttached(HOVER_HEIGHT, minecart.getWorld().getReceivedRedstonePower(pos));
+        minecart.setAttached(HOVER_HEIGHT, minecart.getEntityWorld().getReceivedRedstonePower(pos));
 
         return original;
     }
