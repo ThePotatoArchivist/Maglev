@@ -2,11 +2,14 @@ package archives.tater.maglev.init;
 
 import archives.tater.maglev.Maglev;
 import archives.tater.maglev.block.*;
+
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
+
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CopperBlockSet;
 import net.minecraft.block.Oxidizable.OxidationLevel;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKey;
@@ -15,12 +18,9 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static net.minecraft.block.Oxidizable.getIncreasedOxidationBlock;
 
@@ -31,65 +31,6 @@ public class MaglevBlocks {
 
     private static TagKey<Block> tagOf(String path) {
         return TagKey.of(RegistryKeys.BLOCK, Maglev.id(path));
-    }
-
-    public record OxidizableBlockSet(
-            Block base,
-            Block exposed,
-            Block weathered,
-            Block oxidized,
-            Block waxedBase,
-            Block waxedExposed,
-            Block waxedWeathered,
-            Block waxedOxidized
-    ) implements Iterable<Block> {
-        public OxidizableBlockSet {
-            OxidizableBlocksRegistry.registerOxidizableBlockPair(base, exposed);
-            OxidizableBlocksRegistry.registerOxidizableBlockPair(exposed, weathered);
-            OxidizableBlocksRegistry.registerOxidizableBlockPair(weathered, oxidized);
-            OxidizableBlocksRegistry.registerWaxableBlockPair(base, waxedBase);
-            OxidizableBlocksRegistry.registerWaxableBlockPair(exposed, waxedExposed);
-            OxidizableBlocksRegistry.registerWaxableBlockPair(weathered, waxedWeathered);
-            OxidizableBlocksRegistry.registerWaxableBlockPair(oxidized, waxedOxidized);
-        }
-
-        public Stream<Block> stream() {
-            return Stream.of(base, exposed, weathered, oxidized, waxedBase, waxedExposed, waxedWeathered, waxedOxidized);
-        }
-
-        @Override
-        public @NotNull Iterator<Block> iterator() {
-            return stream().iterator();
-        }
-
-        public Block[] toArray() {
-            return new Block[]{base, exposed, weathered, oxidized, waxedBase, waxedExposed, waxedWeathered, waxedOxidized};
-        }
-
-        public boolean contains(Block block) {
-            return (block == base ||
-                    block == exposed ||
-                    block == weathered ||
-                    block == oxidized ||
-                    block == waxedBase ||
-                    block == waxedExposed ||
-                    block == waxedWeathered ||
-                    block == waxedOxidized
-            );
-        }
-
-        public static Stream<Function<OxidizableBlockSet, Block>> fields() {
-            return Stream.of(
-                    OxidizableBlockSet::base,
-                    OxidizableBlockSet::exposed,
-                    OxidizableBlockSet::weathered,
-                    OxidizableBlockSet::oxidized,
-                    OxidizableBlockSet::waxedBase,
-                    OxidizableBlockSet::waxedExposed,
-                    OxidizableBlockSet::waxedWeathered,
-                    OxidizableBlockSet::waxedOxidized
-            );
-        }
     }
 
     private static String getOxidizedName(String name, OxidationLevel oxidationLevel) {
@@ -112,8 +53,13 @@ public class MaglevBlocks {
         );
     }
 
-    private static OxidizableBlockSet registerOxidizableRails(String name, BiFunction<OxidationLevel, AbstractBlock.Settings, Block> waxedConstructor, BiFunction<OxidationLevel, AbstractBlock.Settings, Block> oxidizableConstructor) {
-        return new OxidizableBlockSet(
+    private static CopperBlockSet registerOxidizable(CopperBlockSet blockSet) {
+        OxidizableBlocksRegistry.registerCopperBlockSet(blockSet);
+        return blockSet;
+    }
+
+    private static CopperBlockSet registerOxidizableRails(String name, BiFunction<OxidationLevel, AbstractBlock.Settings, Block> waxedConstructor, BiFunction<OxidationLevel, AbstractBlock.Settings, Block> oxidizableConstructor) {
+        return registerOxidizable(new CopperBlockSet(
                 registerOxidizableRail(name, OxidationLevel.UNAFFECTED, oxidizableConstructor),
                 registerOxidizableRail(name, OxidationLevel.EXPOSED, oxidizableConstructor),
                 registerOxidizableRail(name, OxidationLevel.WEATHERED, oxidizableConstructor),
@@ -122,12 +68,12 @@ public class MaglevBlocks {
                 registerWaxedRail(name, OxidationLevel.EXPOSED, waxedConstructor),
                 registerWaxedRail(name, OxidationLevel.WEATHERED, waxedConstructor),
                 registerWaxedRail(name, OxidationLevel.OXIDIZED, waxedConstructor)
-        );
+        ));
     }
 
-    public static final OxidizableBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, OxidizableRailBlock::new);
-    public static final OxidizableBlockSet POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, OxidizablePoweredRailBlock::new);
-    public static final OxidizableBlockSet VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, OxidizableVariableRailBlock::new);
+    public static final CopperBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, OxidizableRailBlock::new);
+    public static final CopperBlockSet POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, OxidizablePoweredRailBlock::new);
+    public static final CopperBlockSet VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, OxidizableVariableRailBlock::new);
 
     public static final TagKey<Block> MAGLEV_RAILS = tagOf("maglev_rails");
     public static final TagKey<Block> POWERED_MAGLEV_RAILS = tagOf("powered_maglev_rails");
@@ -136,6 +82,7 @@ public class MaglevBlocks {
     public static final TagKey<Block> MANUALLY_OXIDIZABLE = tagOf("manually_oxidizable");
 
     public static void init() {
+
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (!player.getStackInHand(hand).isIn(MaglevItems.OXIDIZERS)) return ActionResult.PASS;
             var pos = hitResult.getBlockPos();

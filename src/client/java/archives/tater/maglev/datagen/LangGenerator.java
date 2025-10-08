@@ -2,9 +2,12 @@ package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevItems;
+
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.CopperBlockSet;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
@@ -42,12 +45,12 @@ public class LangGenerator extends FabricLanguageProvider {
         translationBuilder.add(createTranslationKey("lore", Registries.BLOCK.getId(block)), description);
     }
 
-    private static void add(TranslationBuilder translationBuilder, MaglevBlocks.OxidizableBlockSet blockSet, String name) {
-        translationBuilder.add(blockSet.base(), name);
+    private static void add(TranslationBuilder translationBuilder, CopperBlockSet blockSet, String name) {
+        translationBuilder.add(blockSet.unaffected(), name);
         translationBuilder.add(blockSet.exposed(), "Exposed " + name);
         translationBuilder.add(blockSet.weathered(), "Weathered " + name);
         translationBuilder.add(blockSet.oxidized(), "Oxidized " + name);
-        translationBuilder.add(blockSet.waxedBase(), "Waxed " + name);
+        translationBuilder.add(blockSet.waxed(), "Waxed " + name);
         translationBuilder.add(blockSet.waxedExposed(), "Waxed Exposed " + name);
         translationBuilder.add(blockSet.waxedWeathered(), "Waxed Weathered " + name);
         translationBuilder.add(blockSet.waxedOxidized(), "Waxed Oxidized " + name);
@@ -57,12 +60,12 @@ public class LangGenerator extends FabricLanguageProvider {
         return "A rail block that " + behavior + ". Friction is removed and minecart travel at a " + speed + " max speed.";
     }
 
-    private static void addDescription(TranslationBuilder translationBuilder, MaglevBlocks.OxidizableBlockSet blockSet, String behavior) {
-        addDescription(translationBuilder, blockSet.base(), createRailDescription(behavior, "very high"));
+    private static void addDescription(TranslationBuilder translationBuilder, CopperBlockSet blockSet, String behavior) {
+        addDescription(translationBuilder, blockSet.unaffected(), createRailDescription(behavior, "very high"));
         addDescription(translationBuilder, blockSet.exposed(), createRailDescription(behavior, "high"));
         addDescription(translationBuilder, blockSet.weathered(), createRailDescription(behavior, "normal"));
         addDescription(translationBuilder, blockSet.oxidized(), createRailDescription(behavior, "low"));
-        addDescription(translationBuilder, blockSet.waxedBase(), createRailDescription(behavior, "very high"));
+        addDescription(translationBuilder, blockSet.waxed(), createRailDescription(behavior, "very high"));
         addDescription(translationBuilder, blockSet.waxedExposed(), createRailDescription(behavior, "high"));
         addDescription(translationBuilder, blockSet.waxedWeathered(), createRailDescription(behavior, "normal"));
         addDescription(translationBuilder, blockSet.waxedOxidized(), createRailDescription(behavior, "low"));

@@ -2,9 +2,12 @@ package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevItems;
+
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
+
+import net.minecraft.block.CopperBlockSet;
 import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.data.recipe.RecipeGenerator;
 import net.minecraft.item.Item;
@@ -28,8 +31,8 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
                 .offerTo(exporter, convertBetween(waxed, Items.HONEYCOMB));
     }
 
-    private void offerWaxingRecipes(MaglevBlocks.OxidizableBlockSet blockSet) {
-        offerWaxingRecipe(blockSet.waxedBase().asItem(), blockSet.base().asItem());
+    private void offerWaxingRecipes(CopperBlockSet blockSet) {
+        offerWaxingRecipe(blockSet.waxed().asItem(), blockSet.unaffected().asItem());
         offerWaxingRecipe(blockSet.waxedExposed().asItem(), blockSet.exposed().asItem());
         offerWaxingRecipe(blockSet.waxedWeathered().asItem(), blockSet.weathered().asItem());
         offerWaxingRecipe(blockSet.waxedOxidized().asItem(), blockSet.oxidized().asItem());
@@ -41,7 +44,7 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
         offerWaxingRecipes(MaglevBlocks.POWERED_MAGLEV_RAIL);
         offerWaxingRecipes(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
 
-        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.MAGLEV_RAIL.base(), 6)
+        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.MAGLEV_RAIL.unaffected(), 6)
                 .pattern("# #")
                 .pattern("#%#")
                 .pattern("# #")
@@ -50,7 +53,7 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
                 .criterion(hasItem(Items.COPPER_INGOT), conditionsFromTag(ConventionalItemTags.COPPER_INGOTS))
                 .offerTo(exporter);
 
-        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.POWERED_MAGLEV_RAIL.base(), 2)
+        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.POWERED_MAGLEV_RAIL.unaffected(), 2)
                 .pattern("#&#")
                 .pattern("#%#")
                 .pattern("#*#")
@@ -58,10 +61,10 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
                 .input('%', ConventionalItemTags.IRON_INGOTS)
                 .input('&', ConventionalItemTags.GOLD_INGOTS)
                 .input('*', ConventionalItemTags.REDSTONE_DUSTS)
-                .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.base()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
+                .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.unaffected()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
                 .offerTo(exporter);
 
-        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.VARIABLE_MAGLEV_RAIL.base(), 1)
+        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.VARIABLE_MAGLEV_RAIL.unaffected(), 1)
                 .pattern("#&#")
                 .pattern("#%#")
                 .pattern("#*#")
@@ -69,7 +72,7 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
                 .input('%', ConventionalItemTags.IRON_INGOTS)
                 .input('&', ConventionalItemTags.QUARTZ_GEMS)
                 .input('*', ConventionalItemTags.REDSTONE_DUSTS)
-                .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.base()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
+                .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.unaffected()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
                 .offerTo(exporter);
     }
 

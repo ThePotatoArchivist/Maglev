@@ -1,12 +1,12 @@
 {
   "values": [
     "maglev:variable_maglev_rail",
-    "maglev:exposed_variable_maglev_rail",
-    "maglev:weathered_variable_maglev_rail",
-    "maglev:oxidized_variable_maglev_rail",
     "maglev:waxed_variable_maglev_rail",
+    "maglev:exposed_variable_maglev_rail",
     "maglev:waxed_exposed_variable_maglev_rail",
+    "maglev:weathered_variable_maglev_rail",
     "maglev:waxed_weathered_variable_maglev_rail",
+    "maglev:oxidized_variable_maglev_rail",
     "maglev:waxed_oxidized_variable_maglev_rail"
   ]
 }

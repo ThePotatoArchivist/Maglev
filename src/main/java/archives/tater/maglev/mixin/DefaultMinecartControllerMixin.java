@@ -20,6 +20,7 @@ import net.minecraft.entity.vehicle.DefaultMinecartController;
 import net.minecraft.entity.vehicle.MinecartController;
 import net.minecraft.util.math.BlockPos;
 
+import static archives.tater.maglev.CopperBlockSetUtil.isOf;
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -55,7 +56,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z")
     )
     private boolean checkPowered(BlockState instance, Block block, Operation<Boolean> original) {
-        return original.call(instance, block) || MaglevBlocks.POWERED_MAGLEV_RAIL.contains(instance.getBlock());
+        return original.call(instance, block) || isOf(instance.getBlock(), MaglevBlocks.POWERED_MAGLEV_RAIL);
     }
 
     @ModifyExpressionValue(
@@ -72,7 +73,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;")
     )
     private BlockState updateOnVariableRail(BlockState original, @Local BlockPos pos) {
-        if (!MaglevBlocks.VARIABLE_MAGLEV_RAIL.contains(original.getBlock())) return original;
+        if (!isOf(original.getBlock(), MaglevBlocks.VARIABLE_MAGLEV_RAIL)) return original;
 
         minecart.setAttached(HOVER_HEIGHT, minecart.getEntityWorld().getReceivedRedstonePower(pos));
 

@@ -2,11 +2,15 @@ package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.Maglev;
 import archives.tater.maglev.init.MaglevBlocks;
+
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.CopperBlockSet;
 import net.minecraft.client.data.*;
 import net.minecraft.util.Identifier;
+
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -111,15 +115,15 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Specialized utilities
 
-    private static void registerOxidizableStraightRail(BlockStateModelGenerator modelGenerator, MaglevBlocks.OxidizableBlockSet blockSet, RailModels railModels) {
-        registerStraightRail(modelGenerator, blockSet.base(), blockSet.waxedBase(), railModels);
+    private static void registerOxidizableStraightRail(BlockStateModelGenerator modelGenerator, CopperBlockSet blockSet, RailModels railModels) {
+        registerStraightRail(modelGenerator, blockSet.unaffected(), blockSet.waxed(), railModels);
         registerStraightRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed(), railModels);
         registerStraightRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized(), railModels);
         registerStraightRail(modelGenerator, blockSet.weathered(), blockSet.waxedWeathered(), railModels);
     }
 
-    private static void registerOxidizableTurnableRail(BlockStateModelGenerator modelGenerator, MaglevBlocks.OxidizableBlockSet blockSet, RailModels railModels) {
-        registerTurnableRail(modelGenerator, blockSet.base(), blockSet.waxedBase(), railModels);
+    private static void registerOxidizableTurnableRail(BlockStateModelGenerator modelGenerator, CopperBlockSet blockSet, RailModels railModels) {
+        registerTurnableRail(modelGenerator, blockSet.unaffected(), blockSet.waxed(), railModels);
         registerTurnableRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed(), railModels);
         registerTurnableRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized(), railModels);
         registerTurnableRail(modelGenerator, blockSet.weathered(), blockSet.waxedWeathered(), railModels);
