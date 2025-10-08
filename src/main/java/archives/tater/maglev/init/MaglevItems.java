@@ -40,12 +40,13 @@ public class MaglevItems {
             FabricItemGroup.builder()
                     .displayName(Text.translatable(ITEM_GROUP_NAME))
                     .icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultStack())
-                    .entries((displayContext, entries) -> {
-                        entries.addAll(CopperBlockSetUtil.fields()
-                                .flatMap(field -> blockSets.stream().map(field))
-                                .map(Block::asItem)
-                                .map(Item::getDefaultStack).toList());
-                    })
+                    .entries((displayContext, entries) -> entries.addAll(
+                            CopperBlockSetUtil.fields()
+                                    .flatMap(field -> blockSets.stream().map(field))
+                                    .map(Block::asItem)
+                                    .map(Item::getDefaultStack)
+                                    .toList()
+                    ))
                     .build()
     );
 
