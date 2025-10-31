@@ -30,7 +30,7 @@ public class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         copy(MaglevBlocks.VARIABLE_MAGLEV_RAILS, MaglevItems.VARIABLE_MAGLEV_RAILS);
         copy(MaglevBlocks.HOVERABLE_RAILS, MaglevItems.HOVERABLE_RAILS);
         copy(BlockTags.RAILS, ItemTags.RAILS);
-        valueLookupBuilder(MaglevItems.OXIDIZERS)
+        getOrCreateTagBuilder(MaglevItems.OXIDIZERS)
                 .add(Items.WET_SPONGE);
     }
 }

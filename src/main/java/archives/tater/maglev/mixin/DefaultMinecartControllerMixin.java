@@ -3,39 +3,46 @@ package archives.tater.maglev.mixin;
 import archives.tater.maglev.block.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
+
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.VehicleEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
 @SuppressWarnings("UnstableApiUsage")
-@Mixin(DefaultMinecartController.class)
-public abstract class DefaultMinecartControllerMixin extends MinecartController {
-    protected DefaultMinecartControllerMixin(AbstractMinecartEntity minecart) {
-        super(minecart);
+@Mixin(AbstractMinecartEntity.class)
+public abstract class DefaultMinecartControllerMixin extends VehicleEntity {
+
+    public DefaultMinecartControllerMixin(EntityType<?> entityType, World world) {
+        super(entityType, world);
     }
 
     @ModifyArg(
             method = {
                     "snapPositionToRail",
-                    "simulateMovement"
+                    "snapPositionToRailWithOffset"
             },
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;<init>(III)V"),
             index = 1
     )
     private int snapToHover(int y) {
-        if (!minecart.hasAttached(HOVER_HEIGHT)) return y;
-        return y - minecart.getAttachedOrElse(HOVER_HEIGHT, 0);
+        if (!hasAttached(HOVER_HEIGHT)) return y;
+        return y - getAttachedOrElse(HOVER_HEIGHT, 0);
     }
 
     @ModifyExpressionValue(
@@ -43,7 +50,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;getY()I")
     )
     private int addHeight(int original) {
-        return original + minecart.getAttachedOrElse(HOVER_HEIGHT, 0);
+        return original + getAttachedOrElse(HOVER_HEIGHT, 0);
     }
 
     @WrapOperation(
@@ -54,43 +61,40 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
         return original.call(instance, block) || MaglevBlocks.POWERED_MAGLEV_RAIL.contains(instance.getBlock());
     }
 
-    @ModifyExpressionValue(
+    @Inject(
             method = "moveOnRail",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;")
+            at = @At("HEAD")
     )
-    private BlockState updateSpeed(BlockState original) {
-        OxidizablePoweredRailBlock.updateSpeed(minecart, original);
-        return original;
+    private void updateSpeed(BlockPos pos, BlockState state, CallbackInfo ci) {
+        OxidizablePoweredRailBlock.updateSpeed((AbstractMinecartEntity) (Object) this, state);
     }
 
-    @ModifyExpressionValue(
+    @Inject(
             method = "moveOnRail",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;")
+            at = @At("HEAD")
     )
-    private BlockState updateOnVariableRail(BlockState original, @Local BlockPos pos) {
-        if (!MaglevBlocks.VARIABLE_MAGLEV_RAIL.contains(original.getBlock())) return original;
+    private void updateOnVariableRail(BlockPos pos, BlockState state, CallbackInfo ci) {
+        if (!MaglevBlocks.VARIABLE_MAGLEV_RAIL.contains(state.getBlock())) return;
 
-        minecart.setAttached(HOVER_HEIGHT, minecart.getWorld().getReceivedRedstonePower(pos));
-
-        return original;
+        setAttached(HOVER_HEIGHT, getWorld().getReceivedRedstonePower(pos));
     }
 
-    @ModifyExpressionValue(
-            method = "limitSpeed",
-            at = @At(value = "CONSTANT", args = {
-                    "doubleValue=-0.4",
-                    "doubleValue=0.4"
-            })
-    )
-    private double changeMaxSpeed(double original) {
-        return minecart.getAttachedOrElse(MaglevDataAttachments.SPEED_MULTIPLIER, 1.0) * original;
-    }
+//    @ModifyExpressionValue(
+//            method = "limitSpeed",
+//            at = @At(value = "CONSTANT", args = {
+//                    "doubleValue=-0.4",
+//                    "doubleValue=0.4"
+//            })
+//    )
+//    private double changeMaxSpeed(double original) {
+//        return getAttachedOrElse(MaglevDataAttachments.SPEED_MULTIPLIER, 1.0) * original;
+//    }
 
     @ModifyReturnValue(
             method = "getMaxSpeed",
             at = @At("RETURN")
     )
     private double changeMaxSpeed2(double original) {
-        return minecart.getAttachedOrElse(MaglevDataAttachments.SPEED_MULTIPLIER, 1.0) * original;
+        return getAttachedOrElse(MaglevDataAttachments.SPEED_MULTIPLIER, 1.0) * original;
     }
 }

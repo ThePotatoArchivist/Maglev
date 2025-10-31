@@ -3,8 +3,12 @@
   "category": "misc",
   "group": "waxed_powered_maglev_rail",
   "ingredients": [
-    "maglev:powered_maglev_rail",
-    "minecraft:honeycomb"
+    {
+      "item": "maglev:powered_maglev_rail"
+    },
+    {
+      "item": "minecraft:honeycomb"
+    }
   ],
   "result": {
     "count": 1,

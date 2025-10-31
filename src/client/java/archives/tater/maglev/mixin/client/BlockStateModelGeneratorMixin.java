@@ -15,15 +15,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
+import net.minecraft.data.client.*;
 
 import java.util.function.Consumer;
 
 @Mixin(BlockStateModelGenerator.class)
 public class BlockStateModelGeneratorMixin {
-	@Shadow @Final public Consumer<BlockModelDefinitionCreator> blockStateCollector;
 
-	@Inject(
+    @Shadow
+    @Final
+    public Consumer<BlockStateSupplier> blockStateCollector;
+
+    @Inject(
 			method = {
 					"registerTurnableRail",
 					"registerStraightRail"
@@ -42,13 +45,13 @@ public class BlockStateModelGeneratorMixin {
 					"registerTurnableRail",
 					"registerStraightRail"
 			},
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/data/VariantsBlockModelDefinitionCreator$Empty;with(Lnet/minecraft/client/data/BlockStateVariantMap;)Lnet/minecraft/client/data/VariantsBlockModelDefinitionCreator;")
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/data/client/VariantsBlockStateSupplier;coordinate(Lnet/minecraft/data/client/BlockStateVariantMap;)Lnet/minecraft/data/client/VariantsBlockStateSupplier;")
 	)
-	private VariantsBlockModelDefinitionCreator replaceBlock2(VariantsBlockModelDefinitionCreator.Empty instance, BlockStateVariantMap<WeightedVariant> variantMap, Operation<VariantsBlockModelDefinitionCreator> original, @Share("targetBlock") LocalRef<Block> targetBlock) {
-		var originalResult = original.call(instance, variantMap);
+	private VariantsBlockStateSupplier replaceBlock2(VariantsBlockStateSupplier instance, BlockStateVariantMap map, Operation<VariantsBlockStateSupplier> original, @Share("targetBlock") LocalRef<Block> targetBlock) {
+		var originalResult = original.call(instance, map);
 		if (targetBlock.get() == null) return originalResult;
 
-		blockStateCollector.accept(VariantsBlockModelDefinitionCreator.of(targetBlock.get()).with(variantMap));
+		blockStateCollector.accept(VariantsBlockStateSupplier.create(targetBlock.get()).coordinate(map));
 
 		return originalResult;
 	}
@@ -58,7 +61,7 @@ public class BlockStateModelGeneratorMixin {
 					"registerTurnableRail",
 					"registerStraightRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;RAIL_FLAT:Lnet/minecraft/client/data/Model;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/data/client/Models;RAIL_FLAT:Lnet/minecraft/data/client/Model;", ordinal = 0)
 	)
 	private Model replaceModel1(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
@@ -67,7 +70,7 @@ public class BlockStateModelGeneratorMixin {
 
 	@ModifyExpressionValue(
 			method = "registerStraightRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;RAIL_FLAT:Lnet/minecraft/client/data/Model;", ordinal = 1)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/data/client/Models;RAIL_FLAT:Lnet/minecraft/data/client/Model;", ordinal = 1)
 	)
 	private Model replaceModel2(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
@@ -76,7 +79,7 @@ public class BlockStateModelGeneratorMixin {
 
 	@ModifyExpressionValue(
 			method = "registerTurnableRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;RAIL_CURVED:Lnet/minecraft/client/data/Model;")
+			at = @At(value = "FIELD", target = "Lnet/minecraft/data/client/Models;RAIL_CURVED:Lnet/minecraft/data/client/Model;")
 	)
 	private Model replaceModel3(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
@@ -88,7 +91,7 @@ public class BlockStateModelGeneratorMixin {
 					"registerTurnableRail",
 					"registerStraightRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;TEMPLATE_RAIL_RAISED_NE:Lnet/minecraft/client/data/Model;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/data/client/Models;TEMPLATE_RAIL_RAISED_NE:Lnet/minecraft/data/client/Model;", ordinal = 0)
 	)
 	private Model replaceModel4(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
@@ -97,7 +100,7 @@ public class BlockStateModelGeneratorMixin {
 
 	@ModifyExpressionValue(
 			method = "registerStraightRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;TEMPLATE_RAIL_RAISED_NE:Lnet/minecraft/client/data/Model;", ordinal = 1)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/data/client/Models;TEMPLATE_RAIL_RAISED_NE:Lnet/minecraft/data/client/Model;", ordinal = 1)
 	)
 	private Model replaceModel5(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
@@ -109,7 +112,7 @@ public class BlockStateModelGeneratorMixin {
 					"registerTurnableRail",
 					"registerStraightRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;TEMPLATE_RAIL_RAISED_SW:Lnet/minecraft/client/data/Model;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/data/client/Models;TEMPLATE_RAIL_RAISED_SW:Lnet/minecraft/data/client/Model;", ordinal = 0)
 	)
 	private Model replaceModel6(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
@@ -118,7 +121,7 @@ public class BlockStateModelGeneratorMixin {
 
 	@ModifyExpressionValue(
 			method = "registerStraightRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;TEMPLATE_RAIL_RAISED_SW:Lnet/minecraft/client/data/Model;", ordinal = 1)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/data/client/Models;TEMPLATE_RAIL_RAISED_SW:Lnet/minecraft/data/client/Model;", ordinal = 1)
 	)
 	private Model replaceModel7(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();

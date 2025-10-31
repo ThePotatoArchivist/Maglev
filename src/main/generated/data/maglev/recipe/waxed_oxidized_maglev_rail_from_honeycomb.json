@@ -3,8 +3,12 @@
   "category": "misc",
   "group": "waxed_oxidized_maglev_rail",
   "ingredients": [
-    "maglev:oxidized_maglev_rail",
-    "minecraft:honeycomb"
+    {
+      "item": "maglev:oxidized_maglev_rail"
+    },
+    {
+      "item": "minecraft:honeycomb"
+    }
   ],
   "result": {
     "count": 1,
