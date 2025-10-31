@@ -1,13 +1,11 @@
 package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
+import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
 import archives.tater.maglev.init.MaglevItems;
-
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.CopperBlockSet;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;

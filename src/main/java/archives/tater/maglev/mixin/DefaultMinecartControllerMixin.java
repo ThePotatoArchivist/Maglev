@@ -3,24 +3,19 @@ package archives.tater.maglev.mixin;
 import archives.tater.maglev.block.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
-
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.entity.vehicle.DefaultMinecartController;
-import net.minecraft.entity.vehicle.MinecartController;
-import net.minecraft.util.math.BlockPos;
-
-import static archives.tater.maglev.CopperBlockSetUtil.isOf;
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -56,7 +51,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z")
     )
     private boolean checkPowered(BlockState instance, Block block, Operation<Boolean> original) {
-        return original.call(instance, block) || isOf(instance.getBlock(), MaglevBlocks.POWERED_MAGLEV_RAIL);
+        return original.call(instance, block) || MaglevBlocks.POWERED_MAGLEV_RAIL.contains(instance.getBlock());
     }
 
     @ModifyExpressionValue(
@@ -73,9 +68,9 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;")
     )
     private BlockState updateOnVariableRail(BlockState original, @Local BlockPos pos) {
-        if (!isOf(original.getBlock(), MaglevBlocks.VARIABLE_MAGLEV_RAIL)) return original;
+        if (!MaglevBlocks.VARIABLE_MAGLEV_RAIL.contains(original.getBlock())) return original;
 
-        minecart.setAttached(HOVER_HEIGHT, minecart.getEntityWorld().getReceivedRedstonePower(pos));
+        minecart.setAttached(HOVER_HEIGHT, minecart.getWorld().getReceivedRedstonePower(pos));
 
         return original;
     }

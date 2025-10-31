@@ -1,10 +1,8 @@
 package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
-
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
 
@@ -17,16 +15,16 @@ public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-        valueLookupBuilder(MaglevBlocks.MAGLEV_RAILS).add(MaglevBlocks.MAGLEV_RAIL.getAll());
-        valueLookupBuilder(MaglevBlocks.POWERED_MAGLEV_RAILS).add(MaglevBlocks.POWERED_MAGLEV_RAIL.getAll());
-        valueLookupBuilder(MaglevBlocks.VARIABLE_MAGLEV_RAILS).add(MaglevBlocks.VARIABLE_MAGLEV_RAIL.getAll());
-        valueLookupBuilder(MaglevBlocks.HOVERABLE_RAILS)
+        getOrCreateTagBuilder(MaglevBlocks.MAGLEV_RAILS).add(MaglevBlocks.MAGLEV_RAIL.toArray());
+        getOrCreateTagBuilder(MaglevBlocks.POWERED_MAGLEV_RAILS).add(MaglevBlocks.POWERED_MAGLEV_RAIL.toArray());
+        getOrCreateTagBuilder(MaglevBlocks.VARIABLE_MAGLEV_RAILS).add(MaglevBlocks.VARIABLE_MAGLEV_RAIL.toArray());
+        getOrCreateTagBuilder(MaglevBlocks.HOVERABLE_RAILS)
                 .forceAddTag(MaglevBlocks.MAGLEV_RAILS)
                 .forceAddTag(MaglevBlocks.POWERED_MAGLEV_RAILS)
                 .forceAddTag(MaglevBlocks.VARIABLE_MAGLEV_RAILS);
-        valueLookupBuilder(BlockTags.RAILS)
+        getOrCreateTagBuilder(BlockTags.RAILS)
                 .forceAddTag(MaglevBlocks.HOVERABLE_RAILS);
-        valueLookupBuilder(MaglevBlocks.MANUALLY_OXIDIZABLE)
+        getOrCreateTagBuilder(MaglevBlocks.MANUALLY_OXIDIZABLE)
                 .forceAddTag(MaglevBlocks.HOVERABLE_RAILS);
     }
 }

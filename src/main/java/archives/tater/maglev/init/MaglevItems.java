@@ -1,12 +1,10 @@
 package archives.tater.maglev.init;
 
-import archives.tater.maglev.CopperBlockSetUtil;
 import archives.tater.maglev.Maglev;
+import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.CopperBlockSet;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
@@ -41,7 +39,7 @@ public class MaglevItems {
                     .displayName(Text.translatable(ITEM_GROUP_NAME))
                     .icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultStack())
                     .entries((displayContext, entries) -> entries.addAll(
-                            CopperBlockSetUtil.fields()
+                            CopperBlockSet.fields()
                                     .flatMap(field -> blockSets.stream().map(field))
                                     .map(Block::asItem)
                                     .map(Item::getDefaultStack)

@@ -2,13 +2,13 @@ package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.Maglev;
 import archives.tater.maglev.init.MaglevBlocks;
+import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
 
-import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.CopperBlockSet;
-import net.minecraft.client.data.*;
+import net.minecraft.data.client.*;
 import net.minecraft.util.Identifier;
 
 import org.jetbrains.annotations.ApiStatus;
