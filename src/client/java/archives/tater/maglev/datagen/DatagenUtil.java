@@ -14,14 +14,16 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.*;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
+import java.util.stream.Collector.Characteristics;
 import java.util.stream.Stream;
 
 public class DatagenUtil {
-    private DatagenUtil() {}
+    private DatagenUtil() {
+    }
 
     public static CompletableFuture<byte[]> read(Path path) {
         return CompletableFuture.supplyAsync(() -> {
@@ -60,8 +62,8 @@ public class DatagenUtil {
 
     static List<UnaryOperator<String>> prefixes(String... prefixes) {
         return Stream.of(prefixes)
-            .<UnaryOperator<String>>map(prefix -> value -> prefix + value)
-            .toList();
+                .<UnaryOperator<String>>map(prefix -> value -> prefix + value)
+                .toList();
     }
 
     private static List<UnaryOperator<String>> suffixes(String... suffixes) {
@@ -71,38 +73,11 @@ public class DatagenUtil {
     }
 
     public static Collector<CompletableFuture<?>, ?, CompletableFuture<Void>> futureAllOf() {
-        return new AllOfCollector();
-    }
-
-    private static class AllOfCollector implements Collector<CompletableFuture<?>, List<CompletableFuture<?>>, CompletableFuture<Void>> {
-        private static final Set<Characteristics> CHARACTERISTICS = Set.of(Characteristics.UNORDERED);
-
-        @Override
-        public Supplier<List<CompletableFuture<?>>> supplier() {
-            return ArrayList::new;
-        }
-
-        @Override
-        public BiConsumer<List<CompletableFuture<?>>, CompletableFuture<?>> accumulator() {
-            return List::add;
-        }
-
-        @Override
-        public BinaryOperator<List<CompletableFuture<?>>> combiner() {
-            return (list1, list2) -> {
-                list1.addAll(list2);
-                return list1;
-            };
-        }
-
-        @Override
-        public Function<List<CompletableFuture<?>>, CompletableFuture<Void>> finisher() {
-            return objects -> CompletableFuture.allOf(objects.toArray(CompletableFuture[]::new));
-        }
-
-        @Override
-        public Set<Characteristics> characteristics() {
-            return CHARACTERISTICS;
-        }
+        return Collector.<CompletableFuture<?>, List<CompletableFuture<?>>, CompletableFuture<Void>>of(ArrayList::new, List::add, (list1, list2) -> {
+                    list1.addAll(list2);
+                    return list1;
+                }, futures ->
+                        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+                , Characteristics.UNORDERED);
     }
 }

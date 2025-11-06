@@ -46,11 +46,11 @@ public final class TextureGenerator implements DataProvider {
     }
 
     private CompletableFuture<Void> copyEmissives(DataWriter writer, Path source, Stream<String> names) {
-        return read(source).thenAcceptAsync(data ->
+        return read(source).thenComposeAsync(data ->
                 writeEmissives(writer, data, names)
-        ).handle((unused, throwable) -> {
+        ).exceptionally(throwable -> {
             Maglev.LOGGER.error("Datagen:", throwable);
-            return unused;
+            return null;
         });
     }
 
