@@ -1,0 +1,94 @@
+package archives.tater.maglev.datagen;
+
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.DataWriter;
+import net.minecraft.util.Util;
+
+import com.google.common.hash.Hashing;
+import com.google.common.hash.HashingOutputStream;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.*;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
+
+public class DatagenUtil {
+    private DatagenUtil() {}
+
+    @SuppressWarnings({"UnstableApiUsage", "deprecation"})
+    private static CompletableFuture<Void> write(DataWriter writer, byte[] data, Path path) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                var byteStream = new ByteArrayOutputStream();
+                var hashingStream = new HashingOutputStream(Hashing.sha1(), byteStream);
+                hashingStream.write(data);
+                writer.write(path, byteStream.toByteArray(), hashingStream.hash());
+            } catch (IOException exception) {
+                DataProvider.LOGGER.error("Failed to save file to {}", path, exception);
+            }
+        }, Util.getMainWorkerExecutor());
+    }
+
+    static CompletableFuture<?> writeAll(DataWriter writer, byte[] data, Stream<Path> paths) {
+        return paths.map(path -> write(writer, data, path)).collect(futureAllOf());
+    }
+
+    static <T> Function<T, Stream<T>> multiply(Collection<UnaryOperator<T>> operators) {
+        return value -> operators.stream().map(operator -> operator.apply(value));
+    }
+
+    static List<UnaryOperator<String>> prefixes(String... prefixes) {
+        return Stream.of(prefixes)
+            .<UnaryOperator<String>>map(prefix -> value -> prefix + value)
+            .toList();
+    }
+
+    private static List<UnaryOperator<String>> suffixes(String... suffixes) {
+        return Stream.of(suffixes)
+                .<UnaryOperator<String>>map(suffix -> value -> value + suffix)
+                .toList();
+    }
+
+    public static AllOfCollector futureAllOf() {
+        return new AllOfCollector();
+    }
+
+    public static class AllOfCollector implements Collector<CompletableFuture<?>, List<CompletableFuture<?>>, CompletableFuture<Void>> {
+        private static final Set<Characteristics> CHARACTERISTICS = Set.of(Characteristics.UNORDERED);
+
+        @Override
+        public Supplier<List<CompletableFuture<?>>> supplier() {
+            return ArrayList::new;
+        }
+
+        @Override
+        public BiConsumer<List<CompletableFuture<?>>, CompletableFuture<?>> accumulator() {
+            return List::add;
+        }
+
+        @Override
+        public BinaryOperator<List<CompletableFuture<?>>> combiner() {
+            return (list1, list2) -> {
+                list1.addAll(list2);
+                return list1;
+            };
+        }
+
+        @Override
+        public Function<List<CompletableFuture<?>>, CompletableFuture<Void>> finisher() {
+            return objects -> CompletableFuture.allOf(objects.toArray(CompletableFuture[]::new));
+        }
+
+        @Override
+        public Set<Characteristics> characteristics() {
+            return CHARACTERISTICS;
+        }
+    }
+}

@@ -8,6 +8,7 @@ public class MaglevDataGenerator implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
 		var pack = fabricDataGenerator.createPack();
+        pack.addProvider(TextureGenerator::new);
 		pack.addProvider(ModelGenerator::new);
 		pack.addProvider(LangGenerator::new);
         pack.addProvider(ItemTagGenerator.factory(
