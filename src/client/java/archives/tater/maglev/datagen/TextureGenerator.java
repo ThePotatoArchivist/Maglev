@@ -23,6 +23,7 @@ import static archives.tater.maglev.datagen.DatagenUtil.*;
 
 public final class TextureGenerator implements DataProvider {
     public static final String EMISSIVE_SUFFIX = "_e";
+
     private final FabricDataOutput dataOutput;
     private final CompletableFuture<WrapperLookup> registryLookup;
     private final PathResolver pathResolver;
