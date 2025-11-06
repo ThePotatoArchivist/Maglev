@@ -1,6 +1,0 @@
-{
-  "parent": "maglev:block/rail_curved_emissive",
-  "textures": {
-    "rail_emissive": "maglev:block/maglev_rail_glow_corner"
-  }
-}

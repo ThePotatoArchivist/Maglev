@@ -1,5 +1,5 @@
 {
-  "parent": "maglev:block/variable_maglev_rail_on_flat",
+  "parent": "minecraft:block/rail_flat",
   "textures": {
     "rail": "maglev:block/oxidized_variable_maglev_rail_on"
   }

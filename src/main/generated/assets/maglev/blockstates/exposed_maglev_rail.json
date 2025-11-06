@@ -8,10 +8,10 @@
       "model": "maglev:block/exposed_maglev_rail_raised_ne"
     },
     "shape=ascending_south": {
-      "model": "maglev:block/exposed_maglev_rail_raised_se"
+      "model": "maglev:block/exposed_maglev_rail_raised_sw"
     },
     "shape=ascending_west": {
-      "model": "maglev:block/exposed_maglev_rail_raised_se",
+      "model": "maglev:block/exposed_maglev_rail_raised_sw",
       "y": 90
     },
     "shape=east_west": {
