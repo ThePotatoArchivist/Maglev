@@ -51,6 +51,9 @@ public class DatagenUtil {
         return paths.map(path -> write(writer, data, path)).collect(futureAllOf());
     }
 
+    /**
+     * Used for {@link Stream#flatMap}
+     */
     static <T> Function<T, Stream<T>> multiply(Collection<UnaryOperator<T>> operators) {
         return value -> operators.stream().map(operator -> operator.apply(value));
     }
@@ -67,11 +70,11 @@ public class DatagenUtil {
                 .toList();
     }
 
-    public static AllOfCollector futureAllOf() {
+    public static Collector<CompletableFuture<?>, ?, CompletableFuture<Void>> futureAllOf() {
         return new AllOfCollector();
     }
 
-    public static class AllOfCollector implements Collector<CompletableFuture<?>, List<CompletableFuture<?>>, CompletableFuture<Void>> {
+    private static class AllOfCollector implements Collector<CompletableFuture<?>, List<CompletableFuture<?>>, CompletableFuture<Void>> {
         private static final Set<Characteristics> CHARACTERISTICS = Set.of(Characteristics.UNORDERED);
 
         @Override
