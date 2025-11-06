@@ -9,6 +9,7 @@ import com.google.common.hash.HashingOutputStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +22,16 @@ import java.util.stream.Stream;
 
 public class DatagenUtil {
     private DatagenUtil() {}
+
+    public static CompletableFuture<byte[]> read(Path path) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return Files.readAllBytes(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 
     @SuppressWarnings({"UnstableApiUsage", "deprecation"})
     private static CompletableFuture<Void> write(DataWriter writer, byte[] data, Path path) {
@@ -36,7 +47,7 @@ public class DatagenUtil {
         }, Util.getMainWorkerExecutor());
     }
 
-    static CompletableFuture<?> writeAll(DataWriter writer, byte[] data, Stream<Path> paths) {
+    static CompletableFuture<Void> writeAll(DataWriter writer, byte[] data, Stream<Path> paths) {
         return paths.map(path -> write(writer, data, path)).collect(futureAllOf());
     }
 
