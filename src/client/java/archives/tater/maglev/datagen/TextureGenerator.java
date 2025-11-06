@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 import static archives.tater.maglev.datagen.DatagenUtil.*;
 
 public final class TextureGenerator implements DataProvider {
-    public static final String EMISSIVE_SUFFIX = "_emissive";
+    public static final String EMISSIVE_SUFFIX = "_e";
     private final FabricDataOutput dataOutput;
     private final CompletableFuture<WrapperLookup> registryLookup;
     private final PathResolver pathResolver;
@@ -33,16 +33,16 @@ public final class TextureGenerator implements DataProvider {
         pathResolver = dataOutput.getResolver(OutputType.RESOURCE_PACK, "textures");
     }
 
-    private static Identifier toEmissiveId(String name) {
-        return Maglev.id(name + EMISSIVE_SUFFIX);
+    private static Identifier toEmissiveBlockId(String name) {
+        return Maglev.id("block/" + name + EMISSIVE_SUFFIX);
     }
 
-    private Path toEmissivePath(String name) {
-        return pathResolver.resolve(toEmissiveId(name), "png");
+    private Path toEmissiveBlockPath(String name) {
+        return pathResolver.resolve(toEmissiveBlockId(name), "png");
     }
 
     private CompletableFuture<?> writeEmissives(DataWriter writer, byte[] data, Stream<String> names) {
-        return writeAll(writer, data, names.map(this::toEmissivePath));
+        return writeAll(writer, data, names.map(this::toEmissiveBlockPath));
     }
 
     public static final List<UnaryOperator<String>> OXIDATIONS = prefixes("", "exposed_", "weathered_", "oxidized_");
@@ -50,12 +50,12 @@ public final class TextureGenerator implements DataProvider {
 
     @Override
     public CompletableFuture<?> run(DataWriter writer) {
-        try {
-            var blockTextures = Path.of(System.getProperty("user.dir")) // build/datagen
-                    .getParent().getParent() // Project root
-                    .resolve("src/main/resources/assets/maglev/textures/block")
-                    .toAbsolutePath();
+        var blockTextures = Path.of(System.getProperty("user.dir")) // build/datagen
+                .getParent().getParent() // Project root
+                .resolve("src/main/resources/assets/maglev/textures/block")
+                .toAbsolutePath();
 
+        try {
             return CompletableFuture.allOf(
                     writeEmissives(writer, Files.readAllBytes(blockTextures.resolve("maglev_rail_glow.png")), Stream.of("maglev_rail")
                             .flatMap(multiply(DEFAULT_TYPES))

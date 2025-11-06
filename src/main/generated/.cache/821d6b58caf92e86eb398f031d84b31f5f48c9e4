@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-06T01:47:05.3002594	Maglev/Block Loot Tables
+// 1.21.1	2025-11-06T01:57:47.534310826	Maglev/Block Loot Tables
 81e7d9c05723a669ee318400e502a143a0752f22 data/maglev/loot_table/blocks/waxed_exposed_maglev_rail.json
 e57ce6e1633722dff13cee0b8acaa0d5153f9368 data/maglev/loot_table/blocks/oxidized_powered_maglev_rail.json
 e88d279997965a5255554742b6cf9b24f0858e18 data/maglev/loot_table/blocks/weathered_variable_maglev_rail.json
@@ -7,8 +7,8 @@ e870fce97f51a272f481b1f392b4747fb6fdfba2 data/maglev/loot_table/blocks/waxed_oxi
 dc821583170b002f816c9c070b6772dfd302378e data/maglev/loot_table/blocks/waxed_exposed_powered_maglev_rail.json
 a80f1bba3fa3200eb3cabc6a7ea98e24bfdd062d data/maglev/loot_table/blocks/waxed_weathered_variable_maglev_rail.json
 1fdaa58e51342d2c4011a1f29f5c50f1ba1ecf1a data/maglev/loot_table/blocks/waxed_maglev_rail.json
-89a0f83318e5c4283b90ee69996e464da41cc221 data/maglev/loot_table/blocks/waxed_exposed_variable_maglev_rail.json
 a435560219c46495f76a89438049aaf137d7e5ee data/maglev/loot_table/blocks/waxed_oxidized_powered_maglev_rail.json
+89a0f83318e5c4283b90ee69996e464da41cc221 data/maglev/loot_table/blocks/waxed_exposed_variable_maglev_rail.json
 f6f3055dbd2debc98b6b909fcf5731b537be069a data/maglev/loot_table/blocks/exposed_maglev_rail.json
 ed3e24e692c9bf881c4ed92531181c681fe04304 data/maglev/loot_table/blocks/weathered_maglev_rail.json
 b7892d5be11e8f34079a0f5dec46f0713caaf7d4 data/maglev/loot_table/blocks/weathered_powered_maglev_rail.json
