@@ -1,7 +1,7 @@
 package archives.tater.maglev.block;
 
 import archives.tater.maglev.HasOxidationLevel;
-
+import eu.pb4.polymer.core.api.block.PolymerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 
-public class OxidizablePoweredRailBlock extends PoweredRailBlock implements WeatheringCopper, HasOxidationLevel, VariantPoweredRail {
+public class OxidizablePoweredRailBlock extends PoweredRailBlock implements WeatheringCopper, HasOxidationLevel, VariantPoweredRail, PolymerBlock {
     private final WeatherState oxidationLevel;
 
     public OxidizablePoweredRailBlock(WeatherState oxidationLevel, Properties settings) {
@@ -50,5 +50,10 @@ public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Weat
             minecart.setAttached(SPEED_MULTIPLIER, OxidizablePoweredRailBlock.getSpeedMultiplier(oxidizable.getAge()));
         else
             minecart.removeAttached(SPEED_MULTIPLIER);
+    }
+
+    @Override
+    public BlockState getPolymerBlockState(BlockState blockState, PacketContext packetContext) {
+        return Blocks.POWERED_RAIL.getStateWithProperties(blockState);
     }
 }

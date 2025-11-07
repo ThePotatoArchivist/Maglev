@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 
-public class VariableRailBlock extends PoweredRailBlock {
+public class VariableRailBlock extends PoweredRailBlock implements PolymerBlock {
 //    public static final IntProperty POWER = Properties.POWER;
 
     public VariableRailBlock(Properties settings) {
@@ -21,5 +21,10 @@ public class VariableRailBlock extends PoweredRailBlock {
     @Override
     protected boolean findPoweredRailSignal(Level world, BlockPos pos, BlockState state, boolean bl, int distance) {
         return false;
+    }
+
+    @Override
+    public BlockState getPolymerBlockState(BlockState blockState, PacketContext packetContext) {
+        return Blocks.POWERED_RAIL.getStateWithProperties(blockState);
     }
 }

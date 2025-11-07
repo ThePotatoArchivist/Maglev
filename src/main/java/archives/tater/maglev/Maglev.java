@@ -3,6 +3,7 @@ package archives.tater.maglev;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
 import archives.tater.maglev.init.MaglevItems;
+import eu.pb4.polymer.core.api.item.PolymerItemGroupUtils;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;

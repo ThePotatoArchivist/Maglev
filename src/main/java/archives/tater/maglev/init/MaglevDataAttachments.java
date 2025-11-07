@@ -11,12 +11,12 @@ import net.minecraft.network.codec.ByteBufCodecs;
 public class MaglevDataAttachments {
     public static AttachmentType<Integer> HOVER_HEIGHT = AttachmentRegistry.create(Maglev.id("hover_height"), builder -> builder
             .persistent(Codec.INT)
-            .syncWith(ByteBufCodecs.INT, AttachmentSyncPredicate.all())
+//            .syncWith(ByteBufCodecs.INT, AttachmentSyncPredicate.all())
     );
 
     public static AttachmentType<Double> SPEED_MULTIPLIER = AttachmentRegistry.create(Maglev.id("speed_multiplier"), builder -> builder
             .persistent(Codec.DOUBLE)
-            .syncWith(ByteBufCodecs.DOUBLE, AttachmentSyncPredicate.all())
+//            .syncWith(ByteBufCodecs.DOUBLE, AttachmentSyncPredicate.all())
     );
 
     public static void init() {
