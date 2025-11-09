@@ -1,10 +1,12 @@
 package archives.tater.maglev.block;
 
 import archives.tater.maglev.HasOxidationLevel;
+
+import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,7 +46,7 @@ public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Weat
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static void updateSpeed(AbstractMinecart minecart, BlockState state) {
+    public static void updateSpeed(AttachmentTarget minecart, BlockState state) {
         if (state.getBlock() instanceof HasOxidationLevel oxidizable)
             minecart.setAttached(SPEED_MULTIPLIER, OxidizablePoweredRailBlock.getSpeedMultiplier(oxidizable.getAge()));
         else

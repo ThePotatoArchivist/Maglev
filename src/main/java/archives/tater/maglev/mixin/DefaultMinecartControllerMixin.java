@@ -4,6 +4,7 @@ import archives.tater.maglev.block.OxidizablePoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
 
+import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -41,8 +42,8 @@ public abstract class DefaultMinecartControllerMixin extends VehicleEntity {
             index = 1
     )
     private int snapToHover(int y) {
-        if (!hasAttached(HOVER_HEIGHT)) return y;
-        return y - getAttachedOrElse(HOVER_HEIGHT, 0);
+        if (!((AttachmentTarget) this).hasAttached(HOVER_HEIGHT)) return y;
+        return y - ((AttachmentTarget) this).getAttachedOrElse(HOVER_HEIGHT, 0);
     }
 
     @ModifyExpressionValue(
@@ -50,7 +51,7 @@ public abstract class DefaultMinecartControllerMixin extends VehicleEntity {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;getY()I")
     )
     private int addHeight(int original) {
-        return original + getAttachedOrElse(HOVER_HEIGHT, 0);
+        return original + ((AttachmentTarget) this).getAttachedOrElse(HOVER_HEIGHT, 0);
     }
 
     @WrapOperation(
@@ -66,7 +67,7 @@ public abstract class DefaultMinecartControllerMixin extends VehicleEntity {
             at = @At("HEAD")
     )
     private void updateSpeed(BlockPos pos, BlockState state, CallbackInfo ci) {
-        OxidizablePoweredRailBlock.updateSpeed((AbstractMinecart) (Object) this, state);
+        OxidizablePoweredRailBlock.updateSpeed((AttachmentTarget) this, state);
     }
 
     @Inject(
@@ -76,7 +77,7 @@ public abstract class DefaultMinecartControllerMixin extends VehicleEntity {
     private void updateOnVariableRail(BlockPos pos, BlockState state, CallbackInfo ci) {
         if (!MaglevBlocks.VARIABLE_MAGLEV_RAIL.contains(state.getBlock())) return;
 
-        setAttached(HOVER_HEIGHT, level().getBestNeighborSignal(pos));
+        ((AttachmentTarget) this).setAttached(HOVER_HEIGHT, level().getBestNeighborSignal(pos));
     }
 
 //    @ModifyExpressionValue(
@@ -95,6 +96,6 @@ public abstract class DefaultMinecartControllerMixin extends VehicleEntity {
             at = @At("RETURN")
     )
     private double changeMaxSpeed2(double original) {
-        return getAttachedOrElse(MaglevDataAttachments.SPEED_MULTIPLIER, 1.0) * original;
+        return ((AttachmentTarget) this).getAttachedOrElse(MaglevDataAttachments.SPEED_MULTIPLIER, 1.0) * original;
     }
 }

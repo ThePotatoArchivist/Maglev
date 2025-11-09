@@ -26,7 +26,7 @@ public class BlockStateModelGeneratorMixin {
 
     @Shadow
     @Final
-    public Consumer<BlockStateGenerator> blockStateOutput;
+    Consumer<BlockStateGenerator> blockStateOutput;
 
     @Inject(
 			method = {

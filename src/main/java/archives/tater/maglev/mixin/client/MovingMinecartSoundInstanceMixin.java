@@ -1,5 +1,6 @@
 package archives.tater.maglev.mixin.client;
 
+import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,6 +22,6 @@ public class MovingMinecartSoundInstanceMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/AbstractMinecart;isRemoved()Z")
     )
     private boolean cancelSound(boolean original) {
-        return original || minecart.hasAttached(HOVER_HEIGHT);
+        return original || ((AttachmentTarget) minecart).hasAttached(HOVER_HEIGHT);
     }
 }
