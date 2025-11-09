@@ -6,11 +6,13 @@ import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-
-import net.minecraft.block.Block;
-import net.minecraft.data.client.*;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.ItemModelGenerators;
+import net.minecraft.data.models.model.ModelLocationUtils;
+import net.minecraft.data.models.model.ModelTemplate;
+import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,19 +22,19 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Static utilities
 
-    private static Model model(Identifier parent, TextureKey... requiredTextureKeys) {
-        return new Model(Optional.of(parent), Optional.empty(), requiredTextureKeys);
+    private static ModelTemplate model(ResourceLocation parent, TextureSlot... requiredTextureKeys) {
+        return new ModelTemplate(Optional.of(parent), Optional.empty(), requiredTextureKeys);
     }
 
-    private static Model model(Identifier parent, String variant, TextureKey... requiredTextureKeys) {
-        return new Model(Optional.of(parent), Optional.of(variant), requiredTextureKeys);
+    private static ModelTemplate model(ResourceLocation parent, String variant, TextureSlot... requiredTextureKeys) {
+        return new ModelTemplate(Optional.of(parent), Optional.of(variant), requiredTextureKeys);
     }
 
-    private static Model blockModel(Identifier parent, TextureKey... requiredTextureKeys) {
-        return model(parent.withPrefixedPath("block/"), requiredTextureKeys);
+    private static ModelTemplate blockModel(ResourceLocation parent, TextureSlot... requiredTextureKeys) {
+        return model(parent.withPrefix("block/"), requiredTextureKeys);
     }
 
-    private static Model blockModel(String parent, TextureKey... requiredTextureKeys) {
+    private static ModelTemplate blockModel(String parent, TextureSlot... requiredTextureKeys) {
         return blockModel(Maglev.id(parent), requiredTextureKeys);
     }
 
@@ -43,28 +45,28 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Mixined utilities
 
-    public static void registerStraightRail(BlockStateModelGenerator modelGenerator, Block block, Block child) {
+    public static void registerStraightRail(BlockModelGenerators modelGenerator, Block block, Block child) {
         childBlock = child;
-        modelGenerator.registerStraightRail(block);
-        modelGenerator.registerParentedItemModel(child, ModelIds.getItemModelId(block.asItem()));
+        modelGenerator.createActiveRail(block);
+        modelGenerator.delegateItemModel(child, ModelLocationUtils.getModelLocation(block.asItem()));
     }
 
-    public static void registerTurnableRail(BlockStateModelGenerator modelGenerator, Block block, Block child) {
+    public static void registerTurnableRail(BlockModelGenerators modelGenerator, Block block, Block child) {
         childBlock = child;
-        modelGenerator.registerTurnableRail(block);
-        modelGenerator.registerParentedItemModel(child, ModelIds.getItemModelId(block.asItem()));
+        modelGenerator.createPassiveRail(block);
+        modelGenerator.delegateItemModel(child, ModelLocationUtils.getModelLocation(block.asItem()));
     }
 
     // Specialized utilities
 
-    private static void registerOxidizableStraightRail(BlockStateModelGenerator modelGenerator, CopperBlockSet blockSet) {
+    private static void registerOxidizableStraightRail(BlockModelGenerators modelGenerator, CopperBlockSet blockSet) {
         registerStraightRail(modelGenerator, blockSet.unaffected(), blockSet.waxed());
         registerStraightRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed());
         registerStraightRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized());
         registerStraightRail(modelGenerator, blockSet.weathered(), blockSet.waxedWeathered());
     }
 
-    private static void registerOxidizableTurnableRail(BlockStateModelGenerator modelGenerator, CopperBlockSet blockSet) {
+    private static void registerOxidizableTurnableRail(BlockModelGenerators modelGenerator, CopperBlockSet blockSet) {
         registerTurnableRail(modelGenerator, blockSet.unaffected(), blockSet.waxed());
         registerTurnableRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed());
         registerTurnableRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized());
@@ -78,14 +80,14 @@ public class ModelGenerator extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
+    public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
         registerOxidizableTurnableRail(blockStateModelGenerator, MaglevBlocks.MAGLEV_RAIL);
         registerOxidizableStraightRail(blockStateModelGenerator, MaglevBlocks.VARIABLE_MAGLEV_RAIL);
         registerOxidizableStraightRail(blockStateModelGenerator, MaglevBlocks.POWERED_MAGLEV_RAIL);
     }
 
     @Override
-    public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+    public void generateItemModels(ItemModelGenerators itemModelGenerator) {
 
     }
 }

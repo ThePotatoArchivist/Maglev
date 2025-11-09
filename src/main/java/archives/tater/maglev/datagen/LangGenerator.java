@@ -5,22 +5,21 @@ import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
 import archives.tater.maglev.init.MaglevItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.minecraft.block.Block;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import java.util.concurrent.CompletableFuture;
 
-import static net.minecraft.util.Util.createTranslationKey;
+import static net.minecraft.Util.makeDescriptionId;
 
 public class LangGenerator extends FabricLanguageProvider {
-    public LangGenerator(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+    public LangGenerator(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(dataOutput, registryLookup);
     }
 
     @Override
-    public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+    public void generateTranslations(HolderLookup.Provider wrapperLookup, TranslationBuilder translationBuilder) {
         add(translationBuilder, MaglevBlocks.MAGLEV_RAIL, "Maglev Rail");
         add(translationBuilder, MaglevBlocks.POWERED_MAGLEV_RAIL, "Powered Maglev Rail");
         add(translationBuilder, MaglevBlocks.VARIABLE_MAGLEV_RAIL, "Variable Maglev Rail");
@@ -36,11 +35,11 @@ public class LangGenerator extends FabricLanguageProvider {
     }
 
     private static void addDescription(TranslationBuilder translationBuilder, TagKey<?> tagKey, String description) {
-        translationBuilder.add(createTranslationKey("tag", tagKey.id()) + "." + "description", description);
+        translationBuilder.add(makeDescriptionId("tag", tagKey.location()) + "." + "description", description);
     }
 
     private static void addDescription(TranslationBuilder translationBuilder, Block block, String description) {
-        translationBuilder.add(createTranslationKey("lore", Registries.BLOCK.getId(block)), description);
+        translationBuilder.add(makeDescriptionId("lore", BuiltInRegistries.BLOCK.getKey(block)), description);
     }
 
     private static void add(TranslationBuilder translationBuilder, CopperBlockSet blockSet, String name) {

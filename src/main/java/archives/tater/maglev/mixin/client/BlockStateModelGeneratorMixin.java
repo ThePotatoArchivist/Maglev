@@ -13,25 +13,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.BlockStateSupplier;
-import net.minecraft.data.client.BlockStateVariantMap;
-import net.minecraft.data.client.VariantsBlockStateSupplier;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.blockstates.BlockStateGenerator;
+import net.minecraft.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.data.models.blockstates.PropertyDispatch;
+import net.minecraft.world.level.block.Block;
 
 import java.util.function.Consumer;
 
-@Mixin(BlockStateModelGenerator.class)
+@Mixin(BlockModelGenerators.class)
 public class BlockStateModelGeneratorMixin {
 
     @Shadow
     @Final
-    public Consumer<BlockStateSupplier> blockStateCollector;
+    public Consumer<BlockStateGenerator> blockStateOutput;
 
     @Inject(
 			method = {
-					"registerTurnableRail",
-					"registerStraightRail"
+					"createPassiveRail",
+					"createActiveRail"
 			},
 			at = @At("HEAD")
 	)
@@ -42,16 +42,16 @@ public class BlockStateModelGeneratorMixin {
 
 	@WrapOperation(
 			method = {
-					"registerTurnableRail",
-					"registerStraightRail"
+					"createPassiveRail",
+					"createActiveRail"
 			},
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/data/client/VariantsBlockStateSupplier;coordinate(Lnet/minecraft/data/client/BlockStateVariantMap;)Lnet/minecraft/data/client/VariantsBlockStateSupplier;")
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/data/models/blockstates/MultiVariantGenerator;with(Lnet/minecraft/data/models/blockstates/PropertyDispatch;)Lnet/minecraft/data/models/blockstates/MultiVariantGenerator;")
 	)
-	private VariantsBlockStateSupplier replaceBlock2(VariantsBlockStateSupplier instance, BlockStateVariantMap map, Operation<VariantsBlockStateSupplier> original, @Share("targetBlock") LocalRef<Block> targetBlock) {
+	private MultiVariantGenerator replaceBlock2(MultiVariantGenerator instance, PropertyDispatch map, Operation<MultiVariantGenerator> original, @Share("targetBlock") LocalRef<Block> targetBlock) {
 		var originalResult = original.call(instance, map);
 		if (targetBlock.get() == null) return originalResult;
 
-		blockStateCollector.accept(VariantsBlockStateSupplier.create(targetBlock.get()).coordinate(map));
+		blockStateOutput.accept(MultiVariantGenerator.multiVariant(targetBlock.get()).with(map));
 
 		return originalResult;
 	}

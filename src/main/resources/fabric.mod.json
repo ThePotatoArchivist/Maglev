@@ -26,11 +26,7 @@
 		]
 	},
 	"mixins": [
-		"maglev.mixins.json",
-		{
-			"config": "maglev.client.mixins.json",
-			"environment": "client"
-		}
+		"maglev.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.17.3",

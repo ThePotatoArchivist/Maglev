@@ -3,14 +3,12 @@ package archives.tater.maglev.datagen;
 import archives.tater.maglev.Maglev;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-
-import net.minecraft.data.DataOutput.OutputType;
-import net.minecraft.data.DataOutput.PathResolver;
+import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.DataWriter;
-import net.minecraft.registry.RegistryWrapper.WrapperLookup;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.data.PackOutput.PathProvider;
+import net.minecraft.data.PackOutput.Target;
+import net.minecraft.resources.ResourceLocation;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -24,28 +22,28 @@ public final class TextureGenerator implements DataProvider {
     public static final String EMISSIVE_SUFFIX = "_e";
 
     private final FabricDataOutput dataOutput;
-    private final CompletableFuture<WrapperLookup> registryLookup;
-    private final PathResolver pathResolver;
+    private final CompletableFuture<Provider> registryLookup;
+    private final PathProvider pathResolver;
 
-    public TextureGenerator(FabricDataOutput dataOutput, CompletableFuture<WrapperLookup> registryLookup) {
+    public TextureGenerator(FabricDataOutput dataOutput, CompletableFuture<Provider> registryLookup) {
         this.dataOutput = dataOutput;
         this.registryLookup = registryLookup;
-        pathResolver = dataOutput.getResolver(OutputType.RESOURCE_PACK, "textures");
+        pathResolver = dataOutput.createPathProvider(Target.RESOURCE_PACK, "textures");
     }
 
-    private static Identifier toEmissiveBlockId(String name) {
+    private static ResourceLocation toEmissiveBlockId(String name) {
         return Maglev.id("block/" + name + EMISSIVE_SUFFIX);
     }
 
     private Path toEmissiveBlockPath(String name) {
-        return pathResolver.resolve(toEmissiveBlockId(name), "png");
+        return pathResolver.file(toEmissiveBlockId(name), "png");
     }
 
-    private CompletableFuture<Void> writeEmissives(DataWriter writer, byte[] data, Stream<String> names) {
+    private CompletableFuture<Void> writeEmissives(CachedOutput writer, byte[] data, Stream<String> names) {
         return writeAll(writer, data, names.map(this::toEmissiveBlockPath));
     }
 
-    private CompletableFuture<Void> copyEmissives(DataWriter writer, Path source, Stream<String> names) {
+    private CompletableFuture<Void> copyEmissives(CachedOutput writer, Path source, Stream<String> names) {
         return read(source).thenComposeAsync(data ->
                 writeEmissives(writer, data, names)
         ).exceptionally(throwable -> {
@@ -58,7 +56,7 @@ public final class TextureGenerator implements DataProvider {
     public static final List<UnaryOperator<String>> DEFAULT_TYPES = prefixes("", "powered_");
 
     @Override
-    public CompletableFuture<?> run(DataWriter writer) {
+    public CompletableFuture<?> run(CachedOutput writer) {
         var blockTextures = Path.of(System.getProperty("user.dir")) // build/datagen
                 .getParent().getParent() // Project root
                 .resolve("src/main/resources/assets/maglev/textures/block")

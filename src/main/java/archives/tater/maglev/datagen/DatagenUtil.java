@@ -1,9 +1,8 @@
 package archives.tater.maglev.datagen;
 
+import net.minecraft.Util;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.DataWriter;
-import net.minecraft.util.Util;
-
 import com.google.common.hash.Hashing;
 import com.google.common.hash.HashingOutputStream;
 
@@ -36,20 +35,20 @@ public class DatagenUtil {
     }
 
     @SuppressWarnings({"UnstableApiUsage", "deprecation"})
-    private static CompletableFuture<Void> write(DataWriter writer, byte[] data, Path path) {
+    private static CompletableFuture<Void> write(CachedOutput writer, byte[] data, Path path) {
         return CompletableFuture.runAsync(() -> {
             try {
                 var byteStream = new ByteArrayOutputStream();
                 var hashingStream = new HashingOutputStream(Hashing.sha1(), byteStream);
                 hashingStream.write(data);
-                writer.write(path, byteStream.toByteArray(), hashingStream.hash());
+                writer.writeIfNeeded(path, byteStream.toByteArray(), hashingStream.hash());
             } catch (IOException exception) {
                 DataProvider.LOGGER.error("Failed to save file to {}", path, exception);
             }
-        }, Util.getMainWorkerExecutor());
+        }, Util.backgroundExecutor());
     }
 
-    static CompletableFuture<Void> writeAll(DataWriter writer, byte[] data, Stream<Path> paths) {
+    static CompletableFuture<Void> writeAll(CachedOutput writer, byte[] data, Stream<Path> paths) {
         return paths.map(path -> write(writer, data, path)).collect(futureAllOf());
     }
 

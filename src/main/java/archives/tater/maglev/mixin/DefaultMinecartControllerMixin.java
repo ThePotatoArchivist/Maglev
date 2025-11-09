@@ -14,30 +14,30 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.entity.vehicle.VehicleEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
 @SuppressWarnings("UnstableApiUsage")
-@Mixin(AbstractMinecartEntity.class)
+@Mixin(AbstractMinecart.class)
 public abstract class DefaultMinecartControllerMixin extends VehicleEntity {
 
-    public DefaultMinecartControllerMixin(EntityType<?> entityType, World world) {
+    public DefaultMinecartControllerMixin(EntityType<?> entityType, Level world) {
         super(entityType, world);
     }
 
     @ModifyArg(
             method = {
-                    "snapPositionToRail",
-                    "snapPositionToRailWithOffset"
+                    "getPos",
+                    "getPosOffs"
             },
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;<init>(III)V"),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;<init>(III)V"),
             index = 1
     )
     private int snapToHover(int y) {
@@ -46,37 +46,37 @@ public abstract class DefaultMinecartControllerMixin extends VehicleEntity {
     }
 
     @ModifyExpressionValue(
-            method = "moveOnRail",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;getY()I")
+            method = "moveAlongTrack",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;getY()I")
     )
     private int addHeight(int original) {
         return original + getAttachedOrElse(HOVER_HEIGHT, 0);
     }
 
     @WrapOperation(
-            method = "moveOnRail",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z")
+            method = "moveAlongTrack",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z")
     )
     private boolean checkPowered(BlockState instance, Block block, Operation<Boolean> original) {
         return original.call(instance, block) || MaglevBlocks.POWERED_MAGLEV_RAIL.contains(instance.getBlock());
     }
 
     @Inject(
-            method = "moveOnRail",
+            method = "moveAlongTrack",
             at = @At("HEAD")
     )
     private void updateSpeed(BlockPos pos, BlockState state, CallbackInfo ci) {
-        OxidizablePoweredRailBlock.updateSpeed((AbstractMinecartEntity) (Object) this, state);
+        OxidizablePoweredRailBlock.updateSpeed((AbstractMinecart) (Object) this, state);
     }
 
     @Inject(
-            method = "moveOnRail",
+            method = "moveAlongTrack",
             at = @At("HEAD")
     )
     private void updateOnVariableRail(BlockPos pos, BlockState state, CallbackInfo ci) {
         if (!MaglevBlocks.VARIABLE_MAGLEV_RAIL.contains(state.getBlock())) return;
 
-        setAttached(HOVER_HEIGHT, getWorld().getReceivedRedstonePower(pos));
+        setAttached(HOVER_HEIGHT, level().getBestNeighborSignal(pos));
     }
 
 //    @ModifyExpressionValue(

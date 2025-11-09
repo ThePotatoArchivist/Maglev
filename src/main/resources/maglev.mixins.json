@@ -5,12 +5,17 @@
   "mixins": [
     "AbstractMinecartEntityMixin",
     "DefaultMinecartControllerMixin",
-    "PoweredRailBlockMixin"
+    "PoweredRailBlockMixin",
+    "client.BlockStateModelGeneratorMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "overwrites": {
     "requireAnnotations": true
-	}
+  },
+  "client": [
+    "client.MinecartInsideSoundInstanceMixin",
+    "client.MovingMinecartSoundInstanceMixin"
+  ]
 }

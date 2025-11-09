@@ -4,10 +4,8 @@ import archives.tater.maglev.init.MaglevBlocks;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.render.RenderLayer;
-
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.level.block.Block;
 import java.util.function.Consumer;
 
 public class MaglevClient implements ClientModInitializer {
@@ -15,7 +13,7 @@ public class MaglevClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
 
-		Consumer<Block> setCutout = block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+		Consumer<Block> setCutout = block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
         MaglevBlocks.MAGLEV_RAIL.forEach(setCutout);
         MaglevBlocks.POWERED_MAGLEV_RAIL.forEach(setCutout);
         MaglevBlocks.VARIABLE_MAGLEV_RAIL.forEach(setCutout);
