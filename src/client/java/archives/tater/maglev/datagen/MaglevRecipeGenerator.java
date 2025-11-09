@@ -6,32 +6,30 @@ import archives.tater.maglev.init.MaglevItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
-
-import net.minecraft.block.CopperBlockSet;
-import net.minecraft.data.recipe.RecipeExporter;
-import net.minecraft.data.recipe.RecipeGenerator;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.WeatheringCopperBlocks;
 import java.util.concurrent.CompletableFuture;
 
-public class MaglevRecipeGenerator extends RecipeGenerator {
-    public MaglevRecipeGenerator(RegistryWrapper.WrapperLookup registries, RecipeExporter exporter) {
+public class MaglevRecipeGenerator extends RecipeProvider {
+    public MaglevRecipeGenerator(HolderLookup.Provider registries, RecipeOutput exporter) {
         super(registries, exporter);
     }
 
     private void offerWaxingRecipe(Item waxed, Item unwaxed) {
-        createShapeless(RecipeCategory.TRANSPORTATION, waxed)
-                .input(unwaxed)
-                .input(Items.HONEYCOMB)
-                .group(getItemPath(waxed))
-                .criterion(hasItem(unwaxed), conditionsFromItem(unwaxed))
-                .offerTo(exporter, convertBetween(waxed, Items.HONEYCOMB));
+        shapeless(RecipeCategory.TRANSPORTATION, waxed)
+                .requires(unwaxed)
+                .requires(Items.HONEYCOMB)
+                .group(getItemName(waxed))
+                .unlockedBy(getHasName(unwaxed), has(unwaxed))
+                .save(output, getConversionRecipeName(waxed, Items.HONEYCOMB));
     }
 
-    private void offerWaxingRecipes(CopperBlockSet blockSet) {
+    private void offerWaxingRecipes(WeatheringCopperBlocks blockSet) {
         offerWaxingRecipe(blockSet.waxed().asItem(), blockSet.unaffected().asItem());
         offerWaxingRecipe(blockSet.waxedExposed().asItem(), blockSet.exposed().asItem());
         offerWaxingRecipe(blockSet.waxedWeathered().asItem(), blockSet.weathered().asItem());
@@ -39,51 +37,51 @@ public class MaglevRecipeGenerator extends RecipeGenerator {
     }
 
     @Override
-    public void generate() {
+    public void buildRecipes() {
         offerWaxingRecipes(MaglevBlocks.MAGLEV_RAIL);
         offerWaxingRecipes(MaglevBlocks.POWERED_MAGLEV_RAIL);
         offerWaxingRecipes(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
 
-        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.MAGLEV_RAIL.unaffected(), 6)
+        shaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.MAGLEV_RAIL.unaffected(), 6)
                 .pattern("# #")
                 .pattern("#%#")
                 .pattern("# #")
-                .input('#', ConventionalItemTags.COPPER_INGOTS)
-                .input('%', ConventionalItemTags.IRON_INGOTS)
-                .criterion(hasItem(Items.COPPER_INGOT), conditionsFromTag(ConventionalItemTags.COPPER_INGOTS))
-                .offerTo(exporter);
+                .define('#', ConventionalItemTags.COPPER_INGOTS)
+                .define('%', ConventionalItemTags.IRON_INGOTS)
+                .unlockedBy(getHasName(Items.COPPER_INGOT), has(ConventionalItemTags.COPPER_INGOTS))
+                .save(output);
 
-        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.POWERED_MAGLEV_RAIL.unaffected(), 2)
+        shaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.POWERED_MAGLEV_RAIL.unaffected(), 2)
                 .pattern("#&#")
                 .pattern("#%#")
                 .pattern("#*#")
-                .input('#', ConventionalItemTags.COPPER_INGOTS)
-                .input('%', ConventionalItemTags.IRON_INGOTS)
-                .input('&', ConventionalItemTags.GOLD_INGOTS)
-                .input('*', ConventionalItemTags.REDSTONE_DUSTS)
-                .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.unaffected()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
-                .offerTo(exporter);
+                .define('#', ConventionalItemTags.COPPER_INGOTS)
+                .define('%', ConventionalItemTags.IRON_INGOTS)
+                .define('&', ConventionalItemTags.GOLD_INGOTS)
+                .define('*', ConventionalItemTags.REDSTONE_DUSTS)
+                .unlockedBy(getHasName(MaglevBlocks.MAGLEV_RAIL.unaffected()), has(MaglevItems.MAGLEV_RAILS))
+                .save(output);
 
-        createShaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.VARIABLE_MAGLEV_RAIL.unaffected(), 1)
+        shaped(RecipeCategory.TRANSPORTATION, MaglevBlocks.VARIABLE_MAGLEV_RAIL.unaffected(), 1)
                 .pattern("#&#")
                 .pattern("#%#")
                 .pattern("#*#")
-                .input('#', ConventionalItemTags.COPPER_INGOTS)
-                .input('%', ConventionalItemTags.IRON_INGOTS)
-                .input('&', ConventionalItemTags.QUARTZ_GEMS)
-                .input('*', ConventionalItemTags.REDSTONE_DUSTS)
-                .criterion(hasItem(MaglevBlocks.MAGLEV_RAIL.unaffected()), conditionsFromTag(MaglevItems.MAGLEV_RAILS))
-                .offerTo(exporter);
+                .define('#', ConventionalItemTags.COPPER_INGOTS)
+                .define('%', ConventionalItemTags.IRON_INGOTS)
+                .define('&', ConventionalItemTags.QUARTZ_GEMS)
+                .define('*', ConventionalItemTags.REDSTONE_DUSTS)
+                .unlockedBy(getHasName(MaglevBlocks.MAGLEV_RAIL.unaffected()), has(MaglevItems.MAGLEV_RAILS))
+                .save(output);
     }
 
     public static class Provider extends FabricRecipeProvider {
 
-        public Provider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+        public Provider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
             super(output, registriesFuture);
         }
 
         @Override
-        protected RecipeGenerator getRecipeGenerator(RegistryWrapper.WrapperLookup registryLookup, RecipeExporter exporter) {
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registryLookup, RecipeOutput exporter) {
             return new MaglevRecipeGenerator(registryLookup, exporter);
         }
 

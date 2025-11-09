@@ -4,22 +4,20 @@ import archives.tater.maglev.init.MaglevBlocks;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.BlockTags;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.BlockTags;
 import java.util.concurrent.CompletableFuture;
 
 public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
-    public BlockTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public BlockTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-        valueLookupBuilder(MaglevBlocks.MAGLEV_RAILS).add(MaglevBlocks.MAGLEV_RAIL.getAll());
-        valueLookupBuilder(MaglevBlocks.POWERED_MAGLEV_RAILS).add(MaglevBlocks.POWERED_MAGLEV_RAIL.getAll());
-        valueLookupBuilder(MaglevBlocks.VARIABLE_MAGLEV_RAILS).add(MaglevBlocks.VARIABLE_MAGLEV_RAIL.getAll());
+    protected void addTags(HolderLookup.Provider wrapperLookup) {
+        valueLookupBuilder(MaglevBlocks.MAGLEV_RAILS).addAll(MaglevBlocks.MAGLEV_RAIL.asList());
+        valueLookupBuilder(MaglevBlocks.POWERED_MAGLEV_RAILS).addAll(MaglevBlocks.POWERED_MAGLEV_RAIL.asList());
+        valueLookupBuilder(MaglevBlocks.VARIABLE_MAGLEV_RAILS).addAll(MaglevBlocks.VARIABLE_MAGLEV_RAIL.asList());
         valueLookupBuilder(MaglevBlocks.HOVERABLE_RAILS)
                 .forceAddTag(MaglevBlocks.MAGLEV_RAILS)
                 .forceAddTag(MaglevBlocks.POWERED_MAGLEV_RAILS)

@@ -1,7 +1,7 @@
 package archives.tater.maglev;
 
-import net.minecraft.block.Oxidizable;
+import net.minecraft.world.level.block.WeatheringCopper;
 
 public interface HasOxidationLevel {
-    Oxidizable.OxidationLevel getDegradationLevel();
+    WeatheringCopper.WeatherState getAge();
 }

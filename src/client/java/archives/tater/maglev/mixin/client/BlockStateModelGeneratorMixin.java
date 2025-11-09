@@ -6,9 +6,14 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.minecraft.block.Block;
 import net.minecraft.client.data.*;
-import net.minecraft.client.render.model.json.WeightedVariant;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.ModelTemplate;
+import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,14 +23,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Consumer;
 
-@Mixin(BlockStateModelGenerator.class)
+@Mixin(BlockModelGenerators.class)
 public class BlockStateModelGeneratorMixin {
-	@Shadow @Final public Consumer<BlockModelDefinitionCreator> blockStateCollector;
+	@Shadow @Final public Consumer<BlockModelDefinitionGenerator> blockStateOutput;
 
 	@Inject(
 			method = {
-					"registerTurnableRail",
-					"registerStraightRail"
+					"createPassiveRail",
+					"createActiveRail"
 			},
 			at = @At("HEAD")
 	)
@@ -38,88 +43,88 @@ public class BlockStateModelGeneratorMixin {
 
 	@WrapOperation(
 			method = {
-					"registerTurnableRail",
-					"registerStraightRail"
+					"createPassiveRail",
+					"createActiveRail"
 			},
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/data/VariantsBlockModelDefinitionCreator$Empty;with(Lnet/minecraft/client/data/BlockStateVariantMap;)Lnet/minecraft/client/data/VariantsBlockModelDefinitionCreator;")
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/data/models/blockstates/MultiVariantGenerator$Empty;with(Lnet/minecraft/client/data/models/blockstates/PropertyDispatch;)Lnet/minecraft/client/data/models/blockstates/MultiVariantGenerator;")
 	)
-	private VariantsBlockModelDefinitionCreator replaceBlock2(VariantsBlockModelDefinitionCreator.Empty instance, BlockStateVariantMap<WeightedVariant> variantMap, Operation<VariantsBlockModelDefinitionCreator> original, @Share("targetBlock") LocalRef<Block> targetBlock) {
+	private MultiVariantGenerator replaceBlock2(MultiVariantGenerator.Empty instance, PropertyDispatch<MultiVariant> variantMap, Operation<MultiVariantGenerator> original, @Share("targetBlock") LocalRef<Block> targetBlock) {
 		var originalResult = original.call(instance, variantMap);
 		if (targetBlock.get() == null) return originalResult;
 
-		blockStateCollector.accept(VariantsBlockModelDefinitionCreator.of(targetBlock.get()).with(variantMap));
+		blockStateOutput.accept(MultiVariantGenerator.dispatch(targetBlock.get()).with(variantMap));
 
 		return originalResult;
 	}
 
 	@ModifyExpressionValue(
 			method = {
-					"registerTurnableRail",
-					"registerStraightRail"
+					"createPassiveRail",
+					"createActiveRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;RAIL_FLAT:Lnet/minecraft/client/data/Model;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_FLAT:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0)
 	)
-	private Model replaceModel1(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
+	private ModelTemplate replaceModel1(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
         return models == null ? original : models.flat();
     }
 
 	@ModifyExpressionValue(
-			method = "registerStraightRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;RAIL_FLAT:Lnet/minecraft/client/data/Model;", ordinal = 1)
+			method = "createActiveRail",
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_FLAT:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1)
 	)
-	private Model replaceModel2(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
+	private ModelTemplate replaceModel2(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
 		return models == null ? original : models.flatOn();
 	}
 
 	@ModifyExpressionValue(
-			method = "registerTurnableRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;RAIL_CURVED:Lnet/minecraft/client/data/Model;")
+			method = "createPassiveRail",
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_CURVED:Lnet/minecraft/client/data/models/model/ModelTemplate;")
 	)
-	private Model replaceModel3(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
+	private ModelTemplate replaceModel3(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
 		return models == null ? original : models.curved();
 	}
 
 	@ModifyExpressionValue(
 			method = {
-					"registerTurnableRail",
-					"registerStraightRail"
+					"createPassiveRail",
+					"createActiveRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;TEMPLATE_RAIL_RAISED_NE:Lnet/minecraft/client/data/Model;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_NE:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0)
 	)
-	private Model replaceModel4(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
+	private ModelTemplate replaceModel4(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
 		return models == null ? original : models.raisedNE();
 	}
 
 	@ModifyExpressionValue(
-			method = "registerStraightRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;TEMPLATE_RAIL_RAISED_NE:Lnet/minecraft/client/data/Model;", ordinal = 1)
+			method = "createActiveRail",
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_NE:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1)
 	)
-	private Model replaceModel5(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
+	private ModelTemplate replaceModel5(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
 		return models == null ? original : models.raisedNEOn();
 	}
 
 	@ModifyExpressionValue(
 			method = {
-					"registerTurnableRail",
-					"registerStraightRail"
+					"createPassiveRail",
+					"createActiveRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;TEMPLATE_RAIL_RAISED_SW:Lnet/minecraft/client/data/Model;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_SW:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0)
 	)
-	private Model replaceModel6(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
+	private ModelTemplate replaceModel6(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
 		return models == null ? original : models.raisedSW();
 	}
 
 	@ModifyExpressionValue(
-			method = "registerStraightRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/Models;TEMPLATE_RAIL_RAISED_SW:Lnet/minecraft/client/data/Model;", ordinal = 1)
+			method = "createActiveRail",
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_SW:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1)
 	)
-	private Model replaceModel7(Model original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
+	private ModelTemplate replaceModel7(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.RailModels> railModels) {
 		var models = railModels.get();
 		return models == null ? original : models.raisedSWOn();
 	}

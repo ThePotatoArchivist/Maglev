@@ -1,18 +1,17 @@
 package archives.tater.maglev;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.CopperBlockSet;
-
 import java.util.function.Function;
 import java.util.stream.Stream;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.WeatheringCopperBlocks;
 
 /**
- * Utilities to deal with {@link CopperBlockSet}
+ * Utilities to deal with {@link WeatheringCopperBlocks}
  */
 public class CopperBlockSetUtil {
     private CopperBlockSetUtil() {}
 
-    public static boolean isOf(Block block, CopperBlockSet blockSet) {
+    public static boolean isOf(Block block, WeatheringCopperBlocks blockSet) {
         return (block == blockSet.unaffected() ||
                 block == blockSet.exposed() ||
                 block == blockSet.weathered() ||
@@ -24,16 +23,16 @@ public class CopperBlockSetUtil {
         );
     }
 
-    public static Stream<Function<CopperBlockSet, Block>> fields() {
+    public static Stream<Function<WeatheringCopperBlocks, Block>> fields() {
         return Stream.of(
-                CopperBlockSet::unaffected,
-                CopperBlockSet::exposed,
-                CopperBlockSet::weathered,
-                CopperBlockSet::oxidized,
-                CopperBlockSet::waxed,
-                CopperBlockSet::waxedExposed,
-                CopperBlockSet::waxedWeathered,
-                CopperBlockSet::waxedOxidized
+                WeatheringCopperBlocks::unaffected,
+                WeatheringCopperBlocks::exposed,
+                WeatheringCopperBlocks::weathered,
+                WeatheringCopperBlocks::oxidized,
+                WeatheringCopperBlocks::waxed,
+                WeatheringCopperBlocks::waxedExposed,
+                WeatheringCopperBlocks::waxedWeathered,
+                WeatheringCopperBlocks::waxedOxidized
         );
     }
 }

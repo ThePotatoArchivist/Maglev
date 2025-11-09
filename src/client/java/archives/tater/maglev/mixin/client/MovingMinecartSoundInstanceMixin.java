@@ -1,7 +1,5 @@
 package archives.tater.maglev.mixin.client;
 
-import net.minecraft.client.sound.MovingMinecartSoundInstance;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,10 +8,13 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
+import net.minecraft.client.resources.sounds.MinecartSoundInstance;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+
 @SuppressWarnings("UnstableApiUsage")
-@Mixin(MovingMinecartSoundInstance.class)
+@Mixin(MinecartSoundInstance.class)
 public class MovingMinecartSoundInstanceMixin {
-    @Shadow @Final private AbstractMinecartEntity minecart;
+    @Shadow @Final private AbstractMinecart minecart;
 
     @ModifyVariable(
             method = "tick",

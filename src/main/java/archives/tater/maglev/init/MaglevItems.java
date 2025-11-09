@@ -4,47 +4,45 @@ import archives.tater.maglev.CopperBlockSetUtil;
 import archives.tater.maglev.Maglev;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.CopperBlockSet;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.text.Text;
-
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.WeatheringCopperBlocks;
 import java.util.List;
 
 /**
- * Use {@link Block#asItem()} to get the items from the {@link CopperBlockSet}s
+ * Use {@link Block#asItem()} to get the items from the {@link WeatheringCopperBlocks}s
  */
 public class MaglevItems {
 
     private static TagKey<Item> tagOf(String path) {
-        return TagKey.of(RegistryKeys.ITEM, Maglev.id(path));
+        return TagKey.create(Registries.ITEM, Maglev.id(path));
     }
 
-    private static final List<CopperBlockSet> blockSets = List.of(
+    private static final List<WeatheringCopperBlocks> blockSets = List.of(
             MaglevBlocks.MAGLEV_RAIL,
             MaglevBlocks.POWERED_MAGLEV_RAIL,
             MaglevBlocks.VARIABLE_MAGLEV_RAIL
     );
 
     public static final String ITEM_GROUP_NAME = "itemGroup.maglev.maglev";
-    public static final ItemGroup ITEM_GROUP = Registry.register(
-            Registries.ITEM_GROUP,
+    public static final CreativeModeTab ITEM_GROUP = Registry.register(
+            BuiltInRegistries.CREATIVE_MODE_TAB,
             Maglev.id("maglev_rails"),
             FabricItemGroup.builder()
-                    .displayName(Text.translatable(ITEM_GROUP_NAME))
-                    .icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultStack())
-                    .entries((displayContext, entries) -> entries.addAll(
+                    .title(Component.translatable(ITEM_GROUP_NAME))
+                    .icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultInstance())
+                    .displayItems((displayContext, entries) -> entries.acceptAll(
                             CopperBlockSetUtil.fields()
                                     .flatMap(field -> blockSets.stream().map(field))
                                     .map(Block::asItem)
-                                    .map(Item::getDefaultStack)
+                                    .map(Item::getDefaultInstance)
                                     .toList()
                     ))
                     .build()
@@ -56,9 +54,9 @@ public class MaglevItems {
     public static final TagKey<Item> HOVERABLE_RAILS = tagOf("hoverable_rails");
     public static final TagKey<Item> OXIDIZERS = tagOf("oxidizers");
 
-    private static void registerOxidizableItems(CopperBlockSet blockSet) {
-        for (var block : blockSet.getAll())
-            Items.register(block);
+    private static void registerOxidizableItems(WeatheringCopperBlocks blockSet) {
+        for (var block : blockSet.asList())
+            Items.registerBlock(block);
     }
 
     public static void init() {

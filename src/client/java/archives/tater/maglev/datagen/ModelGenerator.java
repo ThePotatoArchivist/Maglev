@@ -5,12 +5,17 @@ import archives.tater.maglev.init.MaglevBlocks;
 
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.CopperBlockSet;
 import net.minecraft.client.data.*;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplate;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.WeatheringCopperBlocks;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,72 +25,72 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Static utilities
 
-    private static Model model(Identifier parent, TextureKey... requiredTextureKeys) {
-        return new Model(Optional.of(parent), Optional.empty(), requiredTextureKeys);
+    private static ModelTemplate model(ResourceLocation parent, TextureSlot... requiredTextureKeys) {
+        return new ModelTemplate(Optional.of(parent), Optional.empty(), requiredTextureKeys);
     }
 
-    private static Model model(Identifier parent, String variant, TextureKey... requiredTextureKeys) {
-        return new Model(Optional.of(parent), Optional.of(variant), requiredTextureKeys);
+    private static ModelTemplate model(ResourceLocation parent, String variant, TextureSlot... requiredTextureKeys) {
+        return new ModelTemplate(Optional.of(parent), Optional.of(variant), requiredTextureKeys);
     }
 
-    private static Model blockModel(Identifier parent, TextureKey... requiredTextureKeys) {
-        return model(parent.withPrefixedPath("block/"), requiredTextureKeys);
+    private static ModelTemplate blockModel(ResourceLocation parent, TextureSlot... requiredTextureKeys) {
+        return model(parent.withPrefix("block/"), requiredTextureKeys);
     }
 
-    private static Model blockModel(String parent, TextureKey... requiredTextureKeys) {
+    private static ModelTemplate blockModel(String parent, TextureSlot... requiredTextureKeys) {
         return blockModel(Maglev.id(parent), requiredTextureKeys);
     }
 
     // Models
 
-    public static final TextureKey RAIL_EMISSIVE = TextureKey.of("rail_emissive");
+    public static final TextureSlot RAIL_EMISSIVE = TextureSlot.create("rail_emissive");
 
-    public static final Model RAIL_FLAT_EMISSIVE = blockModel("rail_flat_emissive", RAIL_EMISSIVE);
-    public static final Model RAIL_CURVED_EMISSIVE = blockModel("rail_curved_emissive", RAIL_EMISSIVE);
-    public static final Model RAIL_RAISED_NE_EMISSIVE = blockModel("template_rail_raised_ne_emissive", RAIL_EMISSIVE);
-    public static final Model RAIL_RAISED_SW_EMISSIVE = blockModel("template_rail_raised_sw_emissive", RAIL_EMISSIVE);
+    public static final ModelTemplate RAIL_FLAT_EMISSIVE = blockModel("rail_flat_emissive", RAIL_EMISSIVE);
+    public static final ModelTemplate RAIL_CURVED_EMISSIVE = blockModel("rail_curved_emissive", RAIL_EMISSIVE);
+    public static final ModelTemplate RAIL_RAISED_NE_EMISSIVE = blockModel("template_rail_raised_ne_emissive", RAIL_EMISSIVE);
+    public static final ModelTemplate RAIL_RAISED_SW_EMISSIVE = blockModel("template_rail_raised_sw_emissive", RAIL_EMISSIVE);
 
     // Data
 
     public record RailModels(
-            Model flat,
-            Model curved,
-            Model raisedNE,
-            Model raisedSW,
-            Model flatOn,
-            Model raisedNEOn,
-            Model raisedSWOn
+            ModelTemplate flat,
+            ModelTemplate curved,
+            ModelTemplate raisedNE,
+            ModelTemplate raisedSW,
+            ModelTemplate flatOn,
+            ModelTemplate raisedNEOn,
+            ModelTemplate raisedSWOn
     ) {
-        public static RailModels createEmissive(BlockStateModelGenerator modelGenerator, Identifier name, @Nullable Identifier texture, Identifier onTexture) {
+        public static RailModels createEmissive(BlockModelGenerators modelGenerator, ResourceLocation name, @Nullable ResourceLocation texture, ResourceLocation onTexture) {
             return new RailModels(
 
-                    texture == null ? Models.RAIL_FLAT : model(
-                            RAIL_FLAT_EMISSIVE.upload(name.withPath(path -> "block/" + path + "_flat"), TextureMap.of(RAIL_EMISSIVE, texture.withPrefixedPath("block/")), modelGenerator.modelCollector),
-                            TextureKey.RAIL),
+                    texture == null ? ModelTemplates.RAIL_FLAT : model(
+                            RAIL_FLAT_EMISSIVE.create(name.withPath(path -> "block/" + path + "_flat"), TextureMapping.singleSlot(RAIL_EMISSIVE, texture.withPrefix("block/")), modelGenerator.modelOutput),
+                            TextureSlot.RAIL),
 
-                    texture == null ? Models.RAIL_CURVED : model(
-                            RAIL_CURVED_EMISSIVE.upload(name.withPath(path -> "block/" + path + "_curved"), TextureMap.of(RAIL_EMISSIVE, texture.withPath(path -> "block/" + path + "_corner")), modelGenerator.modelCollector),
-                            "_corner", TextureKey.RAIL),
+                    texture == null ? ModelTemplates.RAIL_CURVED : model(
+                            RAIL_CURVED_EMISSIVE.create(name.withPath(path -> "block/" + path + "_curved"), TextureMapping.singleSlot(RAIL_EMISSIVE, texture.withPath(path -> "block/" + path + "_corner")), modelGenerator.modelOutput),
+                            "_corner", TextureSlot.RAIL),
 
-                    texture == null ? Models.TEMPLATE_RAIL_RAISED_NE : model(
-                            RAIL_RAISED_NE_EMISSIVE.upload(name.withPath(path -> "block/template_" + path + "_raised_ne"), TextureMap.of(RAIL_EMISSIVE, texture.withPrefixedPath("block/")), modelGenerator.modelCollector),
-                            "_raised_ne", TextureKey.RAIL),
+                    texture == null ? ModelTemplates.RAIL_RAISED_NE : model(
+                            RAIL_RAISED_NE_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_raised_ne"), TextureMapping.singleSlot(RAIL_EMISSIVE, texture.withPrefix("block/")), modelGenerator.modelOutput),
+                            "_raised_ne", TextureSlot.RAIL),
 
-                    texture == null ? Models.TEMPLATE_RAIL_RAISED_SW : model(
-                            RAIL_RAISED_SW_EMISSIVE.upload(name.withPath(path -> "block/template_" + path + "_raised_sw"), TextureMap.of(RAIL_EMISSIVE, texture.withPrefixedPath("block/")), modelGenerator.modelCollector),
-                            "_raised_se", TextureKey.RAIL),
-
-                    model(
-                            RAIL_FLAT_EMISSIVE.upload(name.withPath(path -> "block/" + path + "_on_flat"), TextureMap.of(RAIL_EMISSIVE, onTexture.withPrefixedPath("block/")), modelGenerator.modelCollector),
-                            TextureKey.RAIL),
+                    texture == null ? ModelTemplates.RAIL_RAISED_SW : model(
+                            RAIL_RAISED_SW_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_raised_sw"), TextureMapping.singleSlot(RAIL_EMISSIVE, texture.withPrefix("block/")), modelGenerator.modelOutput),
+                            "_raised_se", TextureSlot.RAIL),
 
                     model(
-                            RAIL_RAISED_NE_EMISSIVE.upload(name.withPath(path -> "block/template_" + path + "_on_raised_ne"), TextureMap.of(RAIL_EMISSIVE, onTexture.withPrefixedPath("block/")), modelGenerator.modelCollector),
-                            "_raised_ne", TextureKey.RAIL),
+                            RAIL_FLAT_EMISSIVE.create(name.withPath(path -> "block/" + path + "_on_flat"), TextureMapping.singleSlot(RAIL_EMISSIVE, onTexture.withPrefix("block/")), modelGenerator.modelOutput),
+                            TextureSlot.RAIL),
 
                     model(
-                            RAIL_RAISED_SW_EMISSIVE.upload(name.withPath(path -> "block/template_" + path + "_on_raised_sw"), TextureMap.of(RAIL_EMISSIVE, onTexture.withPrefixedPath("block/")), modelGenerator.modelCollector),
-                            "_raised_sw", TextureKey.RAIL)
+                            RAIL_RAISED_NE_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_on_raised_ne"), TextureMapping.singleSlot(RAIL_EMISSIVE, onTexture.withPrefix("block/")), modelGenerator.modelOutput),
+                            "_raised_ne", TextureSlot.RAIL),
+
+                    model(
+                            RAIL_RAISED_SW_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_on_raised_sw"), TextureMapping.singleSlot(RAIL_EMISSIVE, onTexture.withPrefix("block/")), modelGenerator.modelOutput),
+                            "_raised_sw", TextureSlot.RAIL)
             );
         }
     }
@@ -99,30 +104,30 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Mixined utilities
 
-    public static void registerStraightRail(BlockStateModelGenerator modelGenerator, Block block, Block child, RailModels railModels) {
+    public static void registerStraightRail(BlockModelGenerators modelGenerator, Block block, Block child, RailModels railModels) {
         childBlock = child;
         ModelGenerator.railModels = railModels;
-        modelGenerator.registerStraightRail(block);
-        modelGenerator.registerParentedItemModel(child, ModelIds.getItemModelId(block.asItem()));
+        modelGenerator.createActiveRail(block);
+        modelGenerator.registerSimpleItemModel(child, ModelLocationUtils.getModelLocation(block.asItem()));
     }
 
-    public static void registerTurnableRail(BlockStateModelGenerator modelGenerator, Block block, Block child, RailModels railModels) {
+    public static void registerTurnableRail(BlockModelGenerators modelGenerator, Block block, Block child, RailModels railModels) {
         childBlock = child;
         ModelGenerator.railModels = railModels;
-        modelGenerator.registerTurnableRail(block);
-        modelGenerator.registerParentedItemModel(child, ModelIds.getItemModelId(block.asItem()));
+        modelGenerator.createPassiveRail(block);
+        modelGenerator.registerSimpleItemModel(child, ModelLocationUtils.getModelLocation(block.asItem()));
     }
 
     // Specialized utilities
 
-    private static void registerOxidizableStraightRail(BlockStateModelGenerator modelGenerator, CopperBlockSet blockSet, RailModels railModels) {
+    private static void registerOxidizableStraightRail(BlockModelGenerators modelGenerator, WeatheringCopperBlocks blockSet, RailModels railModels) {
         registerStraightRail(modelGenerator, blockSet.unaffected(), blockSet.waxed(), railModels);
         registerStraightRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed(), railModels);
         registerStraightRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized(), railModels);
         registerStraightRail(modelGenerator, blockSet.weathered(), blockSet.waxedWeathered(), railModels);
     }
 
-    private static void registerOxidizableTurnableRail(BlockStateModelGenerator modelGenerator, CopperBlockSet blockSet, RailModels railModels) {
+    private static void registerOxidizableTurnableRail(BlockModelGenerators modelGenerator, WeatheringCopperBlocks blockSet, RailModels railModels) {
         registerTurnableRail(modelGenerator, blockSet.unaffected(), blockSet.waxed(), railModels);
         registerTurnableRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed(), railModels);
         registerTurnableRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized(), railModels);
@@ -136,7 +141,7 @@ public class ModelGenerator extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
+    public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
         var baseModels = RailModels.createEmissive(blockStateModelGenerator, Maglev.id("maglev_rail"), Maglev.id("maglev_rail_glow"), Maglev.id("powered_maglev_rail_glow"));
         var variableModels = RailModels.createEmissive(blockStateModelGenerator, Maglev.id("variable_maglev_rail"), null, Maglev.id("variable_maglev_rail_glow"));
 
@@ -146,7 +151,7 @@ public class ModelGenerator extends FabricModelProvider {
     }
 
     @Override
-    public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+    public void generateItemModels(ItemModelGenerators itemModelGenerator) {
 
     }
 }

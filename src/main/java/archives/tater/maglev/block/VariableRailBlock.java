@@ -1,25 +1,25 @@
 package archives.tater.maglev.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.PoweredRailBlock;
-import net.minecraft.block.enums.RailShape;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.PoweredRailBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
 
 public class VariableRailBlock extends PoweredRailBlock {
 //    public static final IntProperty POWER = Properties.POWER;
 
-    public VariableRailBlock(Settings settings) {
+    public VariableRailBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    protected boolean isPoweredByOtherRails(World world, BlockPos pos, boolean bl, int distance, RailShape shape) {
+    protected boolean isSameRailWithPower(Level world, BlockPos pos, boolean bl, int distance, RailShape shape) {
         return false;
     }
 
     @Override
-    protected boolean isPoweredByOtherRails(World world, BlockPos pos, BlockState state, boolean bl, int distance) {
+    protected boolean findPoweredRailSignal(Level world, BlockPos pos, BlockState state, boolean bl, int distance) {
         return false;
     }
 }

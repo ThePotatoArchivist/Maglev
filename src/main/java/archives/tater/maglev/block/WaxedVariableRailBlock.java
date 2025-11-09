@@ -1,18 +1,18 @@
 package archives.tater.maglev.block;
 
 import archives.tater.maglev.HasOxidationLevel;
-import net.minecraft.block.Oxidizable;
+import net.minecraft.world.level.block.WeatheringCopper;
 
 public class WaxedVariableRailBlock extends VariableRailBlock implements HasOxidationLevel {
-    private final Oxidizable.OxidationLevel oxidationLevel;
+    private final WeatheringCopper.WeatherState oxidationLevel;
 
-    public WaxedVariableRailBlock(Oxidizable.OxidationLevel oxidationLevel, Settings settings) {
+    public WaxedVariableRailBlock(WeatheringCopper.WeatherState oxidationLevel, Properties settings) {
         super(settings);
         this.oxidationLevel = oxidationLevel;
     }
 
     @Override
-    public Oxidizable.OxidationLevel getDegradationLevel() {
+    public WeatheringCopper.WeatherState getAge() {
         return oxidationLevel;
     }
 }

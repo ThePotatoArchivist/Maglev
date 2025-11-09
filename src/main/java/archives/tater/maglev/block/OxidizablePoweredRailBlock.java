@@ -1,40 +1,40 @@
 package archives.tater.maglev.block;
 
 import archives.tater.maglev.HasOxidationLevel;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Oxidizable;
-import net.minecraft.block.PoweredRailBlock;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.level.block.PoweredRailBlock;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.state.BlockState;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 
-public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Oxidizable, HasOxidationLevel, VariantPoweredRail {
-    private final OxidationLevel oxidationLevel;
+public class OxidizablePoweredRailBlock extends PoweredRailBlock implements WeatheringCopper, HasOxidationLevel, VariantPoweredRail {
+    private final WeatherState oxidationLevel;
 
-    public OxidizablePoweredRailBlock(OxidationLevel oxidationLevel, Settings settings) {
+    public OxidizablePoweredRailBlock(WeatherState oxidationLevel, Properties settings) {
         super(settings);
         this.oxidationLevel = oxidationLevel;
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        tickDegradation(state, world, pos, random);
+    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        changeOverTime(state, world, pos, random);
     }
 
     @Override
-    protected boolean hasRandomTicks(BlockState state) {
-        return Oxidizable.getIncreasedOxidationBlock(state.getBlock()).isPresent();
+    protected boolean isRandomlyTicking(BlockState state) {
+        return WeatheringCopper.getNext(state.getBlock()).isPresent();
     }
 
     @Override
-    public OxidationLevel getDegradationLevel() {
+    public WeatherState getAge() {
         return oxidationLevel;
     }
 
-    public static double getSpeedMultiplier(OxidationLevel level) {
+    public static double getSpeedMultiplier(WeatherState level) {
         return switch (level) {
             case UNAFFECTED -> 3;
             case EXPOSED -> 2;
@@ -44,9 +44,9 @@ public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Oxid
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static void updateSpeed(AbstractMinecartEntity minecart, BlockState state) {
+    public static void updateSpeed(AbstractMinecart minecart, BlockState state) {
         if (state.getBlock() instanceof HasOxidationLevel oxidizable)
-            minecart.setAttached(SPEED_MULTIPLIER, OxidizablePoweredRailBlock.getSpeedMultiplier(oxidizable.getDegradationLevel()));
+            minecart.setAttached(SPEED_MULTIPLIER, OxidizablePoweredRailBlock.getSpeedMultiplier(oxidizable.getAge()));
         else
             minecart.removeAttached(SPEED_MULTIPLIER);
     }
