@@ -12,5 +12,10 @@
   },
   "overwrites": {
     "requireAnnotations": true
-	}
+  },
+  "client": [
+    "client.BlockStateModelGeneratorMixin",
+    "client.MinecartInsideSoundInstanceMixin",
+    "client.MovingMinecartSoundInstanceMixin"
+  ]
 }

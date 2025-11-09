@@ -6,10 +6,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
-
 import net.minecraft.client.resources.sounds.MinecartSoundInstance;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+
+import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
 @SuppressWarnings("UnstableApiUsage")
 @Mixin(MinecartSoundInstance.class)
