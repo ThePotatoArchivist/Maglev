@@ -3,32 +3,39 @@ package archives.tater.maglev;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
 import archives.tater.maglev.init.MaglevItems;
-import eu.pb4.polymer.core.api.item.PolymerItemGroupUtils;
+import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.state.properties.RailShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Maglev implements ModInitializer {
-	public static final String MOD_ID = "maglev";
+    public static final String MOD_ID = "maglev";
 
 	public static Identifier id(String path) {
 		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    // This logger is used to write text to the console and the log file.
+    // It is considered best practice to use your mod id as the logger's name.
+    // That way, it's clear which mod wrote info, warnings, and errors.
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	@Override
-	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
+    @Override
+    public void onInitialize() {
+        // This code runs as soon as Minecraft is in a mod-load-ready state.
+        // However, some things (like resources) may still be uninitialized.
+        // Proceed with mild caution.
 
-		MaglevBlocks.init();
-		MaglevItems.init();
-		MaglevDataAttachments.init();
-	}
+        MaglevBlocks.init();
+        MaglevItems.init();
+        MaglevDataAttachments.init();
+
+        PolymerResourcePackUtils.addModAssets(MOD_ID);
+    }
+
+    public record RailState(RailShape shape, boolean powered) {
+
+    }
 }

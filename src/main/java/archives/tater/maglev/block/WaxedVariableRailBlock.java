@@ -1,10 +1,10 @@
 package archives.tater.maglev.block;
 
 import archives.tater.maglev.HasOxidationLevel;
-import eu.pb4.polymer.core.api.block.PolymerBlock;
+import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 
-public class WaxedVariableRailBlock extends VariableRailBlock implements HasOxidationLevel, PolymerBlock {
+public class WaxedVariableRailBlock extends VariableRailBlock implements HasOxidationLevel, PolymerTexturedBlock {
     private final WeatheringCopper.WeatherState oxidationLevel;
 
     public WaxedVariableRailBlock(WeatheringCopper.WeatherState oxidationLevel, Properties settings) {

@@ -1,22 +1,24 @@
 package archives.tater.maglev.init;
 
 import archives.tater.maglev.CopperBlockSetUtil;
+import archives.tater.maglev.HasOxidationLevel;
 import archives.tater.maglev.Maglev;
-
+import archives.tater.maglev.block.*;
 import eu.pb4.polymer.core.api.item.PolymerBlockItem;
 import eu.pb4.polymer.core.api.item.PolymerItemGroupUtils;
-import eu.pb4.polymer.core.api.item.PolymerItemUtils;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.level.block.WeatheringCopperBlocks;
+import org.jetbrains.annotations.NotNull;
+import xyz.nucleoid.packettweaker.PacketContext;
+
 import java.util.List;
 
 /**
@@ -44,15 +46,35 @@ public class MaglevItems {
 
     private static void registerOxidizableItems(WeatheringCopperBlocks blockSet) {
         for (var block : blockSet.asList())
-            Items.register(block, (b, s) -> new PolymerBlockItem(b, s) {
+            Items.registerBlock(block, (b, props) -> new PolymerBlockItem(b, props) {
                 @Override
                 public Item getPolymerItem(ItemStack itemStack, PacketContext context) {
                     return block instanceof PoweredRailBlock ? Items.POWERED_RAIL : Items.RAIL;
                 }
 
                 @Override
-                public @NotNull Identifier getPolymerItemModel(ItemStack stack, PacketContext context) {
-                    return block instanceof PoweredRailBlock ? Identifier.ofVanilla("powered_rail") : Identifier.ofVanilla("rail");
+                public @NotNull ResourceLocation getPolymerItemModel(ItemStack stack, PacketContext context) {
+                    if (block instanceof HasOxidationLevel) {
+                        String prefix = switch (((HasOxidationLevel) block).getAge()) {
+                            case UNAFFECTED -> "";
+                            case EXPOSED -> "exposed_";
+                            case WEATHERED -> "weathered_";
+                            case OXIDIZED -> "oxidized_";
+                        };
+                        if (block instanceof OxidizableRailBlock || block instanceof WaxedRailBlock) {
+                            String preprefix = block instanceof WaxedRailBlock ? "waxed_" : "";
+                            return Maglev.id(preprefix + prefix + "maglev_rail");
+                        }
+                        if (block instanceof OxidizablePoweredRailBlock || block instanceof WaxedPoweredRailBlock) {
+                            String preprefix = block instanceof WaxedPoweredRailBlock ? "waxed_" : "";
+                            return Maglev.id(preprefix + prefix + "powered_maglev_rail");
+                        }
+                        if (block instanceof OxidizableVariableRailBlock || block instanceof WaxedVariableRailBlock) {
+                            String preprefix = block instanceof WaxedVariableRailBlock ? "waxed_" : "";
+                            return Maglev.id(preprefix + prefix + "variable_maglev_rail");
+                        }
+                    }
+                    return block instanceof PoweredRailBlock ? ResourceLocation.withDefaultNamespace("powered_rail") : ResourceLocation.withDefaultNamespace("rail");
                 }
             });
     }
@@ -63,13 +85,13 @@ public class MaglevItems {
         registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
         PolymerItemGroupUtils.registerPolymerItemGroup(Maglev.id("maglev_rails"),
                 PolymerItemGroupUtils.builder()
-                        .displayName(Text.translatable(ITEM_GROUP_NAME))
-                        .icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultStack())
-                        .entries((displayContext, entries) -> entries.addAll(
+                        .title(Component.translatable(ITEM_GROUP_NAME))
+                        .icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultInstance())
+                        .displayItems((displayContext, entries) -> entries.acceptAll(
                                 CopperBlockSetUtil.fields()
                                         .flatMap(field -> blockSets.stream().map(field))
                                         .map(Block::asItem)
-                                        .map(Item::getDefaultStack)
+                                        .map(Item::getDefaultInstance)
                                         .toList()
                         ))
                         .build());
