@@ -4,19 +4,20 @@ import archives.tater.maglev.init.MaglevBlocks;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.entity.vehicle.VehicleEntity;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
+import net.minecraft.world.level.Level;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
@@ -37,7 +38,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
 
     @ModifyVariable(
             method = "getCurrentBlockPosOrRailBelow",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/AbstractMinecart;level()Lnet/minecraft/world/level/Level;", ordinal = 0),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/minecart/AbstractMinecart;level()Lnet/minecraft/world/level/Level;", ordinal = 0),
             ordinal = 1
     )
     private int addHoverHeight(int y, @Local(ordinal = 0) int x, @Local(ordinal = 2) int z) {
@@ -65,7 +66,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
 
     @ModifyExpressionValue(
             method = "applyNaturalSlowdown",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/MinecartBehavior;getSlowdownFactor()D")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/minecart/MinecartBehavior;getSlowdownFactor()D")
     )
     private double frictionless(double original) {
         return hasAttached(SPEED_MULTIPLIER) ? 1 : original;

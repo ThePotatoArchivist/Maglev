@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeatheringCopperBlocks;
 import java.util.concurrent.CompletableFuture;
 
-import static net.minecraft.Util.makeDescriptionId;
+import static net.minecraft.util.Util.makeDescriptionId;
 
 public class LangGenerator extends FabricLanguageProvider {
     public LangGenerator(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {

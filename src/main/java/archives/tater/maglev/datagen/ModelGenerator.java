@@ -13,7 +13,7 @@ import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeatheringCopperBlocks;
 import org.jetbrains.annotations.ApiStatus;
@@ -25,15 +25,15 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Static utilities
 
-    private static ModelTemplate model(ResourceLocation parent, TextureSlot... requiredTextureKeys) {
+    private static ModelTemplate model(Identifier parent, TextureSlot... requiredTextureKeys) {
         return new ModelTemplate(Optional.of(parent), Optional.empty(), requiredTextureKeys);
     }
 
-    private static ModelTemplate model(ResourceLocation parent, String variant, TextureSlot... requiredTextureKeys) {
+    private static ModelTemplate model(Identifier parent, String variant, TextureSlot... requiredTextureKeys) {
         return new ModelTemplate(Optional.of(parent), Optional.of(variant), requiredTextureKeys);
     }
 
-    private static ModelTemplate blockModel(ResourceLocation parent, TextureSlot... requiredTextureKeys) {
+    private static ModelTemplate blockModel(Identifier parent, TextureSlot... requiredTextureKeys) {
         return model(parent.withPrefix("block/"), requiredTextureKeys);
     }
 
@@ -61,7 +61,7 @@ public class ModelGenerator extends FabricModelProvider {
             ModelTemplate raisedNEOn,
             ModelTemplate raisedSWOn
     ) {
-        public static RailModels createEmissive(BlockModelGenerators modelGenerator, ResourceLocation name, @Nullable ResourceLocation texture, ResourceLocation onTexture) {
+        public static RailModels createEmissive(BlockModelGenerators modelGenerator, Identifier name, @Nullable Identifier texture, Identifier onTexture) {
             return new RailModels(
 
                     texture == null ? ModelTemplates.RAIL_FLAT : model(
