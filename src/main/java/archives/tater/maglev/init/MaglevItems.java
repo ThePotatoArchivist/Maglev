@@ -8,7 +8,7 @@ import eu.pb4.polymer.core.api.item.PolymerBlockItem;
 import eu.pb4.polymer.core.api.item.PolymerItemGroupUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +16,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.level.block.WeatheringCopperBlocks;
-import org.jetbrains.annotations.NotNull;
 import xyz.nucleoid.packettweaker.PacketContext;
 
 import java.util.List;
@@ -30,11 +29,7 @@ public class MaglevItems {
         return TagKey.create(Registries.ITEM, Maglev.id(path));
     }
 
-    private static final List<WeatheringCopperBlocks> blockSets = List.of(
-            MaglevBlocks.MAGLEV_RAIL,
-            MaglevBlocks.POWERED_MAGLEV_RAIL,
-            MaglevBlocks.VARIABLE_MAGLEV_RAIL
-    );
+    private static final List<WeatheringCopperBlocks> blockSets = List.of(MaglevBlocks.MAGLEV_RAIL, MaglevBlocks.POWERED_MAGLEV_RAIL, MaglevBlocks.VARIABLE_MAGLEV_RAIL);
 
     public static final String ITEM_GROUP_NAME = "itemGroup.maglev.maglev";
 
@@ -53,7 +48,7 @@ public class MaglevItems {
                 }
 
                 @Override
-                public @NotNull ResourceLocation getPolymerItemModel(ItemStack stack, PacketContext context) {
+                public Identifier getPolymerItemModel(ItemStack stack, PacketContext context) {
                     if (block instanceof HasOxidationLevel) {
                         String prefix = switch (((HasOxidationLevel) block).getAge()) {
                             case UNAFFECTED -> "";
@@ -74,7 +69,7 @@ public class MaglevItems {
                             return Maglev.id(preprefix + prefix + "variable_maglev_rail");
                         }
                     }
-                    return block instanceof PoweredRailBlock ? ResourceLocation.withDefaultNamespace("powered_rail") : ResourceLocation.withDefaultNamespace("rail");
+                    return block instanceof PoweredRailBlock ? Identifier.withDefaultNamespace("powered_rail") : Identifier.withDefaultNamespace("rail");
                 }
             });
     }
@@ -83,17 +78,6 @@ public class MaglevItems {
         registerOxidizableItems(MaglevBlocks.MAGLEV_RAIL);
         registerOxidizableItems(MaglevBlocks.POWERED_MAGLEV_RAIL);
         registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
-        PolymerItemGroupUtils.registerPolymerItemGroup(Maglev.id("maglev_rails"),
-                PolymerItemGroupUtils.builder()
-                        .title(Component.translatable(ITEM_GROUP_NAME))
-                        .icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultInstance())
-                        .displayItems((displayContext, entries) -> entries.acceptAll(
-                                CopperBlockSetUtil.fields()
-                                        .flatMap(field -> blockSets.stream().map(field))
-                                        .map(Block::asItem)
-                                        .map(Item::getDefaultInstance)
-                                        .toList()
-                        ))
-                        .build());
+        PolymerItemGroupUtils.registerPolymerItemGroup(Maglev.id("maglev_rails"), PolymerItemGroupUtils.builder().title(Component.translatable(ITEM_GROUP_NAME)).icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultInstance()).displayItems((displayContext, entries) -> entries.acceptAll(CopperBlockSetUtil.fields().flatMap(field -> blockSets.stream().map(field)).map(Block::asItem).map(Item::getDefaultInstance).toList())).build());
     }
 }
