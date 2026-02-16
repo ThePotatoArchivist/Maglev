@@ -1,7 +1,7 @@
 package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
-import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
+import archives.tater.maglev.init.MaglevBlocks.WeatheringCopperBlocks;
 import archives.tater.maglev.init.MaglevItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -42,7 +42,7 @@ public class LangGenerator extends FabricLanguageProvider {
         translationBuilder.add(makeDescriptionId("lore", BuiltInRegistries.BLOCK.getKey(block)), description);
     }
 
-    private static void add(TranslationBuilder translationBuilder, CopperBlockSet blockSet, String name) {
+    private static void add(TranslationBuilder translationBuilder, WeatheringCopperBlocks blockSet, String name) {
         translationBuilder.add(blockSet.unaffected(), name);
         translationBuilder.add(blockSet.exposed(), "Exposed " + name);
         translationBuilder.add(blockSet.weathered(), "Weathered " + name);
@@ -57,7 +57,7 @@ public class LangGenerator extends FabricLanguageProvider {
         return "A rail block that " + behavior + ". Friction is removed and minecart travel at a " + speed + " max speed.";
     }
 
-    private static void addDescription(TranslationBuilder translationBuilder, CopperBlockSet blockSet, String behavior) {
+    private static void addDescription(TranslationBuilder translationBuilder, WeatheringCopperBlocks blockSet, String behavior) {
         addDescription(translationBuilder, blockSet.unaffected(), createRailDescription(behavior, "very high"));
         addDescription(translationBuilder, blockSet.exposed(), createRailDescription(behavior, "high"));
         addDescription(translationBuilder, blockSet.weathered(), createRailDescription(behavior, "normal"));

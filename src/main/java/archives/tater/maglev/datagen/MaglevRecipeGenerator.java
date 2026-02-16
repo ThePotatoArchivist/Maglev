@@ -1,7 +1,7 @@
 package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
-import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
+import archives.tater.maglev.init.MaglevBlocks.WeatheringCopperBlocks;
 import archives.tater.maglev.init.MaglevItems;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -31,7 +31,7 @@ public class MaglevRecipeGenerator extends FabricRecipeProvider {
                 .save(exporter, getConversionRecipeName(waxed, Items.HONEYCOMB));
     }
 
-    private void offerWaxingRecipes(RecipeOutput exporter, CopperBlockSet blockSet) {
+    private void offerWaxingRecipes(RecipeOutput exporter, WeatheringCopperBlocks blockSet) {
         offerWaxingRecipe(exporter, blockSet.waxed().asItem(), blockSet.unaffected().asItem());
         offerWaxingRecipe(exporter, blockSet.waxedExposed().asItem(), blockSet.exposed().asItem());
         offerWaxingRecipe(exporter, blockSet.waxedWeathered().asItem(), blockSet.weathered().asItem());

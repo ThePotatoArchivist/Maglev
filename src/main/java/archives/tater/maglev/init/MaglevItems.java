@@ -1,7 +1,7 @@
 package archives.tater.maglev.init;
 
 import archives.tater.maglev.Maglev;
-import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
+import archives.tater.maglev.init.MaglevBlocks.WeatheringCopperBlocks;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Block;
 import java.util.List;
 
 /**
- * Use {@link Block#asItem()} to get the items from the {@link CopperBlockSet}s
+ * Use {@link Block#asItem()} to get the items from the {@link WeatheringCopperBlocks}s
  */
 public class MaglevItems {
 
@@ -24,7 +24,7 @@ public class MaglevItems {
         return TagKey.create(Registries.ITEM, Maglev.id(path));
     }
 
-    private static final List<CopperBlockSet> blockSets = List.of(
+    private static final List<WeatheringCopperBlocks> blockSets = List.of(
             MaglevBlocks.MAGLEV_RAIL,
             MaglevBlocks.POWERED_MAGLEV_RAIL,
             MaglevBlocks.VARIABLE_MAGLEV_RAIL
@@ -38,7 +38,7 @@ public class MaglevItems {
                     .title(Component.translatable(ITEM_GROUP_NAME))
                     .icon(() -> MaglevBlocks.MAGLEV_RAIL.unaffected().asItem().getDefaultInstance())
                     .displayItems((displayContext, entries) -> entries.acceptAll(
-                            CopperBlockSet.fields()
+                            WeatheringCopperBlocks.fields()
                                     .flatMap(field -> blockSets.stream().map(field))
                                     .map(Block::asItem)
                                     .map(Item::getDefaultInstance)
@@ -53,7 +53,7 @@ public class MaglevItems {
     public static final TagKey<Item> HOVERABLE_RAILS = tagOf("hoverable_rails");
     public static final TagKey<Item> OXIDIZERS = tagOf("oxidizers");
 
-    private static void registerOxidizableItems(CopperBlockSet blockSet) {
+    private static void registerOxidizableItems(WeatheringCopperBlocks blockSet) {
         for (var block : blockSet.getAll())
             Items.registerBlock(block);
     }

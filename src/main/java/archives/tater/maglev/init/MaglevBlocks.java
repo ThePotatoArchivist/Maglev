@@ -33,7 +33,7 @@ public class MaglevBlocks {
         return TagKey.create(Registries.BLOCK, Maglev.id(path));
     }
 
-    public record CopperBlockSet(
+    public record WeatheringCopperBlocks(
             Block unaffected,
             Block exposed,
             Block weathered,
@@ -43,7 +43,7 @@ public class MaglevBlocks {
             Block waxedWeathered,
             Block waxedOxidized
     ) {
-        public CopperBlockSet {
+        public WeatheringCopperBlocks {
             OxidizableBlocksRegistry.registerOxidizableBlockPair(unaffected, exposed);
             OxidizableBlocksRegistry.registerOxidizableBlockPair(exposed, weathered);
             OxidizableBlocksRegistry.registerOxidizableBlockPair(weathered, oxidized);
@@ -81,16 +81,16 @@ public class MaglevBlocks {
             );
         }
 
-        public static Stream<Function<CopperBlockSet, Block>> fields() {
+        public static Stream<Function<WeatheringCopperBlocks, Block>> fields() {
             return Stream.of(
-                    CopperBlockSet::unaffected,
-                    CopperBlockSet::exposed,
-                    CopperBlockSet::weathered,
-                    CopperBlockSet::oxidized,
-                    CopperBlockSet::waxed,
-                    CopperBlockSet::waxedExposed,
-                    CopperBlockSet::waxedWeathered,
-                    CopperBlockSet::waxedOxidized
+                    WeatheringCopperBlocks::unaffected,
+                    WeatheringCopperBlocks::exposed,
+                    WeatheringCopperBlocks::weathered,
+                    WeatheringCopperBlocks::oxidized,
+                    WeatheringCopperBlocks::waxed,
+                    WeatheringCopperBlocks::waxedExposed,
+                    WeatheringCopperBlocks::waxedWeathered,
+                    WeatheringCopperBlocks::waxedOxidized
             );
         }
     }
@@ -115,8 +115,8 @@ public class MaglevBlocks {
         );
     }
 
-    private static CopperBlockSet registerOxidizableRails(String name, BiFunction<WeatherState, BlockBehaviour.Properties, Block> waxedConstructor, BiFunction<WeatherState, BlockBehaviour.Properties, Block> oxidizableConstructor) {
-        return new CopperBlockSet(
+    private static WeatheringCopperBlocks registerOxidizableRails(String name, BiFunction<WeatherState, BlockBehaviour.Properties, Block> waxedConstructor, BiFunction<WeatherState, BlockBehaviour.Properties, Block> oxidizableConstructor) {
+        return new WeatheringCopperBlocks(
                 registerOxidizableRail(name, WeatherState.UNAFFECTED, oxidizableConstructor),
                 registerOxidizableRail(name, WeatherState.EXPOSED, oxidizableConstructor),
                 registerOxidizableRail(name, WeatherState.WEATHERED, oxidizableConstructor),
@@ -128,9 +128,9 @@ public class MaglevBlocks {
         );
     }
 
-    public static final CopperBlockSet MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, OxidizableRailBlock::new);
-    public static final CopperBlockSet POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, OxidizablePoweredRailBlock::new);
-    public static final CopperBlockSet VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, OxidizableVariableRailBlock::new);
+    public static final WeatheringCopperBlocks MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, OxidizableRailBlock::new);
+    public static final WeatheringCopperBlocks POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, OxidizablePoweredRailBlock::new);
+    public static final WeatheringCopperBlocks VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, OxidizableVariableRailBlock::new);
 
     public static final TagKey<Block> MAGLEV_RAILS = tagOf("maglev_rails");
     public static final TagKey<Block> POWERED_MAGLEV_RAILS = tagOf("powered_maglev_rails");

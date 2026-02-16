@@ -33,7 +33,7 @@ public class MaglevEmiPlugin implements EmiPlugin {
                 .build();
     }
 
-    private static Stream<EmiWorldInteractionRecipe> createOxidizingRecipes(MaglevBlocks.CopperBlockSet blockSet) {
+    private static Stream<EmiWorldInteractionRecipe> createOxidizingRecipes(MaglevBlocks.WeatheringCopperBlocks blockSet) {
         return Stream.of(
                 createOxidizingRecipe(blockSet.unaffected(), blockSet.exposed()),
                 createOxidizingRecipe(blockSet.exposed(), blockSet.weathered()),

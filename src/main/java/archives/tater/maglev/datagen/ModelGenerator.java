@@ -2,7 +2,7 @@ package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.Maglev;
 import archives.tater.maglev.init.MaglevBlocks;
-import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
+import archives.tater.maglev.init.MaglevBlocks.WeatheringCopperBlocks;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -59,14 +59,14 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Specialized utilities
 
-    private static void registerOxidizableStraightRail(BlockModelGenerators modelGenerator, CopperBlockSet blockSet) {
+    private static void registerOxidizableStraightRail(BlockModelGenerators modelGenerator, WeatheringCopperBlocks blockSet) {
         registerStraightRail(modelGenerator, blockSet.unaffected(), blockSet.waxed());
         registerStraightRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed());
         registerStraightRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized());
         registerStraightRail(modelGenerator, blockSet.weathered(), blockSet.waxedWeathered());
     }
 
-    private static void registerOxidizableTurnableRail(BlockModelGenerators modelGenerator, CopperBlockSet blockSet) {
+    private static void registerOxidizableTurnableRail(BlockModelGenerators modelGenerator, WeatheringCopperBlocks blockSet) {
         registerTurnableRail(modelGenerator, blockSet.unaffected(), blockSet.waxed());
         registerTurnableRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed());
         registerTurnableRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized());

@@ -1,7 +1,7 @@
 package archives.tater.maglev.datagen;
 
 import archives.tater.maglev.init.MaglevBlocks;
-import archives.tater.maglev.init.MaglevBlocks.CopperBlockSet;
+import archives.tater.maglev.init.MaglevBlocks.WeatheringCopperBlocks;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
@@ -13,7 +13,7 @@ public class BlockLootTableGenerator extends FabricBlockLootTableProvider {
         super(dataOutput, registryLookup);
     }
 
-    private void addDrops(CopperBlockSet blockSet) {
+    private void addDrops(WeatheringCopperBlocks blockSet) {
         for (var block : blockSet.getAll())
             dropSelf(block);
     }
