@@ -1,4 +1,4 @@
-// 1.21.9	-999999999-01-01T00:00:00	Maglev/Block Loot Tables
+// 1.21.11	-999999999-01-01T00:00:00	Maglev/Block Loot Tables
 f6f3055dbd2debc98b6b909fcf5731b537be069a data/maglev/loot_table/blocks/exposed_maglev_rail.json
 1982e3d1134a7d365b41d652a84c05bfea258a03 data/maglev/loot_table/blocks/exposed_powered_maglev_rail.json
 671030c98c9cec1995606fe660b81410cafdfa15 data/maglev/loot_table/blocks/exposed_variable_maglev_rail.json

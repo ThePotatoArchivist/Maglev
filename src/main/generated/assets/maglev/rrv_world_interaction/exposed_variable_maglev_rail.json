@@ -1,0 +1,6 @@
+{
+  "type": "rrv:world_interaction",
+  "left": "maglev:variable_maglev_rail",
+  "result": "maglev:exposed_variable_maglev_rail",
+  "right": "#maglev:oxidizers"
+}
