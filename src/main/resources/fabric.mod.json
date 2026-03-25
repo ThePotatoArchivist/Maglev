@@ -23,15 +23,18 @@
 		],
 		"fabric-datagen": [
 			"archives.tater.maglev.MaglevDataGenerator"
+		],
+		"rrv_client": [
+			"archives.tater.maglev.MaglevRRVPlugin"
 		]
 	},
 	"mixins": [
 		"maglev.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.18.0",
-		"minecraft": "~1.21.11",
-		"java": ">=21",
+		"fabricloader": ">=0.18.4",
+		"minecraft": ">=26.1",
+		"java": ">=25",
 		"fabric-api": "*"
 	},
 	"suggests": {

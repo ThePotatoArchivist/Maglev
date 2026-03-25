@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 
-@SuppressWarnings("UnstableApiUsage")
 public class MaglevDataAttachments {
     public static AttachmentType<Integer> HOVER_HEIGHT = AttachmentRegistry.create(Maglev.id("hover_height"), builder -> builder
             .persistent(Codec.INT)

@@ -17,13 +17,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.minecart.MinecartBehavior;
 import net.minecraft.world.entity.vehicle.minecart.OldMinecartBehavior;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static archives.tater.maglev.CopperBlockSetUtil.isOf;
+import static archives.tater.maglev.WeatheringCopperSetUtil.isOf;
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
-@SuppressWarnings("UnstableApiUsage")
 @Mixin(OldMinecartBehavior.class)
 public abstract class DefaultMinecartControllerMixin extends MinecartBehavior {
     protected DefaultMinecartControllerMixin(AbstractMinecart minecart) {
@@ -53,9 +51,9 @@ public abstract class DefaultMinecartControllerMixin extends MinecartBehavior {
 
     @WrapOperation(
             method = "moveAlongTrack",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z")
     )
-    private boolean checkPowered(BlockState instance, Block block, Operation<Boolean> original) {
+    private boolean checkPowered(BlockState instance, Object block, Operation<Boolean> original) {
         return original.call(instance, block) || isOf(instance.getBlock(), MaglevBlocks.POWERED_MAGLEV_RAIL);
     }
 
@@ -72,7 +70,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartBehavior {
             method = "moveAlongTrack",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;")
     )
-    private BlockState updateOnVariableRail(BlockState original, @Local BlockPos pos) {
+    private BlockState updateOnVariableRail(BlockState original, @Local(name = "pos") BlockPos pos) {
         if (!isOf(original.getBlock(), MaglevBlocks.VARIABLE_MAGLEV_RAIL)) return original;
 
         minecart.setAttached(HOVER_HEIGHT, minecart.level().getBestNeighborSignal(pos));

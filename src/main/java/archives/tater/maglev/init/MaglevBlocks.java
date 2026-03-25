@@ -52,7 +52,7 @@ public class MaglevBlocks {
     }
 
     private static WeatheringCopperBlocks registerOxidizable(WeatheringCopperBlocks blockSet) {
-        OxidizableBlocksRegistry.registerCopperBlockSet(blockSet);
+        OxidizableBlocksRegistry.registerWeatheringCopperBlocks(blockSet);
         return blockSet;
     }
 

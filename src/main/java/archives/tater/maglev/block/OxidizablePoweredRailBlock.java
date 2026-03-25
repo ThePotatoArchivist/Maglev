@@ -44,7 +44,6 @@ public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Weat
         };
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     public static void updateSpeed(AbstractMinecart minecart, BlockState state) {
         if (state.getBlock() instanceof HasOxidationLevel oxidizable)
             minecart.setAttached(SPEED_MULTIPLIER, OxidizablePoweredRailBlock.getSpeedMultiplier(oxidizable.getAge()));

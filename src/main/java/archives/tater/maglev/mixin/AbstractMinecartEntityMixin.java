@@ -22,7 +22,6 @@ import net.minecraft.world.level.Level;
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 
-@SuppressWarnings("UnstableApiUsage")
 @Mixin(AbstractMinecart.class)
 public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     public AbstractMinecartEntityMixin(EntityType<?> entityType, Level world) {

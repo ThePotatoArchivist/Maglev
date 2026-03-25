@@ -1,6 +1,0 @@
-{
-  "type": "rrv:world_interaction",
-  "left": "maglev:maglev_rail",
-  "result": "maglev:exposed_maglev_rail",
-  "right": "#maglev:oxidizers"
-}

@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -15,9 +14,9 @@ import net.minecraft.world.level.block.state.BlockState;
 public class PoweredRailBlockMixin {
     @WrapOperation(
             method = "isSameRailWithPower(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;ZILnet/minecraft/world/level/block/state/properties/RailShape;)Z",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z")
     )
-    private boolean checkVariantType(BlockState instance, Block block, Operation<Boolean> original) {
+    private boolean checkVariantType(BlockState instance, Object block, Operation<Boolean> original) {
         return original.call(instance, block) ||
                 block instanceof VariantPoweredRail rail1 &&
                 instance.getBlock() instanceof VariantPoweredRail rail2 &&

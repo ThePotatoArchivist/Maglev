@@ -11,14 +11,14 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
-@SuppressWarnings("UnstableApiUsage")
 @Mixin(MinecartSoundInstance.class)
 public class MovingMinecartSoundInstanceMixin {
     @Shadow @Final private AbstractMinecart minecart;
 
     @ModifyVariable(
             method = "tick",
-            at = @At(value = "STORE", ordinal = 0)
+            at = @At(value = "STORE", ordinal = 0),
+            name = "offRail"
     )
     private boolean cancelSound(boolean original) {
         return original || minecart.hasAttached(HOVER_HEIGHT);

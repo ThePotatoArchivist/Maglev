@@ -4,7 +4,7 @@ import archives.tater.maglev.Maglev;
 import archives.tater.maglev.init.MaglevBlocks;
 
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.*;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -13,6 +13,7 @@ import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeatheringCopperBlocks;
@@ -52,6 +53,10 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Data
 
+    private static TextureMapping railEmissive(Identifier texture) {
+        return TextureMapping.singleSlot(RAIL_EMISSIVE, new Material(texture));
+    }
+
     public record RailModels(
             ModelTemplate flat,
             ModelTemplate curved,
@@ -63,33 +68,32 @@ public class ModelGenerator extends FabricModelProvider {
     ) {
         public static RailModels createEmissive(BlockModelGenerators modelGenerator, Identifier name, @Nullable Identifier texture, Identifier onTexture) {
             return new RailModels(
-
                     texture == null ? ModelTemplates.RAIL_FLAT : model(
-                            RAIL_FLAT_EMISSIVE.create(name.withPath(path -> "block/" + path + "_flat"), TextureMapping.singleSlot(RAIL_EMISSIVE, texture.withPrefix("block/")), modelGenerator.modelOutput),
+                            RAIL_FLAT_EMISSIVE.create(name.withPath(path -> "block/" + path + "_flat"), railEmissive(texture.withPrefix("block/")), modelGenerator.modelOutput),
                             TextureSlot.RAIL),
 
                     texture == null ? ModelTemplates.RAIL_CURVED : model(
-                            RAIL_CURVED_EMISSIVE.create(name.withPath(path -> "block/" + path + "_curved"), TextureMapping.singleSlot(RAIL_EMISSIVE, texture.withPath(path -> "block/" + path + "_corner")), modelGenerator.modelOutput),
+                            RAIL_CURVED_EMISSIVE.create(name.withPath(path -> "block/" + path + "_curved"), railEmissive(texture.withPath(path -> "block/" + path + "_corner")), modelGenerator.modelOutput),
                             "_corner", TextureSlot.RAIL),
 
                     texture == null ? ModelTemplates.RAIL_RAISED_NE : model(
-                            RAIL_RAISED_NE_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_raised_ne"), TextureMapping.singleSlot(RAIL_EMISSIVE, texture.withPrefix("block/")), modelGenerator.modelOutput),
+                            RAIL_RAISED_NE_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_raised_ne"), railEmissive(texture.withPrefix("block/")), modelGenerator.modelOutput),
                             "_raised_ne", TextureSlot.RAIL),
 
                     texture == null ? ModelTemplates.RAIL_RAISED_SW : model(
-                            RAIL_RAISED_SW_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_raised_sw"), TextureMapping.singleSlot(RAIL_EMISSIVE, texture.withPrefix("block/")), modelGenerator.modelOutput),
+                            RAIL_RAISED_SW_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_raised_sw"), railEmissive(texture.withPrefix("block/")), modelGenerator.modelOutput),
                             "_raised_se", TextureSlot.RAIL),
 
                     model(
-                            RAIL_FLAT_EMISSIVE.create(name.withPath(path -> "block/" + path + "_on_flat"), TextureMapping.singleSlot(RAIL_EMISSIVE, onTexture.withPrefix("block/")), modelGenerator.modelOutput),
+                            RAIL_FLAT_EMISSIVE.create(name.withPath(path -> "block/" + path + "_on_flat"), railEmissive(onTexture.withPrefix("block/")), modelGenerator.modelOutput),
                             TextureSlot.RAIL),
 
                     model(
-                            RAIL_RAISED_NE_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_on_raised_ne"), TextureMapping.singleSlot(RAIL_EMISSIVE, onTexture.withPrefix("block/")), modelGenerator.modelOutput),
+                            RAIL_RAISED_NE_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_on_raised_ne"), railEmissive(onTexture.withPrefix("block/")), modelGenerator.modelOutput),
                             "_raised_ne", TextureSlot.RAIL),
 
                     model(
-                            RAIL_RAISED_SW_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_on_raised_sw"), TextureMapping.singleSlot(RAIL_EMISSIVE, onTexture.withPrefix("block/")), modelGenerator.modelOutput),
+                            RAIL_RAISED_SW_EMISSIVE.create(name.withPath(path -> "block/template_" + path + "_on_raised_sw"), railEmissive(onTexture.withPrefix("block/")), modelGenerator.modelOutput),
                             "_raised_sw", TextureSlot.RAIL)
             );
         }
@@ -136,7 +140,7 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Datagen implementation
 
-    public ModelGenerator(FabricDataOutput output) {
+    public ModelGenerator(FabricPackOutput output) {
         super(output);
     }
 

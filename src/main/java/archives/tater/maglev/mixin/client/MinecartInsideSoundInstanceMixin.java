@@ -11,7 +11,6 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
-@SuppressWarnings("UnstableApiUsage")
 @Mixin(RidingMinecartSoundInstance.class)
 public class MinecartInsideSoundInstanceMixin {
     @Shadow @Final private AbstractMinecart minecart;
