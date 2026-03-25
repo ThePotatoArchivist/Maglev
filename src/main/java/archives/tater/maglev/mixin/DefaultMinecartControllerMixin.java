@@ -1,6 +1,6 @@
 package archives.tater.maglev.mixin;
 
-import archives.tater.maglev.block.OxidizablePoweredRailBlock;
+import archives.tater.maglev.block.WeatheringCopperPoweredRailBlock;
 import archives.tater.maglev.init.MaglevBlocks;
 import archives.tater.maglev.init.MaglevDataAttachments;
 
@@ -62,7 +62,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartBehavior {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;")
     )
     private BlockState updateSpeed(BlockState original) {
-        OxidizablePoweredRailBlock.updateSpeed(minecart, original);
+        WeatheringCopperPoweredRailBlock.updateSpeed(minecart, original);
         return original;
     }
 

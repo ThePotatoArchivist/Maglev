@@ -24,24 +24,23 @@ import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 
 @Mixin(AbstractMinecart.class)
 public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
-    public AbstractMinecartEntityMixin(EntityType<?> entityType, Level world) {
-        super(entityType, world);
+    public AbstractMinecartEntityMixin(EntityType<?> entityType, Level level) {
+        super(entityType, level);
     }
 
     @Unique
     private boolean checkRail(int x, int y, int z) {
         var state = level().getBlockState(new BlockPos(x, y, z));
-        if (!state.is(MaglevBlocks.HOVERABLE_RAILS)) return false;
-        return true;
+        return state.is(MaglevBlocks.HOVERABLE_RAILS);
     }
 
     @ModifyVariable(
             method = "getCurrentBlockPosOrRailBelow",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/minecart/AbstractMinecart;level()Lnet/minecraft/world/level/Level;", ordinal = 0),
-            ordinal = 1
+            name = "yt"
     )
-    private int addHoverHeight(int y, @Local(ordinal = 0) int x, @Local(ordinal = 2) int z) {
-        var world = level();
+    private int addHoverHeight(int y, @Local(name = "xt") int x, @Local(name = "zt") int z) {
+        var level = level();
         if (hasAttached(HOVER_HEIGHT)) {
             var movedY = y - getAttachedOrElse(HOVER_HEIGHT, 0);
             if (checkRail(x, movedY, z) || checkRail(x, movedY - 1, z))
@@ -50,7 +49,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
 
         var blockPos = blockPosition().mutable();
         for (int i = 0; i <= 15; i++) { // TODO unhardcode? or at least make constant
-            var state = world.getBlockState(blockPos);
+            var state = level.getBlockState(blockPos);
             if (state.is(MaglevBlocks.HOVERABLE_RAILS)) {
                 if (i <= 1) return y;
                 setAttached(HOVER_HEIGHT, i);
@@ -75,7 +74,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             method = "comeOffTrack",
             at = @At("HEAD")
     )
-    private void removeHoverSpeed(ServerLevel world, CallbackInfo ci) {
+    private void removeHoverSpeed(ServerLevel level, CallbackInfo ci) {
         removeAttached(SPEED_MULTIPLIER);
     }
 }

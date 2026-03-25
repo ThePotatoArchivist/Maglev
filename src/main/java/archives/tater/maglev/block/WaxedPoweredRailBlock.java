@@ -1,10 +1,10 @@
 package archives.tater.maglev.block;
 
-import archives.tater.maglev.HasOxidationLevel;
+import archives.tater.maglev.HasWeatherState;
 import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 
-public class WaxedPoweredRailBlock extends PoweredRailBlock implements HasOxidationLevel, VariantPoweredRail {
+public class WaxedPoweredRailBlock extends PoweredRailBlock implements HasWeatherState, VariantPoweredRail {
     private final WeatheringCopper.WeatherState oxidationLevel;
 
     public WaxedPoweredRailBlock(WeatheringCopper.WeatherState oxidationLevel, Properties settings) {

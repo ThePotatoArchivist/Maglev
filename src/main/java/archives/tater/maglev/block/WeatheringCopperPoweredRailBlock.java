@@ -1,6 +1,6 @@
 package archives.tater.maglev.block;
 
-import archives.tater.maglev.HasOxidationLevel;
+import archives.tater.maglev.HasWeatherState;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -12,17 +12,17 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import static archives.tater.maglev.init.MaglevDataAttachments.SPEED_MULTIPLIER;
 
-public class OxidizablePoweredRailBlock extends PoweredRailBlock implements WeatheringCopper, HasOxidationLevel, VariantPoweredRail {
+public class WeatheringCopperPoweredRailBlock extends PoweredRailBlock implements WeatheringCopper, HasWeatherState, VariantPoweredRail {
     private final WeatherState oxidationLevel;
 
-    public OxidizablePoweredRailBlock(WeatherState oxidationLevel, Properties settings) {
+    public WeatheringCopperPoweredRailBlock(WeatherState oxidationLevel, Properties settings) {
         super(settings);
         this.oxidationLevel = oxidationLevel;
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        changeOverTime(state, world, pos, random);
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        changeOverTime(state, level, pos, random);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class OxidizablePoweredRailBlock extends PoweredRailBlock implements Weat
     }
 
     public static void updateSpeed(AbstractMinecart minecart, BlockState state) {
-        if (state.getBlock() instanceof HasOxidationLevel oxidizable)
-            minecart.setAttached(SPEED_MULTIPLIER, OxidizablePoweredRailBlock.getSpeedMultiplier(oxidizable.getAge()));
+        if (state.getBlock() instanceof HasWeatherState oxidizable)
+            minecart.setAttached(SPEED_MULTIPLIER, WeatheringCopperPoweredRailBlock.getSpeedMultiplier(oxidizable.getAge()));
         else
             minecart.removeAttached(SPEED_MULTIPLIER);
     }

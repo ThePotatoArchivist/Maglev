@@ -1,24 +1,23 @@
 package archives.tater.maglev.block;
 
-import archives.tater.maglev.HasOxidationLevel;
+import archives.tater.maglev.HasWeatherState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class OxidizableRailBlock extends RailBlock implements WeatheringCopper, HasOxidationLevel {
+public class WeatheringCopperVariableRailBlock extends VariableRailBlock implements WeatheringCopper, HasWeatherState {
     private final WeatherState oxidationLevel;
 
-    public OxidizableRailBlock(WeatherState oxidationLevel, Properties settings) {
+    public WeatheringCopperVariableRailBlock(WeatherState oxidationLevel, Properties settings) {
         super(settings);
         this.oxidationLevel = oxidationLevel;
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        changeOverTime(state, world, pos, random);
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        changeOverTime(state, level, pos, random);
     }
 
     @Override

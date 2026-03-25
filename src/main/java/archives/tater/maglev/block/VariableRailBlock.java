@@ -14,12 +14,12 @@ public class VariableRailBlock extends PoweredRailBlock {
     }
 
     @Override
-    protected boolean isSameRailWithPower(Level world, BlockPos pos, boolean bl, int distance, RailShape shape) {
+    protected boolean isSameRailWithPower(Level level, BlockPos pos, boolean bl, int distance, RailShape shape) {
         return false;
     }
 
     @Override
-    protected boolean findPoweredRailSignal(Level world, BlockPos pos, BlockState state, boolean bl, int distance) {
+    protected boolean findPoweredRailSignal(Level level, BlockPos pos, BlockState state, boolean bl, int distance) {
         return false;
     }
 }

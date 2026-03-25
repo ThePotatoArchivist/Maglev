@@ -14,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import org.objectweb.asm.Opcodes;
+
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
@@ -66,7 +68,7 @@ public class BlockStateModelGeneratorMixin {
 					"createPassiveRail",
 					"createActiveRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_FLAT:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_FLAT:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0, opcode = Opcodes.GETSTATIC)
 	)
 	private ModelTemplate replaceModel1(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.@Nullable RailModels> railModels) {
 		var models = railModels.get();
@@ -75,7 +77,7 @@ public class BlockStateModelGeneratorMixin {
 
 	@ModifyExpressionValue(
 			method = "createActiveRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_FLAT:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_FLAT:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1, opcode = Opcodes.GETSTATIC)
 	)
 	private ModelTemplate replaceModel2(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.@Nullable RailModels> railModels) {
 		var models = railModels.get();
@@ -84,7 +86,7 @@ public class BlockStateModelGeneratorMixin {
 
 	@ModifyExpressionValue(
 			method = "createPassiveRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_CURVED:Lnet/minecraft/client/data/models/model/ModelTemplate;")
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_CURVED:Lnet/minecraft/client/data/models/model/ModelTemplate;", opcode = Opcodes.GETSTATIC)
 	)
 	private ModelTemplate replaceModel3(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.@Nullable RailModels> railModels) {
 		var models = railModels.get();
@@ -96,7 +98,7 @@ public class BlockStateModelGeneratorMixin {
 					"createPassiveRail",
 					"createActiveRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_NE:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_NE:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0, opcode = Opcodes.GETSTATIC)
 	)
 	private ModelTemplate replaceModel4(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.@Nullable RailModels> railModels) {
 		var models = railModels.get();
@@ -105,7 +107,7 @@ public class BlockStateModelGeneratorMixin {
 
 	@ModifyExpressionValue(
 			method = "createActiveRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_NE:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_NE:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1, opcode = Opcodes.GETSTATIC)
 	)
 	private ModelTemplate replaceModel5(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.@Nullable RailModels> railModels) {
 		var models = railModels.get();
@@ -117,7 +119,7 @@ public class BlockStateModelGeneratorMixin {
 					"createPassiveRail",
 					"createActiveRail"
 			},
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_SW:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_SW:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 0, opcode = Opcodes.GETSTATIC)
 	)
 	private ModelTemplate replaceModel6(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.@Nullable RailModels> railModels) {
 		var models = railModels.get();
@@ -126,7 +128,7 @@ public class BlockStateModelGeneratorMixin {
 
 	@ModifyExpressionValue(
 			method = "createActiveRail",
-			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_SW:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1)
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/data/models/model/ModelTemplates;RAIL_RAISED_SW:Lnet/minecraft/client/data/models/model/ModelTemplate;", ordinal = 1, opcode = Opcodes.GETSTATIC)
 	)
 	private ModelTemplate replaceModel7(ModelTemplate original, @Share("railModels") LocalRef<ModelGenerator.@Nullable RailModels> railModels) {
 		var models = railModels.get();

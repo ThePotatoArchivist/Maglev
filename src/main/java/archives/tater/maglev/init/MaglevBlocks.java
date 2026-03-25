@@ -69,9 +69,9 @@ public class MaglevBlocks {
         ));
     }
 
-    public static final WeatheringCopperBlocks MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, OxidizableRailBlock::new);
-    public static final WeatheringCopperBlocks POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, OxidizablePoweredRailBlock::new);
-    public static final WeatheringCopperBlocks VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, OxidizableVariableRailBlock::new);
+    public static final WeatheringCopperBlocks MAGLEV_RAIL = registerOxidizableRails("maglev_rail", WaxedRailBlock::new, WeatheringCopperRailBlock::new);
+    public static final WeatheringCopperBlocks POWERED_MAGLEV_RAIL = registerOxidizableRails("powered_maglev_rail", WaxedPoweredRailBlock::new, WeatheringCopperPoweredRailBlock::new);
+    public static final WeatheringCopperBlocks VARIABLE_MAGLEV_RAIL = registerOxidizableRails("variable_maglev_rail", WaxedVariableRailBlock::new, WeatheringCopperVariableRailBlock::new);
 
     public static final TagKey<Block> MAGLEV_RAILS = tagOf("maglev_rails");
     public static final TagKey<Block> POWERED_MAGLEV_RAILS = tagOf("powered_maglev_rails");
@@ -81,18 +81,18 @@ public class MaglevBlocks {
 
     public static void init() {
 
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+        UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
             if (!player.getItemInHand(hand).is(MaglevItems.OXIDIZERS)) return InteractionResult.PASS;
             var pos = hitResult.getBlockPos();
-            var state = world.getBlockState(pos);
+            var state = level.getBlockState(pos);
             if (!state.is(MaglevBlocks.MANUALLY_OXIDIZABLE)) return InteractionResult.PASS;
 
             var oxidizedBlock = getNext(state.getBlock()).orElse(null);
             if (oxidizedBlock == null) return InteractionResult.FAIL;
 
-            world.setBlockAndUpdate(pos, oxidizedBlock.withPropertiesOf(state));
-            world.playSound(player, pos, SoundEvents.BOTTLE_EMPTY, player.getSoundSource());
-            if (world instanceof ServerLevel serverWorld) {
+            level.setBlockAndUpdate(pos, oxidizedBlock.withPropertiesOf(state));
+            level.playSound(player, pos, SoundEvents.BOTTLE_EMPTY, player.getSoundSource());
+            if (level instanceof ServerLevel serverWorld) {
                 var particlePos = pos.getBottomCenter();
                 serverWorld.sendParticles(ParticleTypes.SPLASH, particlePos.x, particlePos.y, particlePos.z, 8, 0.25, 0, 0.25, 0);
             }

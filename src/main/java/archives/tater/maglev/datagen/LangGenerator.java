@@ -5,11 +5,12 @@ import archives.tater.maglev.init.MaglevItems;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeatheringCopperBlocks;
+
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.util.Util.makeDescriptionId;
@@ -33,10 +34,6 @@ public class LangGenerator extends FabricLanguageProvider {
         addDescription(translationBuilder, MaglevBlocks.MAGLEV_RAIL, "allows minecarts to hover up to 15 blocks above it");
         addDescription(translationBuilder, MaglevBlocks.POWERED_MAGLEV_RAIL, "accelerates minecarts hovering above it");
         addDescription(translationBuilder, MaglevBlocks.VARIABLE_MAGLEV_RAIL, "sets minecarts' hover speed to its redstone power level");
-    }
-
-    private static void addDescription(TranslationBuilder translationBuilder, TagKey<?> tagKey, String description) {
-        translationBuilder.add(makeDescriptionId("tag", tagKey.location()) + "." + "description", description);
     }
 
     private static void addDescription(TranslationBuilder translationBuilder, Block block, String description) {
