@@ -51,7 +51,6 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         for (int i = 0; i <= 15; i++) { // TODO unhardcode? or at least make constant
             var state = level.getBlockState(blockPos);
             if (state.is(MaglevBlocks.HOVERABLE_RAILS)) {
-                if (i <= 1) return y;
                 setAttached(HOVER_HEIGHT, i);
                 return blockPos.getY();
             }
@@ -67,7 +66,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/minecart/MinecartBehavior;getSlowdownFactor()D")
     )
     private double frictionless(double original) {
-        return hasAttached(SPEED_MULTIPLIER) ? 1 : original;
+        return hasAttached(HOVER_HEIGHT) ? 1 : original;
     }
 
     @Inject(
