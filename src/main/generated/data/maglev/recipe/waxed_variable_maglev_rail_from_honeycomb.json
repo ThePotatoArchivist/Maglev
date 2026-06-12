@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "group": "waxed_variable_maglev_rail",
   "ingredients": [
     "maglev:variable_maglev_rail",

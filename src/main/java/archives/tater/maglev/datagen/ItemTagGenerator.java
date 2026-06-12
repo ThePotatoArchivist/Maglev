@@ -1,14 +1,18 @@
 package archives.tater.maglev.datagen;
 
-import archives.tater.maglev.init.MaglevBlocks;
+import archives.tater.maglev.init.MaglevBlockItemTags;
 import archives.tater.maglev.init.MaglevItems;
+
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+
 import net.minecraft.core.HolderLookup;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.tags.BlockItemTagId;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Items;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,14 +27,18 @@ public class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
         return (output, registriesFuture) -> new ItemTagGenerator(output, registriesFuture, blockTagProvider);
     }
 
+    private void copy(BlockItemTagId id) {
+        copy(id.block(), id.item());
+    }
+
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
-        copy(MaglevBlocks.MAGLEV_RAILS, MaglevItems.MAGLEV_RAILS);
-        copy(MaglevBlocks.POWERED_MAGLEV_RAILS, MaglevItems.POWERED_MAGLEV_RAILS);
-        copy(MaglevBlocks.VARIABLE_MAGLEV_RAILS, MaglevItems.VARIABLE_MAGLEV_RAILS);
-        copy(MaglevBlocks.HOVERABLE_RAILS, MaglevItems.HOVERABLE_RAILS);
+        copy(MaglevBlockItemTags.MAGLEV_RAILS);
+        copy(MaglevBlockItemTags.POWERED_MAGLEV_RAILS);
+        copy(MaglevBlockItemTags.VARIABLE_MAGLEV_RAILS);
+        copy(MaglevBlockItemTags.HOVERABLE_RAILS);
         copy(BlockTags.RAILS, ItemTags.RAILS);
-        valueLookupBuilder(MaglevItems.OXIDIZERS)
-                .add(Items.WET_SPONGE);
+        builder(MaglevItems.OXIDIZERS)
+                .add(BlockItemIds.WET_SPONGE);
     }
 }

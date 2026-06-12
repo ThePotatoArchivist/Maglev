@@ -6,7 +6,9 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.world.level.block.WeatheringCopperBlocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.WeatheringCopperCollection;
+
 import java.util.concurrent.CompletableFuture;
 
 public class BlockLootTableGenerator extends FabricBlockLootSubProvider {
@@ -14,9 +16,8 @@ public class BlockLootTableGenerator extends FabricBlockLootSubProvider {
         super(dataOutput, registryLookup);
     }
 
-    private void addDrops(WeatheringCopperBlocks blockSet) {
-        for (var block : blockSet.asList())
-            dropSelf(block);
+    private void addDrops(WeatheringCopperCollection<Block> blockSet) {
+        blockSet.forEach(this::dropSelf);
     }
 
     @Override

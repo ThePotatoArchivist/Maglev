@@ -19,7 +19,7 @@ import net.minecraft.world.entity.vehicle.minecart.MinecartBehavior;
 import net.minecraft.world.entity.vehicle.minecart.OldMinecartBehavior;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static archives.tater.maglev.WeatheringCopperSetUtil.isOf;
+import static archives.tater.maglev.WeatheringCopperCollectionUtil.isOf;
 import static archives.tater.maglev.init.MaglevDataAttachments.HOVER_HEIGHT;
 
 @Mixin(OldMinecartBehavior.class)

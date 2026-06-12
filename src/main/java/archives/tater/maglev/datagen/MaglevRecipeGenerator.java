@@ -1,5 +1,6 @@
 package archives.tater.maglev.datagen;
 
+import archives.tater.maglev.init.MaglevBlockItemTags;
 import archives.tater.maglev.init.MaglevItems;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
@@ -12,7 +13,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.WeatheringCopperItems;
+import net.minecraft.world.level.block.WeatheringCopperCollection;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,7 +22,7 @@ public class MaglevRecipeGenerator extends RecipeProvider {
         super(registries, exporter);
     }
 
-    private void offerWaxingRecipe(Item waxed, Item unwaxed) {
+    private void offerWaxingRecipe(Item unwaxed, Item waxed) {
         shapeless(RecipeCategory.TRANSPORTATION, waxed)
                 .requires(unwaxed)
                 .requires(Items.HONEYCOMB)
@@ -30,11 +31,8 @@ public class MaglevRecipeGenerator extends RecipeProvider {
                 .save(output, getConversionRecipeName(waxed, Items.HONEYCOMB));
     }
 
-    private void offerWaxingRecipes(WeatheringCopperItems blockSet) {
-        offerWaxingRecipe(blockSet.waxed(), blockSet.unaffected());
-        offerWaxingRecipe(blockSet.waxedExposed(), blockSet.exposed());
-        offerWaxingRecipe(blockSet.waxedWeathered(), blockSet.weathered());
-        offerWaxingRecipe(blockSet.waxedOxidized(), blockSet.oxidized());
+    private void offerWaxingRecipes(WeatheringCopperCollection<Item> blockSet) {
+        blockSet.zipUnwaxedWaxed(this::offerWaxingRecipe);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class MaglevRecipeGenerator extends RecipeProvider {
         offerWaxingRecipes(MaglevItems.POWERED_MAGLEV_RAIL);
         offerWaxingRecipes(MaglevItems.VARIABLE_MAGLEV_RAIL);
 
-        shaped(RecipeCategory.TRANSPORTATION, MaglevItems.MAGLEV_RAIL.unaffected(), 6)
+        shaped(RecipeCategory.TRANSPORTATION, MaglevItems.MAGLEV_RAIL.weathering().unaffected(), 6)
                 .pattern("# #")
                 .pattern("#%#")
                 .pattern("# #")
@@ -52,7 +50,7 @@ public class MaglevRecipeGenerator extends RecipeProvider {
                 .unlockedBy(getHasName(Items.COPPER_INGOT), has(ConventionalItemTags.COPPER_INGOTS))
                 .save(output);
 
-        shaped(RecipeCategory.TRANSPORTATION, MaglevItems.POWERED_MAGLEV_RAIL.unaffected(), 2)
+        shaped(RecipeCategory.TRANSPORTATION, MaglevItems.POWERED_MAGLEV_RAIL.weathering().unaffected(), 2)
                 .pattern("#&#")
                 .pattern("#%#")
                 .pattern("#*#")
@@ -60,10 +58,10 @@ public class MaglevRecipeGenerator extends RecipeProvider {
                 .define('%', ConventionalItemTags.IRON_INGOTS)
                 .define('&', ConventionalItemTags.GOLD_INGOTS)
                 .define('*', ConventionalItemTags.REDSTONE_DUSTS)
-                .unlockedBy(getHasName(MaglevItems.MAGLEV_RAIL.unaffected()), has(MaglevItems.MAGLEV_RAILS))
+                .unlockedBy(getHasName(MaglevItems.MAGLEV_RAIL.weathering().unaffected()), has(MaglevBlockItemTags.MAGLEV_RAILS.item()))
                 .save(output);
 
-        shaped(RecipeCategory.TRANSPORTATION, MaglevItems.VARIABLE_MAGLEV_RAIL.unaffected(), 1)
+        shaped(RecipeCategory.TRANSPORTATION, MaglevItems.VARIABLE_MAGLEV_RAIL.weathering().unaffected(), 1)
                 .pattern("#&#")
                 .pattern("#%#")
                 .pattern("#*#")
@@ -71,7 +69,7 @@ public class MaglevRecipeGenerator extends RecipeProvider {
                 .define('%', ConventionalItemTags.IRON_INGOTS)
                 .define('&', ConventionalItemTags.QUARTZ_GEMS)
                 .define('*', ConventionalItemTags.REDSTONE_DUSTS)
-                .unlockedBy(getHasName(MaglevItems.MAGLEV_RAIL.unaffected()), has(MaglevItems.MAGLEV_RAILS))
+                .unlockedBy(getHasName(MaglevItems.MAGLEV_RAIL.weathering().unaffected()), has(MaglevBlockItemTags.MAGLEV_RAILS.item()))
                 .save(output);
     }
 

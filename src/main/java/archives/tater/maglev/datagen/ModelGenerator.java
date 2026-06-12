@@ -5,17 +5,15 @@ import archives.tater.maglev.init.MaglevBlocks;
 
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
-import net.minecraft.client.data.models.model.ModelLocationUtils;
-import net.minecraft.client.data.models.model.ModelTemplate;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.WeatheringCopperBlocks;
+import net.minecraft.world.level.block.WeatheringCopperCollection;
+
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,18 +121,12 @@ public class ModelGenerator extends FabricModelProvider {
 
     // Specialized utilities
 
-    private static void registerOxidizableStraightRail(BlockModelGenerators modelGenerator, WeatheringCopperBlocks blockSet, RailModels railModels) {
-        registerStraightRail(modelGenerator, blockSet.unaffected(), blockSet.waxed(), railModels);
-        registerStraightRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed(), railModels);
-        registerStraightRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized(), railModels);
-        registerStraightRail(modelGenerator, blockSet.weathered(), blockSet.waxedWeathered(), railModels);
+    private static void registerOxidizableStraightRail(BlockModelGenerators modelGenerator, WeatheringCopperCollection<Block> blockSet, RailModels railModels) {
+        blockSet.zipUnwaxedWaxed((unwaxed, waxed) -> registerStraightRail(modelGenerator, unwaxed, waxed, railModels));
     }
 
-    private static void registerOxidizableTurnableRail(BlockModelGenerators modelGenerator, WeatheringCopperBlocks blockSet, RailModels railModels) {
-        registerTurnableRail(modelGenerator, blockSet.unaffected(), blockSet.waxed(), railModels);
-        registerTurnableRail(modelGenerator, blockSet.exposed(), blockSet.waxedExposed(), railModels);
-        registerTurnableRail(modelGenerator, blockSet.oxidized(), blockSet.waxedOxidized(), railModels);
-        registerTurnableRail(modelGenerator, blockSet.weathered(), blockSet.waxedWeathered(), railModels);
+    private static void registerOxidizableTurnableRail(BlockModelGenerators modelGenerator, WeatheringCopperCollection<Block> blockSet, RailModels railModels) {
+        blockSet.zipUnwaxedWaxed((unwaxed, waxed) -> registerTurnableRail(modelGenerator, unwaxed, waxed, railModels));
     }
 
     // Datagen implementation

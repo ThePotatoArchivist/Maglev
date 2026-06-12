@@ -1,7 +1,7 @@
 package archives.tater.maglev.init;
 
-import archives.tater.maglev.WeatheringCopperSetUtil;
 import archives.tater.maglev.Maglev;
+import archives.tater.maglev.WeatheringCopperCollectionUtil;
 
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 
@@ -9,47 +9,45 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.WeatheringCopperItems;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.WeatheringCopperBlocks;
+import net.minecraft.world.level.block.WeatheringCopperCollection;
 
 import java.util.List;
 import java.util.function.Function;
 
 public class MaglevItems {
 
-    private static Item register(Identifier id, Function<Item.Properties, Item> item, Item.Properties properties) {
-        var key = ResourceKey.create(Registries.ITEM, id);
+    private static Item register(ResourceKey <Item> key, Function<Item.Properties, Item> item, Item.Properties properties) {
         return Registry.register(BuiltInRegistries.ITEM, key, item.apply(properties.setId(key)));
     }
 
-    private static Item register(Block block) {
+    private static Item register(BlockItemId id, Block block) {
         return register(
-                BuiltInRegistries.BLOCK.getKey(block),
+                id.item(),
                 properties -> new BlockItem(block, properties),
                 new Item.Properties().useBlockDescriptionPrefix()
         );
     }
 
-    private static WeatheringCopperItems registerOxidizableItems(WeatheringCopperBlocks blockSet) {
-        return WeatheringCopperItems.create(blockSet, MaglevItems::register);
+    private static WeatheringCopperCollection<Item> registerOxidizableItems(WeatheringCopperCollection<BlockItemId> ids, WeatheringCopperCollection<Block> blockSet) {
+        return WeatheringCopperCollection.registerItems(ids, blockSet, MaglevItems::register);
     }
 
     private static TagKey<Item> tagOf(String path) {
         return TagKey.create(Registries.ITEM, Maglev.id(path));
     }
 
-    public static final WeatheringCopperItems MAGLEV_RAIL = registerOxidizableItems(MaglevBlocks.MAGLEV_RAIL);
-    public static final WeatheringCopperItems POWERED_MAGLEV_RAIL = registerOxidizableItems(MaglevBlocks.POWERED_MAGLEV_RAIL);
-    public static final WeatheringCopperItems VARIABLE_MAGLEV_RAIL = registerOxidizableItems(MaglevBlocks.VARIABLE_MAGLEV_RAIL);
+    public static final WeatheringCopperCollection<Item> MAGLEV_RAIL = registerOxidizableItems(MaglevBlockItemIds.MAGLEV_RAIL, MaglevBlocks.MAGLEV_RAIL);
+    public static final WeatheringCopperCollection<Item> POWERED_MAGLEV_RAIL = registerOxidizableItems(MaglevBlockItemIds.POWERED_MAGLEV_RAIL, MaglevBlocks.POWERED_MAGLEV_RAIL);
+    public static final WeatheringCopperCollection<Item> VARIABLE_MAGLEV_RAIL = registerOxidizableItems(MaglevBlockItemIds.VARIABLE_MAGLEV_RAIL, MaglevBlocks.VARIABLE_MAGLEV_RAIL);
 
-    private static final List<WeatheringCopperItems> itemSets = List.of(
+    private static final List<WeatheringCopperCollection<Item>> itemSets = List.of(
             MAGLEV_RAIL,
             POWERED_MAGLEV_RAIL,
             VARIABLE_MAGLEV_RAIL
@@ -61,9 +59,9 @@ public class MaglevItems {
             Maglev.id("maglev_rails"),
             FabricCreativeModeTab.builder()
                     .title(Component.translatable(ITEM_GROUP_NAME))
-                    .icon(() -> MAGLEV_RAIL.unaffected().getDefaultInstance())
+                    .icon(() -> MAGLEV_RAIL.weathering().unaffected().getDefaultInstance())
                     .displayItems((_, output) -> output.acceptAll(
-                            WeatheringCopperSetUtil.fields()
+                            WeatheringCopperCollectionUtil.<Item>fields()
                                     .flatMap(field -> itemSets.stream().map(field))
                                     .map(Item::getDefaultInstance)
                                     .toList()
@@ -71,10 +69,6 @@ public class MaglevItems {
                     .build()
     );
 
-    public static final TagKey<Item> MAGLEV_RAILS = tagOf("maglev_rails");
-    public static final TagKey<Item> POWERED_MAGLEV_RAILS = tagOf("powered_maglev_rails");
-    public static final TagKey<Item> VARIABLE_MAGLEV_RAILS = tagOf("variable_maglev_rails");
-    public static final TagKey<Item> HOVERABLE_RAILS = tagOf("hoverable_rails");
     public static final TagKey<Item> OXIDIZERS = tagOf("oxidizers");
 
     public static void init() {

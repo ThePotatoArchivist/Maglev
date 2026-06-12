@@ -1,6 +1,6 @@
 package archives.tater.maglev;
 
-import archives.tater.maglev.init.MaglevBlocks;
+import archives.tater.maglev.init.MaglevBlockItemTags;
 import archives.tater.maglev.init.MaglevItems;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -17,11 +17,12 @@ public class MaglevRRVPlugin implements ReliableRecipeViewerClientPlugin {
         ItemView.addClientReloadCallback(() -> {
             var oxidizer = SlotContent.of(MaglevItems.OXIDIZERS);
 
-            for (var holder : BuiltInRegistries.BLOCK.getOrThrow(MaglevBlocks.MANUALLY_OXIDIZABLE)) {
+            for (var holder : BuiltInRegistries.BLOCK.getOrThrow(MaglevBlockItemTags.MANUALLY_OXIDIZABLE.block())) {
                 var unoxidized = holder.value();
                 var oxidized = WeatheringCopper.getNext(unoxidized).orElse(null);
                 if (oxidized == null) continue;
                 ItemView.addWorldInteractionRecipe(new WorldInteractionClientRecipe(
+                        BuiltInRegistries.BLOCK.getKey(oxidized).withPrefix("manual_oxidation/"),
                         SlotContent.of(unoxidized),
                         oxidizer,
                         SlotContent.of(oxidized)

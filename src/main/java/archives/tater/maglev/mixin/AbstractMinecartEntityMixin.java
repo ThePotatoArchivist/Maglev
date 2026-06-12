@@ -1,6 +1,6 @@
 package archives.tater.maglev.mixin;
 
-import archives.tater.maglev.init.MaglevBlocks;
+import archives.tater.maglev.init.MaglevBlockItemTags;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -31,7 +31,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     @Unique
     private boolean checkRail(int x, int y, int z) {
         var state = level().getBlockState(new BlockPos(x, y, z));
-        return state.is(MaglevBlocks.HOVERABLE_RAILS);
+        return state.is(MaglevBlockItemTags.HOVERABLE_RAILS.block());
     }
 
     @ModifyVariable(
@@ -50,7 +50,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         var blockPos = blockPosition().mutable();
         for (int i = 0; i <= 15; i++) { // TODO unhardcode? or at least make constant
             var state = level.getBlockState(blockPos);
-            if (state.is(MaglevBlocks.HOVERABLE_RAILS)) {
+            if (state.is(MaglevBlockItemTags.HOVERABLE_RAILS.block())) {
                 if (i <= 1) return y;
                 setAttached(HOVER_HEIGHT, i);
                 return blockPos.getY();
