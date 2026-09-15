@@ -14,6 +14,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
 import net.minecraft.world.level.block.WeatheringCopperBlocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -40,6 +41,7 @@ public class MaglevBlocks {
                 getOxidizedName(name, oxidationLevel),
                 settings -> constructor.apply(oxidationLevel, settings),
                 BlockBehaviour.Properties.ofFullCopy(Blocks.RAIL)
+                        .sound(SoundType.COPPER)
         );
     }
 
@@ -48,6 +50,7 @@ public class MaglevBlocks {
                 "waxed_" + getOxidizedName(name, oxidationLevel),
                 settings -> constructor.apply(oxidationLevel, settings),
                 BlockBehaviour.Properties.ofFullCopy(Blocks.RAIL)
+                        .sound(SoundType.COPPER)
         );
     }
 
