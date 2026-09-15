@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "maglev:powered_maglev_rail"
+        "recipes": "maglev:powered_maglev_rail"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

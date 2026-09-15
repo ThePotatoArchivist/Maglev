@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "maglev:waxed_exposed_variable_maglev_rail_from_honeycomb"
+        "recipes": "maglev:waxed_exposed_variable_maglev_rail_from_honeycomb"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

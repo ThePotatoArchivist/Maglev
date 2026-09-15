@@ -1,4 +1,4 @@
-// 26.2	-999999999-01-01T00:00:00	Maglev/Tags for minecraft:block
+// 26.3-rc-3	-999999999-01-01T00:00:00	Maglev/Tags for minecraft:block
 3ffe2a451f8da3686af238e2e7adb3da3c7a0b6d data/maglev/tags/block/hoverable_rails.json
 c8189c663292f87e73939485f213e369f203c65e data/maglev/tags/block/maglev_rails.json
 9794b10ef319d953347d75f596df865b80cd8978 data/maglev/tags/block/manually_oxidizable.json

@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.references.BlockItemIds;
-import net.minecraft.tags.BlockItemTagId;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 
@@ -25,10 +24,6 @@ public class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
 
     public static FabricDataGenerator.Pack.RegistryDependentFactory<ItemTagGenerator> factory(BlockTagsProvider blockTagProvider) {
         return (output, registriesFuture) -> new ItemTagGenerator(output, registriesFuture, blockTagProvider);
-    }
-
-    private void copy(BlockItemTagId id) {
-        copy(id.block(), id.item());
     }
 
     @Override

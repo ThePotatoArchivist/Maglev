@@ -7,19 +7,22 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.WeatheringCopperCollection;
 
 import java.util.concurrent.CompletableFuture;
 
 public class MaglevRecipeGenerator extends RecipeProvider {
-    public MaglevRecipeGenerator(HolderLookup.Provider registries, RecipeOutput exporter) {
-        super(registries, exporter);
+
+    protected MaglevRecipeGenerator(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
+        super(recipeOutput, advancementOutput);
     }
 
     private void offerWaxingRecipe(Item unwaxed, Item waxed) {
@@ -80,13 +83,9 @@ public class MaglevRecipeGenerator extends RecipeProvider {
         }
 
         @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registryLookup, RecipeOutput exporter) {
-            return new MaglevRecipeGenerator(registryLookup, exporter);
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+            return new MaglevRecipeGenerator(recipes, advancements);
         }
 
-        @Override
-        public String getName() {
-            return "Recipes";
-        }
     }
 }
