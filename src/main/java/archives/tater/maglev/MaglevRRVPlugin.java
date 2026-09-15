@@ -22,7 +22,7 @@ public class MaglevRRVPlugin implements ReliableRecipeViewerClientPlugin {
                 var oxidized = WeatheringCopper.getNext(unoxidized).orElse(null);
                 if (oxidized == null) continue;
                 ItemView.addWorldInteractionRecipe(new WorldInteractionClientRecipe(
-                        BuiltInRegistries.BLOCK.getKey(oxidized).withPrefix("manual_oxidation/"),
+                        BuiltInRegistries.BLOCK.getKey(oxidized).withPath(path -> "/world_interaction/" + path + "_manual_oxidation"),
                         SlotContent.of(unoxidized),
                         oxidizer,
                         SlotContent.of(oxidized)
